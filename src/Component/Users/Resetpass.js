@@ -56,8 +56,7 @@ export default function Resetpass() {
       setVisivility3(false)
     }
   }
-
-
+  
   React.useEffect(() => {
     if (!localStorage.getItem('token')) {
       Navigate('/')
@@ -65,12 +64,28 @@ export default function Resetpass() {
   }, [])
 
   const handleSubmit = async (event) => {
+    const passworderegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const N = data.get('Npassword')
     const C = data.get('Cpassword')
     const id = JSON.parse(localStorage.getItem("id"))
     try {
+      if (!passworderegex.test(data.get('Npassword'))) {
+        toast("Password must contain 8 charecter at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:", {
+          position: "top-center",
+          autoClose: 2000,
+          type: "error"
+        })
+        return
+      } else if (!passworderegex.test(data.get('Cpassword'))) {
+        toast("Password must contain 8 charecter at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:", {
+          position: "top-center",
+          autoClose: 2000,
+          type: "error"
+        })
+        return
+      }
       if (N !== C) {
         toast("password did't match", {
           position: "top-center",
@@ -116,7 +131,7 @@ export default function Resetpass() {
       <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
         <DrawerHeader />
         <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs"  >
+          <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
               sx={{

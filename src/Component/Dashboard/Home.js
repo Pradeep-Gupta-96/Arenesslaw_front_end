@@ -63,9 +63,13 @@ const Home = () => {
         navigate(`/totalexceldata/${id}`)
     }
 
-    const API = "http://localhost:4000/excel"
+    const API = (JSON.parse(localStorage.getItem("role")) === "Admin") ? "http://localhost:4000/excel/all" : "http://localhost:4000/excel"
     const callapi = async (url) => {
-        const res = await fetch(url)
+        const res = await fetch(url, {
+            headers: {
+                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+            },
+        })
         const result = await res.json()
         setResults(result.message)
     }
@@ -79,6 +83,14 @@ const Home = () => {
 
 
     const sendemail = async (id) => {
+        if (!emailformaill.emailformail) {
+            toast("select email!", {
+                position: "top-center",
+                autoClose: 1000,
+                type: "error"
+            })
+            return
+        }
         try {
             const res = await fetch(`http://localhost:4000/notice/sendemail/${id}`, {
                 method: "put",
@@ -94,8 +106,7 @@ const Home = () => {
                     autoClose: 1000,
                     type: "success"
                 })
-
-            }
+        }
         } catch (error) {
             console.log(error)
         }
@@ -191,7 +202,7 @@ const Home = () => {
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                     <Button>
                                         <Link>
-                                        
+
                                         </Link>
                                     </Button>
                                 </Item>
@@ -271,7 +282,7 @@ const Home = () => {
                                                     })}
                                             </TableBody>
                                         </Table>
-                                    </TableContainer> 
+                                    </TableContainer>
                                 </Paper>
                             </Grid>
                         </Grid>

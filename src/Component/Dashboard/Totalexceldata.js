@@ -30,7 +30,11 @@ const Totalexceldata = () => {
 
     const API = `http://localhost:4000/excel/${id}`
     const callapi = async (url) => {
-        const res = await fetch(url)
+        const res = await fetch(url,{
+            headers: {
+                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+            },
+        })
         const result = await res.json()
         setheaders(result.message)
         setResults(result.message.xlData)

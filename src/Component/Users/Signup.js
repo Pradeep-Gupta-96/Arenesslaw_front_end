@@ -3,7 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -56,7 +55,27 @@ export default function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    // email and password validation
+    const emailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    const passworderegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     try {
+      if (!emailregex.test(data.get('email'))) {
+        toast("please enter the valid email!", {
+          position: "top-center",
+          autoClose: 1000,
+          type: "error"
+        })
+        return
+      } else if (!passworderegex.test(data.get('password'))) {
+        toast("Password must contain 8 charecter at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:", {
+          position: "top-center",
+          autoClose: 2000,
+          type: "error"
+        })
+        return
+      }
+      // post data for registration
       const res = await fetch("http://localhost:4000/user/signup", {
         method: "post",
         headers: {
@@ -85,10 +104,12 @@ export default function Signup() {
           type: "success"
         })
       }
+
     } catch (error) {
       console.log(error)
     }
   };
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -140,13 +161,14 @@ export default function Signup() {
                     autoFocus
                   />
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                    <InputLabel id="demo-simple-select-label" >Employment type</InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={Role}
-                      label="Role"
+                      label="Employment type"
                       onChange={handleChange}
+                      required
                     >
                       <MenuItem value={"Admin"}>Admin</MenuItem>
                       <MenuItem value={"User"}>User</MenuItem>

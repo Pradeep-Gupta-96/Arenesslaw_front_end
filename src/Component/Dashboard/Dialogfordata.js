@@ -78,7 +78,16 @@ const Dialogfordata = () => {
         formData.append('template', temp)
         formData.append("filename", filename)
         formData.append('file', excelFile)
+        formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
         try {
+            if (!temp || !excelFile) {
+                toast("please fill all details!", {
+                    position: "top-center",
+                    autoClose: 1000,
+                    type: "error"
+                })
+                return
+            }
             if (excelFile !== null) {
                 const res = await fetch("http://localhost:4000/excel", {
                     method: 'POST',
