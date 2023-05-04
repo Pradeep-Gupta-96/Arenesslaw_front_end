@@ -15,12 +15,12 @@ import { toast } from 'react-toastify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment } from '@mui/material';
-import AdminNav from '../Navbar/AdminNav';
 import { styled } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import AdminNavbar from '../Navbar/AdminNavbar';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -38,6 +38,11 @@ export default function Signup() {
   const [visivility, setVisivility] = React.useState(false)
   const [Role, setRole] = React.useState('');
 
+  React.useEffect(() => {
+      if (!localStorage.getItem('token')) {
+        Navigate('/')
+      }
+  })
 
   const changeicons = () => {
     if (visivility === false) {
@@ -57,7 +62,7 @@ export default function Signup() {
     const data = new FormData(event.currentTarget);
 
     // email and password validation
-    const emailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    const emailregex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     const passworderegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     try {
       if (!emailregex.test(data.get('email'))) {
@@ -110,10 +115,9 @@ export default function Signup() {
     }
   };
 
-
   return (
     <Box sx={{ display: 'flex' }}>
-      <AdminNav />
+      <AdminNavbar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
         <DrawerHeader />
         <ThemeProvider theme={theme}>

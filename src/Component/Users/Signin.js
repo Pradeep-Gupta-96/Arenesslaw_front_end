@@ -73,7 +73,7 @@ export default function Signin() {
           autoClose: 1000,
           type: "success"
         })
-        Navigate('/userdashboard')
+        Navigate('/admindashboard')
       }
 
     } catch (error) {
@@ -145,9 +145,6 @@ export default function Signin() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  {/* <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link> */}
                 </Grid>
               </Grid>
             </Box>

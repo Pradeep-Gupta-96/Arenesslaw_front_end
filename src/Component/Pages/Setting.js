@@ -1,12 +1,14 @@
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
-import {useNavigate} from 'react-router-dom'
-import Navbar from '../Navbar/Navbar'
-import { Grid, Paper, Typography } from '@mui/material';
-import FeedIcon from '@mui/icons-material/Feed';
-import AddIcCallIcon from '@mui/icons-material/AddIcCall';
-import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle';
+import { useNavigate } from 'react-router-dom'
+import { Grid, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
+import AdminNavbar from '../Navbar/AdminNavbar';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import MarkEmailReadOutlinedIcon from '@mui/icons-material/MarkEmailReadOutlined';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
+import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
+
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -17,6 +19,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
 }));
 
+const Iconscss = styled('div')(({ theme }) => ({
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    boxShadow: "0 0 0 10px rgba(0, 0, 0, 0.1)",
+    background: "rgba(0, 0, 0, 0.1)",
+    transition: "transform 0.5s ease",
+    "&:hover": { color: "#1a237e", transform: "rotate(720deg)" }
+}));
+
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -25,69 +37,145 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
+
+
 const Setting = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-        navigate('/')
-    }
-  }, [])
+    useEffect(() => {
+        if (!localStorage.getItem('token')) {
+            navigate('/')
+        }
+    })
 
-    const notice=()=>{
-      navigate('/noticetemplate')
+    const template = () => {
+        navigate("/openemaildetails")
     }
+    const Noticetemp = () => {
+        navigate('/opendetails')
+    }
+    const Config = () => {
+        navigate('/openconfig')
+    }
+    const NoticeConfig = () => {
+        navigate('/opennoticeconfig ')
+    }
+    const AuthNotice = () => {
+        navigate('/opendetailAuth ')
+    }
+    const AuthMail = () => {
+        navigate('/openemailauth ')
+    }
+    const ListItemCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(1.2)" } }
+    const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
-                <Navbar />
+                <AdminNavbar />
                 <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
                     <DrawerHeader />
                     <Grid>
-                        <Item >
+                        <Item sx={tableCSS} >
                             <Typography variant='h4'> Configurations</Typography>
                         </Item>
                     </Grid>
-
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: "center",
-                            mt: "20%",
-                            cursor:"pointer",
-                            '& > :not(style)': {
-                                m: 1,
-                                width: 128,
-                                height: 128,
-                            },
-                        }}
+                    <br />
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        spacing={0} sx={tableCSS}
                     >
-                        <Item elevation={3} sx={{ backgroundColor: "#BFF8FC" }} >
-                            <FeedIcon sx={{m:2, fontSize:30}} />
-                            <Typography variant='h6'>Letter Head</Typography>
-                        </Item>
-                        <Item elevation={3} sx={{ backgroundColor: "#FFF1D6" }} onClick={notice} >
-                            <FeedIcon  sx={{m:2, fontSize:30}}/>
-                            <Typography variant='h6'>Notices</Typography>
-                        </Item>
-                        <Item elevation={3} sx={{ backgroundColor: "#FFECE2" }}>
-                            <AddIcCallIcon  sx={{m:2, fontSize:30}} />
-                            <Typography variant='h6'>Email</Typography>
-                        </Item>
-                        <Item elevation={3} sx={{ backgroundColor: "#D2FCEB" }} >
-                            <PlaylistAddCheckCircleIcon  sx={{m:2, fontSize:30}} />
-                            <Typography variant='h6'>Reports</Typography>
-                        </Item>
-                    </Box>
-
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Item sx={{ height: "640px" }}>
+                                <List >
+                                    <ListItem >
+                                        <ListItemText>
+                                            <Typography variant='subtitle1'>
+                                                <Iconscss><SettingsOutlinedIcon fontSize='large' /></Iconscss>
+                                                <br /><br /><strong>Notices</strong>
+                                            </Typography>
+                                        </ListItemText>
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Letter Head" onClick={NoticeConfig} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Template" onClick={Noticetemp} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Signatory authority" onClick={AuthNotice} />
+                                    </ListItem>
+                                </List>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Item sx={{ height: "640px" }}>
+                                <List >
+                                    <ListItem >
+                                        <ListItemText>
+                                            <Typography variant='subtitle1'>
+                                                <Iconscss><MarkEmailReadOutlinedIcon fontSize='large' /></Iconscss>
+                                                <br /><br /><strong>Email</strong>
+                                            </Typography>
+                                        </ListItemText>
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Email id Config " onClick={Config} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Email template" onClick={template} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Signatory authority" onClick={AuthMail} />
+                                    </ListItem>
+                                </List>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Item sx={{ height: "640px" }}>
+                                <List>
+                                    <ListItem >
+                                        <ListItemText>
+                                            <Typography variant='subtitle1'>
+                                                <Iconscss><BusinessOutlinedIcon fontSize='large' /></Iconscss>
+                                                <br /><br /><strong>Company</strong>
+                                            </Typography>
+                                        </ListItemText>
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Add new company" />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="View Company" />
+                                    </ListItem>
+                                </List>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={3}>
+                            <Item sx={{ height: "640px" }}>
+                                <List>
+                                    <ListItem >
+                                        <ListItemText>
+                                            <Typography variant='subtitle1'>
+                                                <Iconscss><RocketLaunchOutlinedIcon fontSize='large' /></Iconscss>
+                                                <br /><br /><strong>Additional Settings</strong>
+                                            </Typography>
+                                        </ListItemText>
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemText sx={ListItemCSS} primary="Role management" />
+                                    </ListItem>
+                                </List>
+                            </Item>
+                        </Grid>
+                    </Grid>
                 </Box>
             </Box>
         </>
-
-
     )
-
 }
 
 export default Setting

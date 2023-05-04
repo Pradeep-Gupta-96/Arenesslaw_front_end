@@ -15,8 +15,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import AdminNav from '../Navbar/AdminNav';
-import UserNav from '../Navbar/UserNav';
+import AdminNavbar from '../Navbar/AdminNavbar';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -56,7 +55,7 @@ export default function Resetpass() {
       setVisivility3(false)
     }
   }
-  
+
   React.useEffect(() => {
     if (!localStorage.getItem('token')) {
       Navigate('/')
@@ -111,7 +110,8 @@ export default function Resetpass() {
             autoClose: 1000,
             type: "success"
           })
-            (((JSON.parse(localStorage.getItem("role"))) === "Admin") ? Navigate('/admindashboard') : Navigate('/userdashboard'))
+          localStorage.clear()
+          Navigate('/')
         } else {
           toast("invalid!", {
             position: "top-center",
@@ -127,7 +127,7 @@ export default function Resetpass() {
 
   return (
     <>   <Box sx={{ display: 'flex' }}>
-      {((JSON.parse(localStorage.getItem("role"))) === "Admin") ? <AdminNav /> : <UserNav />}
+      <AdminNavbar/>
       <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
         <DrawerHeader />
         <ThemeProvider theme={theme}>

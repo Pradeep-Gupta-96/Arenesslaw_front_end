@@ -104,6 +104,13 @@ const Dialogfordata = () => {
                         type: "success"
                     })
                     setExcelFile(null);
+                }else if (result.msg === "Stop") {
+                    toast("filename already exist!", {
+                        position: "top-center",
+                        autoClose: 1000,
+                        type: "warning"
+                    })
+                    setExcelFile(null);
                 }
             }
         } catch (error) {
