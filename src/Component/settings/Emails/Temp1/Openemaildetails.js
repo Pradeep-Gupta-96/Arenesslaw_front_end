@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { Grid, Paper, Typography, InputBase, ButtonGroup, Button, TableHead, TableContainer, TableRow, TableCell, TableBody, Table } from '@mui/material';
@@ -70,7 +70,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Openemaildetails = () => {
-
+    const [PdfUrl, setPdfUrl] = useState("")
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -83,6 +83,20 @@ const Openemaildetails = () => {
         navigate("/createemails")
     }
     const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
+    const onClickforViewPdf = async () => {
+        const response = await fetch("http://localhost:4000/emailtemp", {
+            headers: {
+                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+            }
+        })
+        const result = await response.blob()
+        const pdfUrl = URL.createObjectURL(result);
+        setPdfUrl(pdfUrl);
+    }
+
+    useEffect(() => {
+        onClickforViewPdf()
+    }, [])
 
     return (
         <>
@@ -98,12 +112,12 @@ const Openemaildetails = () => {
                                 transition: "transform 0.5s ease",
                                 "&:hover": {
                                     transform: "scale(1.2)",
-                                    color:"#6a1b9a"
+                                    color: "#6a1b9a"
                                 }
                             }} onClick={ADDemail}> + Add New</Typography>
                         </Item>
                         <br />
-                        <Item  sx={tableCSS}>
+                        <Item sx={tableCSS}>
                             <Item sx={{ ml: 110 }}>
                                 <Search>
                                     <SearchIconWrapper>
@@ -125,12 +139,18 @@ const Openemaildetails = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableRow  sx={tableCSS} hover role="checkbox" tabIndex={-1}>
+                                        <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1}>
                                             <TableCell sx={{ cursor: 'pointer' }} ><strong>0123-Notices </strong><br />Last Updated on: 04 Apr 2023</TableCell>
                                             <TableCell >
                                                 <ButtonGroup>
                                                     <Button variant='non'><EditOutlinedIcon /></Button>
-                                                    <Button variant='non'><RemoveRedEyeOutlinedIcon /></Button>
+                                                    <Button variant='non' title='View Notice'>
+                                                        {PdfUrl && (
+                                                            <a href={PdfUrl} target="_blank" rel="noopener noreferrer">
+                                                                <RemoveRedEyeOutlinedIcon />
+                                                            </a>
+                                                        )}
+                                                    </Button>
                                                     <Button variant='non'><Inventory2OutlinedIcon /></Button>
                                                 </ButtonGroup>
                                             </TableCell>

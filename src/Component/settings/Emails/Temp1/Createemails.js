@@ -29,19 +29,76 @@ const Item = styled(Paper)(({ theme }) => ({
 const Createemails = () => {
     const [ContentInner, setContentInner] = useState('')
     const [ContentFooter, setContentFooter] = useState('')
-    console.log(ContentInner)
-    const navigate = useNavigate()
+    const [Emaillogo, setEmaillogo] = useState('')
     const [avatarImage, setAvatarImage] = useState(null);
-
+    const getinputdata = {
+        title: "",
+        subtitle: "",
+        noticeid: "",
+        noticeidEg: "",
+        noticedate: "",
+        noticedateEg: "",
+        to: "",
+        address: "",
+        subject: "",
+        subjecttitle: ""
+    }
+    const [inpudata, setInputdata] = useState(getinputdata)
+    const navigate = useNavigate()
+    // console.log(ContentInner)
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];
+        setEmaillogo(event.target.files[0])
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
             setAvatarImage(reader.result);
         };
     };
-    console.log(avatarImage)
+
+    const inputhandleonchange = (event) => {
+        const { name, value } = event.target
+        setInputdata({
+            ...inpudata, [name]: value
+        })
+    }
+
+    const onClickforreset = (e) => {
+        setInputdata(getinputdata)
+        setAvatarImage(null)
+        setEmaillogo("")
+        setContentInner("")
+        setContentFooter("")
+    }
+
+    const Createemailtemplate = async () => {
+        const formData = new FormData();
+        formData.append("Emaillogo", Emaillogo);
+        formData.append("title", inpudata.title)
+        formData.append("subtitle", inpudata.subtitle)
+        formData.append("noticeid", inpudata.noticeid)
+        formData.append("noticeidEg", inpudata.noticeidEg)
+        formData.append("noticedate", inpudata.noticedate)
+        formData.append("noticedateEg", inpudata.noticedateEg)
+        formData.append("to", inpudata.to)
+        formData.append("address", inpudata.address)
+        formData.append("subject", inpudata.subject)
+        formData.append("subjecttitle", inpudata.subjecttitle)
+        formData.append("ContentInner", ContentInner)
+        formData.append("ContentFooter", ContentFooter)
+        formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
+        const response = await fetch('http://localhost:4000/emailtemp', {
+            method: 'POST',
+            headers: {
+                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+            },
+            body: formData
+        });
+        const result = response.json()
+        console.log(result)
+    }
+
+
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/')
@@ -78,6 +135,7 @@ const Createemails = () => {
         },
     };
 
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -107,34 +165,34 @@ const Createemails = () => {
 
                         <Grid item xs={12} sm={6} md={3}> </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField label="Enter title here" variant="outlined" size="small" fullWidth />
+                            <TextField label="Enter title here" name='title' value={inpudata.title} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} >
-                            <TextField label="Enter Sub title here" variant="outlined" size="small" fullWidth />
+                            <TextField label="Enter Sub title here" name='subtitle' value={inpudata.subtitle} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <TextField label="Notice Id" variant="outlined" size="small" fullWidth />
+                            <TextField label="Notice Id" name='noticeid' value={inpudata.noticeid} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <TextField label="Notice Id 123456" variant="outlined" size="small" fullWidth />
+                            <TextField label="Notice Id 123456" name='noticeidEg' value={inpudata.noticeidEg} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <TextField label="Notice Date" variant="outlined" size="small" fullWidth />
+                            <TextField label="Notice Date" name='noticedate' value={inpudata.noticedate} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <TextField label="Notice Date 03/05/2023" variant="outlined" size="small" fullWidth />
+                            <TextField label="Notice Date 03/05/2023" name='noticedateEg' value={inpudata.noticedateEg} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField label="<<to>>" variant="outlined" size="small" fullWidth />
+                            <TextField label="<<to>>" name='to' value={inpudata.to} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} >
-                            <TextField label="<<address>>" variant="outlined" size="small" fullWidth />
+                            <TextField label="<<address>>" name='address' value={inpudata.address} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <TextField label="Subject" variant="outlined" size="small" fullWidth />
+                            <TextField label="Subject" name='subject' value={inpudata.subject} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         <Grid item xs={12} sm={6} md={3}>
-                            <TextField label="Subject Title" variant="outlined" size="small" fullWidth />
+                            <TextField label="Subject Title" name='subjecttitle' value={inpudata.subjecttitle} onChange={inputhandleonchange} variant="outlined" size="small" fullWidth />
                         </Grid>
                         {/* ==============ck-editor text areas==============  */}
                         <Grid item xs={12} >
@@ -167,8 +225,8 @@ const Createemails = () => {
 
                         <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
                             <ButtonGroup>
-                                <Button>Reset</Button>
-                                <Button>Submit</Button>
+                                <Button onClick={onClickforreset}>Reset</Button>
+                                <Button onClick={Createemailtemplate}>Submit</Button>
                             </ButtonGroup>
                         </Grid>
                     </Grid>

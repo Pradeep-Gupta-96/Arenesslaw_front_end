@@ -184,9 +184,8 @@ const Notice = () => {
                                             onChange={searchhandleChangeT}
                                         >
                                             <MenuItem value=''><em>none</em></MenuItem>
-                                            <MenuItem value={"Ten"}>Ten</MenuItem>
-                                            <MenuItem value={"Twenty"}>Twenty</MenuItem>
-                                            <MenuItem value={"Thirty"}>Thirty</MenuItem>
+                                            <MenuItem value={"areness attorneys"}>areness attorneys </MenuItem>
+                                    <MenuItem value={"Legal & Associates"}>Legal & Associates</MenuItem>
                                         </Select>
                                     </FormControl>
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">

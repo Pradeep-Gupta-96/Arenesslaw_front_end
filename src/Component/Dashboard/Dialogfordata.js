@@ -133,9 +133,8 @@ const Dialogfordata = () => {
                                     label="Select Template"
                                     onChange={handleChange}
                                 >
-                                    <MenuItem value={"Ten"}>Ten</MenuItem>
-                                    <MenuItem value={"Twenty"}>Twenty</MenuItem>
-                                    <MenuItem value={"Thirty"}>Thirty</MenuItem>
+                                    <MenuItem value={"areness attorneys"}>areness attorneys </MenuItem>
+                                    <MenuItem value={"Legal & Associates"}>Legal & Associates</MenuItem>
                                 </Select>
                             </FormControl>
                         </Item>
