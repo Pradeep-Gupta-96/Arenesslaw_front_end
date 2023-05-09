@@ -49,7 +49,7 @@ const AdminDashboard = () => {
     })
 
     const ListItemCSS = {
-        mt: 50, mr:10, float:"right", display: 'block', cursor: "pointer",
+        mt: 50, mr: 10, float: "right", display: 'block', cursor: "pointer",
         width: "100px",
         height: "100px",
         borderRadius: "100%",
@@ -84,14 +84,14 @@ const AdminDashboard = () => {
                                     <MenuItem value={"Mobikwik"}>Mobikwik</MenuItem>
                                     <MenuItem value={"Vodafone"}>vodafone</MenuItem>
                                 </Select>
-                               
+
                             </FormControl>
                         </Grid>
-                        <Grid xs={12}>
-                                <Button sx={ListItemCSS} variant="contained" color="secondary" onClick={submit} >
-                                    Proceed....
-                                </Button>
-                                </Grid>
+                        <Grid item xs={12}>
+                            <Button sx={ListItemCSS} variant="contained" color="secondary" onClick={submit} >
+                                Proceed....
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Box>
             </Box>

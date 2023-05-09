@@ -23,6 +23,7 @@ import OpendetailAuth from './Component/settings/Notices/SigningAuthority2/Opend
 import CreatedetailsAuth from './Component/settings/Notices/SigningAuthority2/CreatedetailsAuth';
 import Openemailauth from './Component/settings/Emails/SigningAuthority1/Openemailauth';
 import Createemailauth from './Component/settings/Emails/SigningAuthority1/Createemailauth';
+import Editmailtemp from './Component/settings/Emails/Temp1/Editmailtemp';
 
 const App = () => {
   return (
@@ -50,6 +51,7 @@ const App = () => {
           <Route path='/opendetailAuth' element={<OpendetailAuth />} />
           <Route path='/createemailauth' element={<Createemailauth />} />
           <Route path='/openemailauth' element={<Openemailauth />} />
+          <Route path='/editmailtemp/:id' element={<Editmailtemp/>}/>
         </Routes>
       </Router>
       <ToastContainer />

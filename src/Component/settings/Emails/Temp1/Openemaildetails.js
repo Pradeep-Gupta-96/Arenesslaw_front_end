@@ -68,9 +68,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
+const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 const Openemaildetails = () => {
     const [PdfUrl, setPdfUrl] = useState("")
+    const [id, setId] = useState([])
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -82,7 +84,6 @@ const Openemaildetails = () => {
     const ADDemail = () => {
         navigate("/createemails")
     }
-    const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
     const onClickforViewPdf = async () => {
         const response = await fetch("http://localhost:4000/emailtemp", {
             headers: {
@@ -94,9 +95,26 @@ const Openemaildetails = () => {
         setPdfUrl(pdfUrl);
     }
 
+    const forupdating = async () => {
+        const response = await fetch("http://localhost:4000/emailtemp/data", {
+            headers: {
+                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+            }
+        })
+        const result = await response.json()
+        setId(result)
+    }
+
+    const onClickforupdate = (id) => {
+        navigate(`/editmailtemp/${id}`)
+    }
+
     useEffect(() => {
         onClickforViewPdf()
+        forupdating()
     }, [])
+
+
 
     return (
         <>
@@ -107,14 +125,14 @@ const Openemaildetails = () => {
                     <Grid>
                         <Item sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Typography variant='h4'> Email - Template</Typography>
-                            <Typography variant='h5' sx={{
+                            <Button variant="contained" sx={{
                                 cursor: "pointer",
                                 transition: "transform 0.5s ease",
                                 "&:hover": {
                                     transform: "scale(1.2)",
-                                    color: "#6a1b9a"
+                                    color: "#fff"
                                 }
-                            }} onClick={ADDemail}> + Add New</Typography>
+                            }} onClick={ADDemail}> + Add New</Button>
                         </Item>
                         <br />
                         <Item sx={tableCSS}>
@@ -143,7 +161,9 @@ const Openemaildetails = () => {
                                             <TableCell sx={{ cursor: 'pointer' }} ><strong>0123-Notices </strong><br />Last Updated on: 04 Apr 2023</TableCell>
                                             <TableCell >
                                                 <ButtonGroup>
-                                                    <Button variant='non'><EditOutlinedIcon /></Button>
+                                                    {id.map((item) => {
+                                                        return <Button variant='non' title='edit' key={item._id} onClick={() => onClickforupdate(item._id)}><EditOutlinedIcon /></Button>
+                                                    })}
                                                     <Button variant='non' title='View Notice'>
                                                         {PdfUrl && (
                                                             <a href={PdfUrl} target="_blank" rel="noopener noreferrer">

@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import { Avatar, Button, ButtonGroup, Grid, Paper, TextField, Typography } from '@mui/material';
 import {toast} from 'react-toastify'
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import AdminNavbar from '../../../Navbar/AdminNavbar';
@@ -26,6 +26,8 @@ const Item = styled(Paper)(({ theme }) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
 }));
+
+
 const ListItemCSS = {
     display: 'block', cursor: "pointer",
     width: "100px",
@@ -56,7 +58,8 @@ const styles = {
     },
 };
 
-const Createemails = () => {
+
+const Editmailtemp = () => {
     const [ContentInner, setContentInner] = useState('')
     const [ContentFooter, setContentFooter] = useState('')
     const [Emaillogo, setEmaillogo] = useState('')
@@ -75,6 +78,7 @@ const Createemails = () => {
     }
     const [inpudata, setInputdata] = useState(getinputdata)
     const navigate = useNavigate()
+    const { id } = useParams()
     // console.log(ContentInner)
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];
@@ -100,59 +104,84 @@ const Createemails = () => {
         setContentInner("")
         setContentFooter("")
     }
-
-    const Createemailtemplate = async () => {
- try {
-    const formData = new FormData();
-    formData.append("Emaillogo", Emaillogo);
-    formData.append("title", inpudata.title)
-    formData.append("subtitle", inpudata.subtitle)
-    formData.append("noticeid", inpudata.noticeid)
-    formData.append("noticeidEg", inpudata.noticeidEg)
-    formData.append("noticedate", inpudata.noticedate)
-    formData.append("noticedateEg", inpudata.noticedateEg)
-    formData.append("to", inpudata.to)
-    formData.append("address", inpudata.address)
-    formData.append("subject", inpudata.subject)
-    formData.append("subjecttitle", inpudata.subjecttitle)
-    formData.append("ContentInner", ContentInner)
-    formData.append("ContentFooter", ContentFooter)
-    formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
-    const response = await fetch('http://localhost:4000/emailtemp', {
-        method: 'POST',
-        headers: {
-            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-        },
-        body: formData
-    });
-    const result = response.json()
-    if(!result.title){
-        toast("You have already created template which you can edit", {
-            position: "top-center",
-            autoClose: 1000,
-            type: "error"
-          })
-    }else{
-        toast("Template Created Successfully", {
-            position: "top-center",
-            autoClose: 1000,
-            type: "success"
-          })
-    }
- } catch (error) {
-    console.log(error)
- }
+    const API = `http://localhost:4000/emailtemp/data/${id}`
+    const CallApi = async (url) => {
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                }
+            })
+            const result = await response.json()
+            console.log(result)
+            setInputdata({
+                title: result.title,
+                subtitle: result.subtitle,
+                noticeid: result.noticeid,
+                noticeidEg: result.noticeidEg,
+                noticedate: result.noticedate,
+                noticedateEg: result.noticedateEg,
+                to: result.to,
+                address: result.address,
+                subject: result.subject,
+                subjecttitle: result.subjecttitle
+            })
+            setContentInner(result.ContentInner)
+            setContentFooter(result.ContentFooter)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
+    const callapiforupdae = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("Emaillogo", Emaillogo);
+            formData.append("title", inpudata.title)
+            formData.append("subtitle", inpudata.subtitle)
+            formData.append("noticeid", inpudata.noticeid)
+            formData.append("noticeidEg", inpudata.noticeidEg)
+            formData.append("noticedate", inpudata.noticedate)
+            formData.append("noticedateEg", inpudata.noticedateEg)
+            formData.append("to", inpudata.to)
+            formData.append("address", inpudata.address)
+            formData.append("subject", inpudata.subject)
+            formData.append("subjecttitle", inpudata.subjecttitle)
+            formData.append("ContentInner", ContentInner)
+            formData.append("ContentFooter", ContentFooter)
+            formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
+            const response = await fetch(`http://localhost:4000/emailtemp/${id}`, {
+                method: 'put',
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                },
+                body: formData
+            });
+            const result = response.json()
+            if(!result.title){
+                toast("error", {
+                    position: "top-center",
+                    autoClose: 1000,
+                    type: "error"
+                  })
+            }else{
+                toast("Template Created Successfully", {
+                    position: "top-center",
+                    autoClose: 1000,
+                    type: "success"
+                  })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/')
         }
+        CallApi(API)
     }, [])
-
-   
-
 
     return (
         <>
@@ -244,7 +273,7 @@ const Createemails = () => {
                         <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
                             <ButtonGroup>
                                 <Button onClick={onClickforreset}>Reset</Button>
-                                <Button onClick={Createemailtemplate}>Submit</Button>
+                                <Button onClick={callapiforupdae}>Submit</Button>
                             </ButtonGroup>
                         </Grid>
                     </Grid>
@@ -257,4 +286,4 @@ const Createemails = () => {
 }
 
 
-export default Createemails
+export default Editmailtemp
