@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { Avatar, Button, ButtonGroup, Grid, Paper, TextField, Typography } from '@mui/material';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 import { useNavigate, useParams } from 'react-router-dom';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -79,7 +79,7 @@ const Editmailtemp = () => {
     const [inpudata, setInputdata] = useState(getinputdata)
     const navigate = useNavigate()
     const { id } = useParams()
-    // console.log(ContentInner)
+
     const handleAvatarChange = (event) => {
         const file = event.target.files[0];
         setEmaillogo(event.target.files[0])
@@ -113,7 +113,6 @@ const Editmailtemp = () => {
                 }
             })
             const result = await response.json()
-            console.log(result)
             setInputdata({
                 title: result.title,
                 subtitle: result.subtitle,
@@ -151,25 +150,27 @@ const Editmailtemp = () => {
             formData.append("ContentFooter", ContentFooter)
             formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
             const response = await fetch(`http://localhost:4000/emailtemp/${id}`, {
-                method: 'put',
+                method: 'PUT',
                 headers: {
-                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+               
                 },
                 body: formData
             });
-            const result = response.json()
-            if(!result.title){
+            const result = await response.json()
+            console.log(result)
+            if (!result.title) {
                 toast("error", {
                     position: "top-center",
                     autoClose: 1000,
                     type: "error"
-                  })
-            }else{
+                })
+            } else {
                 toast("Template Created Successfully", {
                     position: "top-center",
                     autoClose: 1000,
                     type: "success"
-                  })
+                })
             }
         } catch (error) {
             console.log(error)

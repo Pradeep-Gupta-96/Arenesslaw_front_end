@@ -121,7 +121,8 @@ const Createemails = () => {
     const response = await fetch('http://localhost:4000/emailtemp', {
         method: 'POST',
         headers: {
-            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            'Content-Type': 'multipart/form-data'
         },
         body: formData
     });

@@ -8,6 +8,9 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AdminNavbar from '../../../Navbar/AdminNavbar';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -71,8 +74,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 const Openemaildetails = () => {
-    const [PdfUrl, setPdfUrl] = useState("")
     const [id, setId] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -80,29 +83,42 @@ const Openemaildetails = () => {
             navigate('/')
         }
     })
-
     const ADDemail = () => {
         navigate("/createemails")
     }
+
     const onClickforViewPdf = async () => {
-        const response = await fetch("http://localhost:4000/emailtemp", {
-            headers: {
-                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-            }
-        })
-        const result = await response.blob()
-        const pdfUrl = URL.createObjectURL(result);
-        setPdfUrl(pdfUrl);
+        try {
+            setIsLoading(true);
+            const response = await fetch("http://localhost:4000/emailtemp", {
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                }
+            })
+            const result = await response.blob()
+            console.log(result.size)
+            const file = new Blob([result], { type: 'application/pdf' });
+            const pdfUrl = URL.createObjectURL(file);
+            window.open(pdfUrl);
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            console.log(error);
+        }
     }
 
     const forupdating = async () => {
-        const response = await fetch("http://localhost:4000/emailtemp/data", {
-            headers: {
-                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-            }
-        })
-        const result = await response.json()
-        setId(result)
+        try {
+            const response = await fetch("http://localhost:4000/emailtemp/data", {
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                }
+            })
+            const result = await response.json()
+            setId(result)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const onClickforupdate = (id) => {
@@ -110,7 +126,6 @@ const Openemaildetails = () => {
     }
 
     useEffect(() => {
-        onClickforViewPdf()
         forupdating()
     }, [])
 
@@ -164,13 +179,15 @@ const Openemaildetails = () => {
                                                     {id.map((item) => {
                                                         return <Button variant='non' title='edit' key={item._id} onClick={() => onClickforupdate(item._id)}><EditOutlinedIcon /></Button>
                                                     })}
-                                                    <Button variant='non' title='View Notice'>
-                                                        {PdfUrl && (
-                                                            <a href={PdfUrl} target="_blank" rel="noopener noreferrer">
-                                                                <RemoveRedEyeOutlinedIcon />
-                                                            </a>
-                                                        )}
+
+
+
+                                                    <Button variant='non' title='View Notice' onClick={onClickforViewPdf} disabled={isLoading}>
+                                                        {isLoading ? <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
+                                                            <CircularProgress color="secondary" />
+                                                        </Stack> : <RemoveRedEyeOutlinedIcon />}
                                                     </Button>
+
                                                     <Button variant='non'><Inventory2OutlinedIcon /></Button>
                                                 </ButtonGroup>
                                             </TableCell>
