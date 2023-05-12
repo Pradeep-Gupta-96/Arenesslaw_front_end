@@ -89,6 +89,8 @@ const Dialogfordata = () => {
                 return
             }
             if (excelFile !== null) {
+                console.log("innner code exicuted")
+                console.log('formdata',formData)
                 const res = await fetch("http://localhost:4000/excel", {
                     method: 'POST',
                     headers: {
@@ -97,6 +99,7 @@ const Dialogfordata = () => {
                     body: formData
                 })
                 const result = await res.json()
+                console.log(result)
                 if (result.msg === "running") {
                     toast("Data uploaded!", {
                         position: "top-center",

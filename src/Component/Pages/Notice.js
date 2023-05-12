@@ -79,7 +79,7 @@ const Notice = () => {
             navigate('/')
         }
         callapi(API)
-    })
+    },[]) 
 
 
     const sendemail = async (id) => {

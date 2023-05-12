@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import { Box } from '@mui/system'
-import { Grid, Paper, Typography, InputBase, ButtonGroup, Button, TableHead, TableContainer, TableRow, TableCell, TableBody, Table } from '@mui/material';
+import { Grid, Paper, Typography, InputBase, ButtonGroup, Button, TableHead, TableContainer, TableRow, TableCell, TableBody, Table, CircularProgress } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom'
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AdminNavbar from '../../../Navbar/AdminNavbar';
-import Stack from '@mui/material/Stack';
-import CircularProgress from '@mui/material/CircularProgress';
 
 
 
@@ -129,8 +127,6 @@ const Openemaildetails = () => {
         forupdating()
     }, [])
 
-
-
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -179,15 +175,9 @@ const Openemaildetails = () => {
                                                     {id.map((item) => {
                                                         return <Button variant='non' title='edit' key={item._id} onClick={() => onClickforupdate(item._id)}><EditOutlinedIcon /></Button>
                                                     })}
-
-
-
                                                     <Button variant='non' title='View Notice' onClick={onClickforViewPdf} disabled={isLoading}>
-                                                        {isLoading ? <Stack sx={{ color: 'grey.500' }} spacing={2} direction="row">
-                                                            <CircularProgress color="secondary" />
-                                                        </Stack> : <RemoveRedEyeOutlinedIcon />}
+                                                        {isLoading ? <CircularProgress color="secondary" /> : <RemoveRedEyeOutlinedIcon />}
                                                     </Button>
-
                                                     <Button variant='non'><Inventory2OutlinedIcon /></Button>
                                                 </ButtonGroup>
                                             </TableCell>

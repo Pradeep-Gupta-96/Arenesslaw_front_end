@@ -11,6 +11,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import Dialogresendemail from './Dialogresendemail';
 import Dialogtimeline from './Dialogtimeline';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import AdminNavbar from '../Navbar/AdminNavbar';
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -33,6 +34,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const IconsCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", borderRadius: "50%", transform: "scale(1.2)" } }
+const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 const Totalexceldata = () => {
     const [open1, setopen1] = useState(false);
@@ -70,16 +73,20 @@ const Totalexceldata = () => {
         setheaders(result.message)
         setResults(result.message.xlData)
     }
+
+    const openPDF = (excelId, xlDataId) => {
+        const PDF_URL = `http://localhost:4000/excel/pdf/${excelId}/${xlDataId}`;
+        window.open(PDF_URL, '_blank');
+    };
+
     // console.log(heders)
     useEffect(() => {
         if (!localStorage.getItem('token')) {
-            navigate('/')
+            navigate('/');
         }
-        callapi(API)
-    })
+        callapi(API);
+    }, []);
 
-    const IconsCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", borderRadius: "50%", transform: "scale(1.2)" } }
-    const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
     return (
         <>
@@ -143,20 +150,14 @@ const Totalexceldata = () => {
                                                 results.map((item, index) => {
                                                     return (
                                                         <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
-                                                            <TableCell >{index + 1} </TableCell>
+                                                            
+                                                            <TableCell  >{index + 1} </TableCell>
                                                             <TableCell sx={{ cursor: 'pointer' }} >{item.FPR_NAME}</TableCell>
                                                             <TableCell >{item["E-mail"]} </TableCell>
                                                             <TableCell >{item.MOBILEPHONE_HOME}</TableCell>
                                                             <TableCell >{item.DPI_Amount} </TableCell>
                                                             <TableCell >
-                                                                <NavLink
-                                                                    to={`${item.pdflink}`}
-                                                                    className={({ isActive, isPending }) =>
-                                                                        isPending ? "pending" : isActive ? "active" : ""
-                                                                    }
-                                                                >
-                                                                    areness
-                                                                </NavLink>
+                                                                <PictureAsPdfIcon variant="contained" onClick={() => openPDF(id, item._id)}/>
                                                             </TableCell>
                                                             <TableCell sx={{ display: "flex", justifyContent: "space-between" }}>
                                                                 <Button variant='contained' sx={{ backgroundColor: "#00AEC6" }}>Re-Send Email</Button>
