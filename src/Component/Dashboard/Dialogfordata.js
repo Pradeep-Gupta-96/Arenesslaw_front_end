@@ -40,7 +40,39 @@ const Dialogfordata = () => {
 
     //sample file download 
     const number = Math.floor(100000 + Math.random() * 900000);
-    const Excelldata = [{ "Notice ID": `sample${number}`, "DATE": "", "ACCOUNT": "", "CARDNO": "", "FPR_NAME": "", "FPR_LD_LIN": "", "FPR_MOB": "", "EMBONAME": "", "ADDRESS1": "", "ADDRESS2": "", "CITY": "", "STATE": "", "PINCODE": "", "NEWRISKREGION": "", "NEW_CURR BAL": "", "RISKCLASS": "", "BLOCK1": "", "BLOCK2": "", "ZONE": "", "SENDER": "", "BKT": "", "MOBILEPHONE_HOME": "", "TRIGGER": "", "ACTIVITY": "", "STAGE": "", "DPI_Amount": "", "Cur Bal": "", "Notice Amount(Cur bal+DPI)": "", "E-mail": "", "CASE No": "", "REF_NO": "", "NAME_OF_ARBITRATOR": "", "ADDRESS_OF_ARBITRATOR1": "", "ADDRESS_OF_ARBITRATOR2": "", "CITY": "", "PINCODE_ARB": "", "DATE_ARB": "", "TIME_ARB": "", "MEETING_LINK": "", "MEETING_PASSWORD": "", "MEETING_ID": "", "NOTICE_DATE": "", "NAME_OF_CONCILIATOR": "", "DATE_OF_CONCILIATION": "", "TIMING_OF_CONCILIATION": "" }]
+    const Excelldata = [{
+        "Notice_ID": `sample${number}`,
+        'DATE': "",
+        'ACCOUNT': "",
+        'CARDNO': "",
+        'FPR_NAME': "",
+        'FPR_LD_LIN': "",
+        'FPR_MOB': "",
+        'EMBONAME': "",
+        'ADDRESS1': "",
+        'ADDRESS2': "",
+        'CITY': "",
+        'STATE': "",
+        'PINCODE': "",
+        'NEWRISKREGION': "",
+        'NEW_CURR_BAL': "",
+        'RISKCLASS': "",
+        'BLOCK1': "",
+        'BLOCK2': "",
+        'ZONE': "",
+        'SENDER': "",
+        'BKT': "",
+        'MOBILEPHONE_HOME': "",
+        'TRIGGER': "",
+        'ACTIVITY': "",
+        'STAGE': "",
+        'DPI_Amount': "",
+        'Cur_Bal': "",
+        'Notice_Amount_total': "",
+        'E_mail': "",
+        'REF_NO': "",
+        'NOTICE_DATE': "",
+    }]
     const downloadfiletype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const downloadfileName = `sample${number}`
     const downloadfilextention = '.xlsx';
@@ -82,58 +114,58 @@ const Dialogfordata = () => {
         formData.append('file', excelFile);
         formData.append('role', JSON.parse(localStorage.getItem('role')));
         try {
-          if (!temp || !excelFile) {
-            toast('Please fill all details!', {
-              position: 'top-center',
-              autoClose: 1000,
-              type: 'error'
-            });
+            if (!temp || !excelFile) {
+                toast('Please fill all details!', {
+                    position: 'top-center',
+                    autoClose: 1000,
+                    type: 'error'
+                });
+                setisLoading(false);
+                return;
+            }
+            if (excelFile !== null) {
+                const res = await fetch('http://localhost:4000/excel', {
+                    method: 'POST',
+                    headers: {
+                        authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+                    },
+                    body: formData
+                });
+                const result = await res.json();
+                console.log(result);
+                handleResponse(result); // Handle the response
+            }
             setisLoading(false);
-            return;
-          }
-          if (excelFile !== null) {
-            const res = await fetch('http://localhost:4000/excel', {
-              method: 'POST',
-              headers: {
-                authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
-              },
-              body: formData
-            });
-            const result = await res.json();
-            console.log(result);
-            handleResponse(result); // Handle the response
-          }
-          setisLoading(false);
         } catch (error) {
-          setisLoading(false);
-          console.log(error);
+            setisLoading(false);
+            console.log(error);
         }
-      };
-      
-      const handleResponse = (result) => {
+    };
+
+    const handleResponse = (result) => {
         if (result.msg === 'running') {
-          toast('Data uploaded!', {
-            position: 'top-center',
-            autoClose: 1000,
-            type: 'success'
-          });
-          setExcelFile(null);
-          reloadPage(); // Reload the page
+            toast('Data uploaded!', {
+                position: 'top-center',
+                autoClose: 1000,
+                type: 'success'
+            });
+            setExcelFile(null);
+            reloadPage(); // Reload the page
         } else if (result.msg === 'Stop') {
-          toast('Filename already exists!', {
-            position: 'top-center',
-            autoClose: 1000,
-            type: 'warning'
-          });
-          setExcelFile(null);
-          setisLoading(false);
+            toast('Filename already exists!', {
+                position: 'top-center',
+                autoClose: 1000,
+                type: 'warning'
+            });
+            setExcelFile(null);
+            setisLoading(false);
         }
-      };
-      
-      const reloadPage = () => {
+    };
+
+    const reloadPage = () => {
         window.location.reload(); // Reload the page
-      };
-      
+    };
+
 
     return (
         <>
