@@ -60,28 +60,34 @@ export default function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    // email and password validation
-    const emailregex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    const passworderegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+  
+    // Email and password validation regular expressions
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  
     try {
-      if (!emailregex.test(data.get('email'))) {
-        toast("please enter the valid email!", {
+      // Email validation
+      if (!emailRegex.test(data.get('email'))) {
+        toast("Please enter a valid email!", {
           position: "top-center",
           autoClose: 1000,
           type: "error"
-        })
-        return
-      } else if (!passworderegex.test(data.get('password'))) {
-        toast("Password must contain 8 charecter at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:", {
+        });
+        return;
+      }
+  
+      // Password validation
+      if (!passwordRegex.test(data.get('password'))) {
+        toast("Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.", {
           position: "top-center",
           autoClose: 2000,
           type: "error"
-        })
-        return
+        });
+        return;
       }
-      // post data for registration
-      const res = await fetch("http://localhost:4000/user/signup", {
+  
+      // Post data for registration
+      const response = await fetch("http://localhost:4000/user/signup", {
         method: "post",
         headers: {
           "content-type": "application/json"
@@ -89,31 +95,32 @@ export default function Signup() {
         body: JSON.stringify({
           username: data.get('username'),
           email: data.get('email'),
-          "role": Role,
+          role: Role,
           password: data.get('password'),
         })
-      })
-      const result = await res.json()
-      console.log(!result.Token)
+      });
+  
+      const result = await response.json();
+      console.log(!result.Token);
+  
       if (!result.Token) {
-        toast("invalid credential!", {
+        toast("Invalid credentials!", {
           position: "top-center",
           autoClose: 1000,
           type: "error"
-        })
-      }
-      if (result.Token) {
-        toast("Registeration Successfull !", {
+        });
+      } else {
+        toast("Registration Successful!", {
           position: "top-center",
           autoClose: 1000,
           type: "success"
-        })
+        });
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
+  
 
   return (
     <Box sx={{ display: 'flex' }}>

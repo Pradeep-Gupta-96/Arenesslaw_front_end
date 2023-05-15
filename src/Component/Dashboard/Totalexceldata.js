@@ -5,7 +5,7 @@ import {
     Button, ButtonGroup, Dialog, DialogContent, DialogTitle, Grid, List, ListItem,
     ListItemText, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from '@mui/material';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
@@ -79,7 +79,6 @@ const Totalexceldata = () => {
         window.open(PDF_URL, '_blank');
     };
 
-    // console.log(heders)
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/');

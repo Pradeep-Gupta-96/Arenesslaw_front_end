@@ -12,6 +12,7 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
 import DialogActions from '@mui/material/DialogActions';
+import CircularProgress from '@mui/material/CircularProgress';
 import * as FileServer from 'file-saver'
 import XLSX from 'sheetjs-style'
 import { toast } from 'react-toastify';
@@ -29,6 +30,7 @@ const Dialogfordata = () => {
     const [temp, setTemp] = useState('');
     const [excelFile, setExcelFile] = useState(null);
     const [excelFileError, setExcelFileError] = useState(null);
+    const [isLoading, setisLoading] = useState(false)
     let [filename, setFilename] = useState('')
     filename = filename.slice(0, -5)
 
@@ -72,54 +74,68 @@ const Dialogfordata = () => {
     }
 
 
-    // submit function
     const handleSubmit = async () => {
-        const formData = new FormData()
-        formData.append('template', temp)
-        formData.append("filename", filename)
-        formData.append('file', excelFile)
-        formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
+        setisLoading(true);
+        const formData = new FormData();
+        formData.append('template', temp);
+        formData.append('filename', filename);
+        formData.append('file', excelFile);
+        formData.append('role', JSON.parse(localStorage.getItem('role')));
         try {
-            if (!temp || !excelFile) {
-                toast("please fill all details!", {
-                    position: "top-center",
-                    autoClose: 1000,
-                    type: "error"
-                })
-                return
-            }
-            if (excelFile !== null) {
-                console.log("innner code exicuted")
-                console.log('formdata',formData)
-                const res = await fetch("http://localhost:4000/excel", {
-                    method: 'POST',
-                    headers: {
-                        authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-                    },
-                    body: formData
-                })
-                const result = await res.json()
-                console.log(result)
-                if (result.msg === "running") {
-                    toast("Data uploaded!", {
-                        position: "top-center",
-                        autoClose: 1000,
-                        type: "success"
-                    })
-                    setExcelFile(null);
-                }else if (result.msg === "Stop") {
-                    toast("filename already exist!", {
-                        position: "top-center",
-                        autoClose: 1000,
-                        type: "warning"
-                    })
-                    setExcelFile(null);
-                }
-            }
+          if (!temp || !excelFile) {
+            toast('Please fill all details!', {
+              position: 'top-center',
+              autoClose: 1000,
+              type: 'error'
+            });
+            setisLoading(false);
+            return;
+          }
+          if (excelFile !== null) {
+            console.log('inner code executed');
+            console.log('formdata', formData);
+            const res = await fetch('http://localhost:4000/excel', {
+              method: 'POST',
+              headers: {
+                authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
+              },
+              body: formData
+            });
+            const result = await res.json();
+            console.log(result);
+            handleResponse(result); // Handle the response
+          }
+          setisLoading(false);
         } catch (error) {
-            console.log(error)
+          setisLoading(false);
+          console.log(error);
         }
-    }
+      };
+      
+      const handleResponse = (result) => {
+        if (result.msg === 'running') {
+          toast('Data uploaded!', {
+            position: 'top-center',
+            autoClose: 1000,
+            type: 'success'
+          });
+          setExcelFile(null);
+          reloadPage(); // Reload the page
+        } else if (result.msg === 'Stop') {
+          toast('Filename already exists!', {
+            position: 'top-center',
+            autoClose: 1000,
+            type: 'warning'
+          });
+          setExcelFile(null);
+          setisLoading(false);
+        }
+      };
+      
+      const reloadPage = () => {
+        window.location.reload(); // Reload the page
+      };
+      
 
     return (
         <>
@@ -153,7 +169,7 @@ const Dialogfordata = () => {
                             <Link onClick={exporttoexcel}> Click Here!</Link>
                         </Typography>
                         <DialogActions>
-                            <Button color="secondary" variant="contained" onClick={handleSubmit}>Import</Button>
+                            <Button color="secondary" variant="contained" disabled={isLoading} onClick={handleSubmit}>{isLoading ? <CircularProgress /> : "Import"}</Button>
                         </DialogActions>
                     </Grid>
                 </Grid>

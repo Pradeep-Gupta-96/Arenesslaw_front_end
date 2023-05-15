@@ -63,36 +63,32 @@ export default function Resetpass() {
   }, [])
 
   const handleSubmit = async (event) => {
-    const passworderegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const N = data.get('Npassword')
-    const C = data.get('Cpassword')
-    const id = JSON.parse(localStorage.getItem("id"))
+    const N = data.get('Npassword');
+    const C = data.get('Cpassword');
+    const id = JSON.parse(localStorage.getItem("id"));
+
     try {
-      if (!passworderegex.test(data.get('Npassword'))) {
-        toast("Password must contain 8 charecter at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:", {
+      // Password validation
+      if (!passwordRegex.test(N) || !passwordRegex.test(C)) {
+        toast("Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.", {
           position: "top-center",
           autoClose: 2000,
           type: "error"
-        })
-        return
-      } else if (!passworderegex.test(data.get('Cpassword'))) {
-        toast("Password must contain 8 charecter at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character:", {
-          position: "top-center",
-          autoClose: 2000,
-          type: "error"
-        })
-        return
+        });
+        return;
       }
+
       if (N !== C) {
-        toast("password did't match", {
+        toast("Passwords don't match.", {
           position: "top-center",
           autoClose: 1000,
           type: "error"
-        })
+        });
       } else {
-        const res = await fetch(`http://localhost:4000/user/resetpass/${id}`, {
+        const response = await fetch(`http://localhost:4000/user/resetpass/${id}`, {
           method: "PATCH",
           headers: {
             "content-type": "application/json",
@@ -102,32 +98,35 @@ export default function Resetpass() {
             Epassword: data.get('Epassword'),
             Cpassword: data.get('Cpassword'),
           })
-        })
-        const result = await res.json()
+        });
+
+        const result = await response.json();
+
         if (result.Message === "Done") {
-          toast("password update successfull!", {
+          toast("Password update successful!", {
             position: "top-center",
             autoClose: 1000,
             type: "success"
-          })
-          localStorage.clear()
-          Navigate('/')
+          });
+          localStorage.clear();
+          Navigate('/');
         } else {
-          toast("invalid!", {
+          toast("Invalid!", {
             position: "top-center",
             autoClose: 1000,
-            type: "errer"
-          })
+            type: "error"
+          });
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
+
   return (
     <>   <Box sx={{ display: 'flex' }}>
-      <AdminNavbar/>
+      <AdminNavbar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
         <DrawerHeader />
         <ThemeProvider theme={theme}>

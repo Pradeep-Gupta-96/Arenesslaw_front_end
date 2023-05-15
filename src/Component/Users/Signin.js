@@ -33,8 +33,9 @@ export default function Signin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+  
     try {
-      const res = await fetch("http://localhost:4000/user/signin", {
+      const response = await fetch("http://localhost:4000/user/signin", {
         method: "post",
         headers: {
           "content-type": "application/json"
@@ -43,43 +44,38 @@ export default function Signin() {
           email: data.get('email'),
           password: data.get('password'),
         })
-      })
-      const result = await res.json()
-      console.log(result.user.role)
+      });
+  
+      const result = await response.json();
+      console.log(result.user.role);
+  
       if (result.message === "invalid") {
-        toast("invalid credential!", {
+        toast("Invalid credentials!", {
           position: "top-center",
           autoClose: 1000,
           type: "error"
-        })
-      } else if (result.user.role === "Admin") {
-        localStorage.setItem("username", JSON.stringify(result.user.username))
-        localStorage.setItem("id", JSON.stringify(result.user._id))
-        localStorage.setItem("token", JSON.stringify(result.Token))
-        localStorage.setItem("role", JSON.stringify(result.user.role))
-        toast("Login Successfull !", {
-          position: "top-center",
-          autoClose: 1000,
-          type: "success"
-        })
-        Navigate('/admindashboard')
-      } else if (result.user.role === "User") {
-        localStorage.setItem("username", JSON.stringify(result.user.username))
-        localStorage.setItem("id", JSON.stringify(result.user._id))
-        localStorage.setItem("token", JSON.stringify(result.Token))
-        localStorage.setItem("role", JSON.stringify(result.user.role))
-        toast("Login Successfull !", {
-          position: "top-center",
-          autoClose: 1000,
-          type: "success"
-        })
-        Navigate('/admindashboard')
+        });
+        return;
       }
-
+  
+      const { username, _id, Token, role } = result.user;
+      localStorage.setItem("username", JSON.stringify(username));
+      localStorage.setItem("id", JSON.stringify(_id));
+      localStorage.setItem("token", JSON.stringify(Token));
+      localStorage.setItem("role", JSON.stringify(role));
+  
+      toast("Login Successful!", {
+        position: "top-center",
+        autoClose: 1000,
+        type: "success"
+      });
+  
+      Navigate('/admindashboard');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
+  
 
   return (
     <ThemeProvider theme={theme}>
