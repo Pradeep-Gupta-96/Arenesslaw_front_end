@@ -92,8 +92,6 @@ const Dialogfordata = () => {
             return;
           }
           if (excelFile !== null) {
-            console.log('inner code executed');
-            console.log('formdata', formData);
             const res = await fetch('http://localhost:4000/excel', {
               method: 'POST',
               headers: {

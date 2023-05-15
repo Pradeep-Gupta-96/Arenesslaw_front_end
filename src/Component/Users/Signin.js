@@ -33,7 +33,7 @@ export default function Signin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-  
+
     try {
       const response = await fetch("http://localhost:4000/user/signin", {
         method: "post",
@@ -45,10 +45,9 @@ export default function Signin() {
           password: data.get('password'),
         })
       });
-  
+
       const result = await response.json();
-      console.log(result.user.role);
-  
+
       if (result.message === "invalid") {
         toast("Invalid credentials!", {
           position: "top-center",
@@ -57,25 +56,25 @@ export default function Signin() {
         });
         return;
       }
-  
-      const { username, _id, Token, role } = result.user;
+
+      const { username, _id, role } = result.user;
       localStorage.setItem("username", JSON.stringify(username));
       localStorage.setItem("id", JSON.stringify(_id));
-      localStorage.setItem("token", JSON.stringify(Token));
+      localStorage.setItem("token", JSON.stringify(result.Token));
       localStorage.setItem("role", JSON.stringify(role));
-  
+
       toast("Login Successful!", {
         position: "top-center",
         autoClose: 1000,
         type: "success"
       });
-  
+
       Navigate('/admindashboard');
     } catch (error) {
       console.log(error);
     }
   };
-  
+
 
   return (
     <ThemeProvider theme={theme}>
