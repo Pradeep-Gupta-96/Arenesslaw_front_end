@@ -11,6 +11,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import '../style/style.css'
 import { toast } from 'react-toastify'
 import AdminNavbar from '../Navbar/AdminNavbar';
 
@@ -35,6 +36,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const UploadFileIconCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" } }
+const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "rotate(360deg)" } }
+const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
+
 const Notice = () => {
     const [open, setOpen] = useState(false);
     const [emailformaill, setEmailformail] = useState({ emailformail: "" });
@@ -42,6 +47,7 @@ const Notice = () => {
     const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [inputsearchmail, setinputsearchmail] = useState('');
     const [inputsearchtemp, setinputsearchtemp] = useState('');
+    const [isloading, setisLoading] = useState(true)
     const navigate = useNavigate();
     const revData = [...results].reverse()
 
@@ -72,6 +78,7 @@ const Notice = () => {
         })
         const result = await res.json()
         setResults(result.message)
+        setisLoading(false)
     }
     // console.log(revData)
     useEffect(() => {
@@ -79,7 +86,7 @@ const Notice = () => {
             navigate('/')
         }
         callapi(API)
-    },[]) 
+    }, [])
 
 
     const sendemail = async (id) => {
@@ -129,9 +136,6 @@ const Notice = () => {
         setinputsearchtemp('')
         setinputsearchmail('')
     }
-    const UploadFileIconCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" } }
-    const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "rotate(360deg)" } }
-    const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
     return (
         <>
@@ -172,7 +176,7 @@ const Notice = () => {
 
                             {/*================ Searchbar ============== */}
                             <Grid item xs={12} >
-                                <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" }  }}    >
+                                <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                     <TextField type='Search' placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={onChange} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                         <InputLabel id="demo-simple-select-label">Notice Type</InputLabel>
@@ -185,7 +189,7 @@ const Notice = () => {
                                         >
                                             <MenuItem value=''><em>none</em></MenuItem>
                                             <MenuItem value={"areness attorneys"}>areness attorneys </MenuItem>
-                                    <MenuItem value={"Legal & Associates"}>Legal & Associates</MenuItem>
+                                            <MenuItem value={"Legal & Associates"}>Legal & Associates</MenuItem>
                                         </Select>
                                     </FormControl>
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
@@ -215,77 +219,82 @@ const Notice = () => {
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                     <TableContainer sx={{ maxHeight: 440 }}>
-                                        <Table stickyHeader aria-label="sticky table">
-                                            <TableHead >
-                                                <TableRow>
-                                                    <TableCell>S. No.</TableCell>
-                                                    <TableCell>File Name</TableCell>
-                                                    <TableCell> Created Date</TableCell>
-                                                    <TableCell>Notice Type</TableCell>
-                                                    <TableCell>Email ID</TableCell>
-                                                    <TableCell>Actions</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {revData
-                                                    .filter((item) => {
-                                                        const inputsearch = inputsearchvalue.toLowerCase()
-                                                        const inputsearchtempp = inputsearchtemp.toLowerCase()
-                                                        const inputsearchmaill = inputsearchmail.toLowerCase()
-                                                        const outputsearch = item.filename.toLowerCase()
-                                                        const outputsearchtemp = item.template.toLowerCase()
-                                                        const outputsearchmailll = item.emailformail ? item.emailformail.toLowerCase() : " "
-                                                        return ((outputsearch && outputsearch.startsWith(inputsearch))
-                                                            && (outputsearchtemp && outputsearchtemp.startsWith(inputsearchtempp))
-                                                            && (outputsearchmailll && outputsearchmailll.startsWith(inputsearchmaill)))
-                                                    })
-                                                    .map((item, index) => {
-                                                        return (
-                                                            <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}  >
-                                                                <TableCell >{index + 1}</TableCell>
-                                                                <TableCell onClick={() => totalexceldata(item._id)} sx={{ cursor: 'pointer' }}  >
-                                                                    {item.filename} <br />Count - {item.xlData.length}
-                                                                </TableCell>
-                                                                <TableCell>{new Date(item.createdAt).getDate()}
-                                                                    -{new Date(item.createdAt).toLocaleString('default', { month: 'short' })}
-                                                                    -{new Date(item.createdAt).getFullYear()}
-                                                                </TableCell>
-                                                                <TableCell>{item.template}</TableCell>
-                                                                <TableCell >
-                                                                    {item.emailformail ? item.emailformail
-                                                                        :
-                                                                        <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                                                            <InputLabel id="demo-simple-select-label">Select email</InputLabel>
-                                                                            <Select
-                                                                                labelId="demo-simple-select-label"
-                                                                                id="demo-simple-select"
-                                                                                name='emailformail'
-                                                                                value={emailformaill.emailformail}
-                                                                                label="Select email"
-                                                                                onChange={handleChange}
-                                                                            >
-                                                                                <MenuItem value=''><em>none</em></MenuItem>
-                                                                                <MenuItem value={"noreply@areness.com"}>noreply@areness.com</MenuItem>
-                                                                                <MenuItem value={"cc@arness.com"}>cc@arness.com</MenuItem>
-                                                                            </Select>
-                                                                        </FormControl>
-                                                                    }
-                                                                </TableCell>
-                                                                <TableCell >
-                                                                    <ButtonGroup variant="non">
-                                                                        {item.emailformail ? <Button variant='contained' sx={{ px: 5 }} disabled>Sent</Button>
-                                                                            : <Button variant='contained' sx={{ backgroundColor: "#24D555" }} onClick={() => sendemail(item._id)}>Sent email</Button>}
-                                                                        <Button variant='contained' sx={{ backgroundColor: "#0BBDDD" }}>Send SMS</Button>
-                                                                        {item.emailformail ? <Button disabled><VisibilityIcon /></Button> : <Button><VisibilityIcon /></Button>}
-                                                                        {item.emailformail ? <Button disabled><AccessTimeIcon /></Button> : <Button><AccessTimeIcon /></Button>}
-                                                                        {item.emailformail ? <Button disabled><FileDownloadIcon /></Button> : <Button><FileDownloadIcon /></Button>}
-                                                                    </ButtonGroup>
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    })}
-                                            </TableBody>
-                                        </Table>
+                                        {isloading ? (
+                                           <div className="loading"></div>
+                                        ) :
+                                            <Table stickyHeader aria-label="sticky table">
+                                                <TableHead >
+                                                    <TableRow>
+                                                        <TableCell>S. No.</TableCell>
+                                                        <TableCell>File Name</TableCell>
+                                                        <TableCell> Created Date</TableCell>
+                                                        <TableCell>Notice Type</TableCell>
+                                                        <TableCell>Email ID</TableCell>
+                                                        <TableCell>Actions</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {
+                                                        revData
+                                                            .filter((item) => {
+                                                                const inputsearch = inputsearchvalue.toLowerCase()
+                                                                const inputsearchtempp = inputsearchtemp.toLowerCase()
+                                                                const inputsearchmaill = inputsearchmail.toLowerCase()
+                                                                const outputsearch = item.filename.toLowerCase()
+                                                                const outputsearchtemp = item.template.toLowerCase()
+                                                                const outputsearchmailll = item.emailformail ? item.emailformail.toLowerCase() : " "
+                                                                return ((outputsearch && outputsearch.startsWith(inputsearch))
+                                                                    && (outputsearchtemp && outputsearchtemp.startsWith(inputsearchtempp))
+                                                                    && (outputsearchmailll && outputsearchmailll.startsWith(inputsearchmaill)))
+                                                            })
+                                                            .map((item, index) => {
+                                                                return (
+                                                                    <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}  >
+                                                                        <TableCell >{index + 1}</TableCell>
+                                                                        <TableCell onClick={() => totalexceldata(item._id)} sx={{ cursor: 'pointer' }}  >
+                                                                            {item.filename} <br />Count - {item.xlData.length}
+                                                                        </TableCell>
+                                                                        <TableCell>{new Date(item.createdAt).getDate()}
+                                                                            -{new Date(item.createdAt).toLocaleString('default', { month: 'short' })}
+                                                                            -{new Date(item.createdAt).getFullYear()}
+                                                                        </TableCell>
+                                                                        <TableCell>{item.template}</TableCell>
+                                                                        <TableCell >
+                                                                            {item.emailformail ? item.emailformail
+                                                                                :
+                                                                                <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                                                                                    <InputLabel id="demo-simple-select-label">Select email</InputLabel>
+                                                                                    <Select
+                                                                                        labelId="demo-simple-select-label"
+                                                                                        id="demo-simple-select"
+                                                                                        name='emailformail'
+                                                                                        value={emailformaill.emailformail}
+                                                                                        label="Select email"
+                                                                                        onChange={handleChange}
+                                                                                    >
+                                                                                        <MenuItem value=''><em>none</em></MenuItem>
+                                                                                        <MenuItem value={"noreply@areness.com"}>noreply@areness.com</MenuItem>
+                                                                                        <MenuItem value={"cc@arness.com"}>cc@arness.com</MenuItem>
+                                                                                    </Select>
+                                                                                </FormControl>
+                                                                            }
+                                                                        </TableCell>
+                                                                        <TableCell >
+                                                                            <ButtonGroup variant="non">
+                                                                                {item.emailformail ? <Button variant='contained' sx={{ px: 5 }} disabled>Sent</Button>
+                                                                                    : <Button variant='contained' sx={{ backgroundColor: "#24D555" }} onClick={() => sendemail(item._id)}>Sent email</Button>}
+                                                                                <Button variant='contained' sx={{ backgroundColor: "#0BBDDD" }}>Send SMS</Button>
+                                                                                {item.emailformail ? <Button disabled><VisibilityIcon /></Button> : <Button><VisibilityIcon /></Button>}
+                                                                                {item.emailformail ? <Button disabled><AccessTimeIcon /></Button> : <Button><AccessTimeIcon /></Button>}
+                                                                                {item.emailformail ? <Button disabled><FileDownloadIcon /></Button> : <Button><FileDownloadIcon /></Button>}
+                                                                            </ButtonGroup>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                )
+                                                            })}
+                                                </TableBody>
+                                            </Table>
+                                        }
                                     </TableContainer>
                                 </Paper>
                             </Grid>

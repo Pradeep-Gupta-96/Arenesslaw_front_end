@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import { Box } from '@mui/system'
-import { Grid, Paper, Typography, InputBase, ButtonGroup, Button, TableHead, TableContainer, TableRow, TableCell, TableBody, Table, CircularProgress } from '@mui/material';
+import { Grid, Paper, Typography, InputBase, ButtonGroup, Button, TableHead, TableContainer, TableRow, TableCell, TableBody, Table } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom'
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AdminNavbar from '../../../Navbar/AdminNavbar';
+import '../../../style/style.css'
 
 
 
@@ -176,7 +177,7 @@ const Openemaildetails = () => {
                                                         return <Button variant='non' title='edit' key={item._id} onClick={() => onClickforupdate(item._id)}><EditOutlinedIcon /></Button>
                                                     })}
                                                     <Button variant='non' title='View Notice' onClick={onClickforViewPdf} disabled={isLoading}>
-                                                        {isLoading ? <CircularProgress color="secondary" /> : <RemoveRedEyeOutlinedIcon />}
+                                                        {isLoading ? (<div className="posting"></div>) : <RemoveRedEyeOutlinedIcon />}
                                                     </Button>
                                                     <Button variant='non'><Inventory2OutlinedIcon /></Button>
                                                 </ButtonGroup>

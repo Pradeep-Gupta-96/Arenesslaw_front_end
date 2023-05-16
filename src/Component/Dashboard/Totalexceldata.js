@@ -13,6 +13,7 @@ import Dialogresendemail from './Dialogresendemail';
 import Dialogtimeline from './Dialogtimeline';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import AdminNavbar from '../Navbar/AdminNavbar';
+import '../style/style.css'
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -42,6 +43,7 @@ const Totalexceldata = () => {
     const [open2, setopen2] = useState(false);
     const [results, setResults] = useState([])
     const [heders, setheaders] = useState([])
+    const [isloading, setisLoading] = useState(true)
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -72,6 +74,7 @@ const Totalexceldata = () => {
         const result = await res.json()
         setheaders(result.message)
         setResults(result.message.xlData)
+        setisLoading(false)
     }
 
     const openPDF = (excelId, xlDataId) => {
@@ -132,48 +135,52 @@ const Totalexceldata = () => {
                         <Grid item xs={12}>
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                 <TableContainer sx={{ maxHeight: 440 }}>
-                                    <Table stickyHeader aria-label="sticky table">
-                                        <TableHead >
-                                            <TableRow  >
-                                                <TableCell><strong> S. No.</strong></TableCell>
-                                                <TableCell><strong> Applicant Name</strong> </TableCell>
-                                                <TableCell><strong>Email ID</strong></TableCell>
-                                                <TableCell><strong>Phone Number</strong></TableCell>
-                                                <TableCell><strong>Due Amount</strong></TableCell>
-                                                <TableCell><strong>PDF</strong></TableCell>
-                                                <TableCell><strong>Actions</strong></TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                results.map((item, index) => {
-                                                    return (
-                                                        <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
-                                                            
-                                                            <TableCell  >{index + 1} </TableCell>
-                                                            <TableCell sx={{ cursor: 'pointer' }} >{item.FPR_NAME}</TableCell>
-                                                            <TableCell >{item["E-mail"]} </TableCell>
-                                                            <TableCell >{item.MOBILEPHONE_HOME}</TableCell>
-                                                            <TableCell >{item.DPI_Amount} </TableCell>
-                                                            <TableCell >
-                                                                <PictureAsPdfIcon variant="contained" onClick={() => openPDF(id, item._id)}/>
-                                                            </TableCell>
-                                                            <TableCell sx={{ display: "flex", justifyContent: "space-between" }}>
-                                                                <Button variant='contained' sx={{ backgroundColor: "#00AEC6" }}>Re-Send Email</Button>
-                                                                <Button variant='contained' sx={{ backgroundColor: "#24D555" }}>Re-Send SMS</Button>
-                                                                <Button variant='non'><WhatsAppIcon sx={{
-                                                                    color: "#24D555",
-                                                                    transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" }
-                                                                }} /></Button>
-                                                                <Button variant='non' sx={IconsCSS}><EmailOutlinedIcon /></Button>
-                                                                <Button variant='non' sx={IconsCSS} onClick={handleClickopen2}><UpdateOutlinedIcon /></Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                })
-                                            }
-                                        </TableBody>
-                                    </Table>
+                                    {isloading ? (
+                                        <div className="loading"></div>
+                                    ) :
+                                        <Table stickyHeader aria-label="sticky table">
+                                            <TableHead >
+                                                <TableRow  >
+                                                    <TableCell><strong> S. No.</strong></TableCell>
+                                                    <TableCell><strong> Applicant Name</strong> </TableCell>
+                                                    <TableCell><strong>Email ID</strong></TableCell>
+                                                    <TableCell><strong>Phone Number</strong></TableCell>
+                                                    <TableCell><strong>Due Amount</strong></TableCell>
+                                                    <TableCell><strong>PDF</strong></TableCell>
+                                                    <TableCell><strong>Actions</strong></TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {
+                                                    results.map((item, index) => {
+                                                        return (
+                                                            <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
+
+                                                                <TableCell  >{index + 1} </TableCell>
+                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.FPR_NAME}</TableCell>
+                                                                <TableCell >{item["E-mail"]} </TableCell>
+                                                                <TableCell >{item.MOBILEPHONE_HOME}</TableCell>
+                                                                <TableCell >{item.DPI_Amount} </TableCell>
+                                                                <TableCell >
+                                                                    <PictureAsPdfIcon variant="contained" onClick={() => openPDF(id, item._id)} />
+                                                                </TableCell>
+                                                                <TableCell sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                                    <Button variant='contained' sx={{ backgroundColor: "#00AEC6" }}>Re-Send Email</Button>
+                                                                    <Button variant='contained' sx={{ backgroundColor: "#24D555" }}>Re-Send SMS</Button>
+                                                                    <Button variant='non'><WhatsAppIcon sx={{
+                                                                        color: "#24D555",
+                                                                        transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" }
+                                                                    }} /></Button>
+                                                                    <Button variant='non' sx={IconsCSS}><EmailOutlinedIcon /></Button>
+                                                                    <Button variant='non' sx={IconsCSS} onClick={handleClickopen2}><UpdateOutlinedIcon /></Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        )
+                                                    })
+                                                }
+                                            </TableBody>
+                                        </Table>
+                                    }
                                 </TableContainer>
                             </Paper>
                         </Grid>

@@ -12,7 +12,6 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
 import DialogActions from '@mui/material/DialogActions';
-import CircularProgress from '@mui/material/CircularProgress';
 import * as FileServer from 'file-saver'
 import XLSX from 'sheetjs-style'
 import { toast } from 'react-toastify';
@@ -199,9 +198,10 @@ const Dialogfordata = () => {
                             <Link onClick={exporttoexcel}> Click Here!</Link>
                         </Typography>
                         <DialogActions>
-                            <Button color="secondary" variant="contained" disabled={isLoading} onClick={handleSubmit}>{isLoading ? <CircularProgress /> : "Import"}</Button>
+                            <Button color="secondary" variant="contained" onClick={handleSubmit}>Import...</Button>
                         </DialogActions>
                     </Grid>
+                    {isLoading ? (<div className="posting"></div>) : ""}
                 </Grid>
             </Box>
         </>

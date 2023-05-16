@@ -26,7 +26,12 @@ const Iconscss = styled('div')(({ theme }) => ({
     boxShadow: "0 0 0 10px rgba(0, 0, 0, 0.1)",
     background: "rgba(0, 0, 0, 0.1)",
     transition: "transform 0.5s ease",
-    "&:hover": { color: "#1a237e", transform: "rotate(720deg)" }
+    "&:hover": {
+        color: "#1a237e",
+        transform: "rotate(720deg)",
+        borderRight: "5px solid #f44336",
+        borderLeft: "5px solid #4caf50",
+    }
 }));
 
 const Item = styled(Paper)(({ theme }) => ({
