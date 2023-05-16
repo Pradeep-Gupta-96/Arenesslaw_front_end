@@ -201,7 +201,7 @@ const Dialogfordata = () => {
                             <Button color="secondary" variant="contained" onClick={handleSubmit}>Import...</Button>
                         </DialogActions>
                     </Grid>
-                    {isLoading ? (<div className="posting"></div>) : ""}
+                    {isLoading ? (<div className="xlpost"></div>) : ""}
                 </Grid>
             </Box>
         </>

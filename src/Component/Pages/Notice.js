@@ -48,6 +48,7 @@ const Notice = () => {
     const [inputsearchmail, setinputsearchmail] = useState('');
     const [inputsearchtemp, setinputsearchtemp] = useState('');
     const [isloading, setisLoading] = useState(true)
+    const [issendloading,setissendloading]=useState(false)
     const navigate = useNavigate();
     const revData = [...results].reverse()
 
@@ -99,6 +100,7 @@ const Notice = () => {
             return
         }
         try {
+            setissendloading(true)
             const res = await fetch(`http://localhost:4000/notice/sendemail/${id}`, {
                 method: "put",
                 headers: {
@@ -107,6 +109,7 @@ const Notice = () => {
                 body: JSON.stringify(emailformaill)
             })
             const result = await res.json()
+            setissendloading(false)
             if (result.message === "Saved") {
                 toast("email sent successfull!", {
                     position: "top-center",
@@ -114,11 +117,15 @@ const Notice = () => {
                     type: "success"
                 })
             }
+            reloadPage();
         } catch (error) {
             console.log(error)
         }
     }
 
+    const reloadPage = () => {
+        window.location.reload(); // Reload the page
+    };
 
     const onChange = (event) => {
         setInputsearchvalue(event.target.value)
@@ -220,7 +227,7 @@ const Notice = () => {
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                     <TableContainer sx={{ maxHeight: 440 }}>
                                         {isloading ? (
-                                           <div className="loading"></div>
+                                            <div className="loading"></div>
                                         ) :
                                             <Table stickyHeader aria-label="sticky table">
                                                 <TableHead >
@@ -282,7 +289,8 @@ const Notice = () => {
                                                                         <TableCell >
                                                                             <ButtonGroup variant="non">
                                                                                 {item.emailformail ? <Button variant='contained' sx={{ px: 5 }} disabled>Sent</Button>
-                                                                                    : <Button variant='contained' sx={{ backgroundColor: "#24D555" }} onClick={() => sendemail(item._id)}>Sent email</Button>}
+                                                                                    : issendloading ? (<div className="mailpost"></div>) :
+                                                                                        (<Button variant='contained' sx={{ backgroundColor: "#24D555" }} onClick={() => sendemail(item._id)}>Sent email</Button>)}
                                                                                 <Button variant='contained' sx={{ backgroundColor: "#0BBDDD" }}>Send SMS</Button>
                                                                                 {item.emailformail ? <Button disabled><VisibilityIcon /></Button> : <Button><VisibilityIcon /></Button>}
                                                                                 {item.emailformail ? <Button disabled><AccessTimeIcon /></Button> : <Button><AccessTimeIcon /></Button>}
