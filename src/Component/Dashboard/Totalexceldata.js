@@ -158,7 +158,7 @@ const Totalexceldata = () => {
 
                                                                 <TableCell  >{index + 1} </TableCell>
                                                                 <TableCell sx={{ cursor: 'pointer' }} >{item.FPR_NAME}</TableCell>
-                                                                <TableCell >{item["E-mail"]} </TableCell>
+                                                                <TableCell >{item.E_mail} </TableCell>
                                                                 <TableCell >{item.MOBILEPHONE_HOME}</TableCell>
                                                                 <TableCell >{item.DPI_Amount} </TableCell>
                                                                 <TableCell >

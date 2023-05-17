@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import * as FileServer from 'file-saver'
 import XLSX from 'sheetjs-style'
 import { toast } from 'react-toastify';
+import '../style/style.css'
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -198,10 +199,10 @@ const Dialogfordata = () => {
                             <Link onClick={exporttoexcel}> Click Here!</Link>
                         </Typography>
                         <DialogActions>
-                            <Button color="secondary" variant="contained" onClick={handleSubmit}>Import...</Button>
+                            {isLoading ? (<div className="xlpost"></div>) : <Button color="secondary" variant="contained" onClick={handleSubmit}>Import...</Button>}
                         </DialogActions>
                     </Grid>
-                    {isLoading ? (<div className="xlpost"></div>) : ""}
+
                 </Grid>
             </Box>
         </>
