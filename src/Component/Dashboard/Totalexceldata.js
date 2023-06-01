@@ -102,7 +102,11 @@ const Totalexceldata = () => {
                                 <List>
                                     <ListItem>
                                         <ListItemText >File Name <br /><strong>{heders.filename}</strong> </ListItemText>
-                                        <ListItemText >Created Date <br /> <strong> {new Date(heders.createdAt).getDate()}-{new Date(heders.createdAt).toLocaleString('default', { month: 'short' })}-{new Date(heders.createdAt).getFullYear()}</strong></ListItemText>
+                                        <ListItemText >Created Date <br /> <strong> {new Date(heders.createdAt).toLocaleDateString('en-US', {
+                                                                    day: 'numeric',
+                                                                    month: 'short',
+                                                                    year: 'numeric',
+                                                                })}</strong></ListItemText>
                                         <ListItemText >Created Time <br /> <strong> {new Date(heders.createdAt).getHours()}-{new Date(heders.createdAt).getMinutes()}-{new Date(heders.createdAt).getSeconds()}</strong></ListItemText>
                                         <ListItemText >Records Uploaded <br /><strong>{results.length}</strong></ListItemText>
                                         <ListItemText >Email ID <br /><strong> {heders.emailformail}</strong></ListItemText>

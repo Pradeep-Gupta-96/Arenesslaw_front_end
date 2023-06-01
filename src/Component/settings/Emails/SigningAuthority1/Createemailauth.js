@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { Avatar, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
@@ -49,66 +49,7 @@ const Createemailauth = () => {
     };
 
 
-    const ListItemCSS = {
-        display: 'block', cursor: "pointer",
-        width: "100px",
-        height: "100px",
-        borderRadius: "100%",
-        boxShadow: "0 0 0 10px #eceff1",
-        background: "#eceff1"
-    }
-    const styles = {
-        fileInput: {
-            display: 'none', // hide the default input element
-        },
-        label: {
-            display: 'block',
-            width: '100px',
-            height: '100px',
-            borderRadius: '50%',
-            boxShadow: '0 0 0 10px #eceff1',
-            cursor: 'pointer',
-            overflow: 'hidden',
-        },
-        labelText: {
-            display: 'block',
-            textAlign: 'center',
-            marginTop: '45px',
-            fontSize: '14px',
-            color: '#777',
-        },
-    };
 
-    //preparing notice
-    // const exportHtml = async () => {
-    //     emailEditorRef.current.editor.exportHtml((data) => {
-    //         const { html } = data;
-    //         const Obj = {
-    //             html: html
-    //         }
-    //         setGethtml(Obj)
-    //     });
-
-    //     try {
-    //         const res = await fetch("http://localhost:4000/notice/savehtml", {
-    //             method: "post",
-    //             headers: {
-    //                 'content-type': 'application/json'
-    //             },
-    //             body: JSON.stringify(gethtml)
-    //         })
-    //         const result = await res.json()
-    //         if (result.message === "Saved") {
-    //             toast("Saved!", {
-    //                 position: "top-center",
-    //                 autoClose: 1000,
-    //                 type: "success"
-    //             })
-    //         }
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // };
 
     return (
         <>
