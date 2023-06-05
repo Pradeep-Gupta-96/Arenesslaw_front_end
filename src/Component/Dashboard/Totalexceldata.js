@@ -22,7 +22,20 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
+const AnimatedGridItem = styled(Grid)`
+  animation: slideIn 1s ease-in-out;
 
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+`;
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -97,7 +110,7 @@ const Totalexceldata = () => {
                 <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <AnimatedGridItem item xs={12}>
                             <Item sx={tableCSS}>
                                 <List>
                                     <ListItem>
@@ -115,8 +128,8 @@ const Totalexceldata = () => {
                                     </ListItem>
                                 </List>
                             </Item>
-                        </Grid>
-                        <Grid sx={{ marginLeft: "auto", justifyContent: "space-between" }}>
+                        </AnimatedGridItem>
+                        <AnimatedGridItem sx={{ marginLeft: "auto", justifyContent: "space-between" }}>
                             <Item >
                                 <ButtonGroup>
                                     <Button variant='contained' sx={{ backgroundColor: "#00AEC6" }} onClick={handleClickopen1}>Re-Send Email</Button>
@@ -135,8 +148,8 @@ const Totalexceldata = () => {
                                     <Button variant='contained' sx={{ backgroundColor: "#24D555" }}>Re-Send SMS</Button>
                                 </ButtonGroup>
                             </Item>
-                        </Grid>
-                        <Grid item xs={12}>
+                        </AnimatedGridItem >
+                        <AnimatedGridItem item xs={12}>
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                 <TableContainer sx={{ maxHeight: 440 }}>
                                     {isloading ? (
@@ -187,7 +200,7 @@ const Totalexceldata = () => {
                                     }
                                 </TableContainer>
                             </Paper>
-                        </Grid>
+                        </AnimatedGridItem>
                         <Dialog
                             open={open2}
                             TransitionComponent={Transition}

@@ -1,26 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import {
+  Box, Toolbar, List, ListItem, ListItemButton, ListItemIcon,
+  ListItemText, CssBaseline, Typography, IconButton, Avatar, Menu, Tooltip
+} from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SummarizeIcon from '@mui/icons-material/Summarize';
-import { Avatar, Menu, Tooltip } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -62,6 +55,8 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: 'rgb(28 121 216 / 80%)', // Set the background color to transparent with 50% opacity
+  backdropFilter: 'blur(6px)', // Apply a blur effect
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
@@ -71,6 +66,8 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
+
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -151,13 +148,6 @@ export default function AdminNavbar() {
         }
       },
       {
-        text: "Reports",
-        icons: <UploadFileIcon />,
-        forNavigation: () => {
-          navigation('/report')
-        }
-      },
-      {
         text: "Settings",
         icons: <SettingsIcon />,
         forNavigation: () => {
@@ -212,15 +202,16 @@ export default function AdminNavbar() {
   }
 
   useEffect(() => {
-      if (!localStorage.getItem('token')) {
-        navigation('/')
-      }
+    if (!localStorage.getItem('token')) {
+      navigation('/')
+    }
   })
 
+ 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -234,9 +225,10 @@ export default function AdminNavbar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ transition: "transform 0.5s ease",
-                "&:hover": { transform: "scale(1.2)" }
-              }} noWrap component="div">
+          <Typography variant="h6" sx={{
+            transition: "transform 0.5s ease",
+            "&:hover": { transform: "scale(1.2)" }
+          }} noWrap component="div">
             {(campany === "") ? JSON.parse(localStorage.getItem("comapny")) : " "}
           </Typography>
 

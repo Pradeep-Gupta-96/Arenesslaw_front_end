@@ -19,6 +19,22 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
 }));
 
+const AnimatedGridItem = styled(Grid)`
+  animation: slideIn 1s ease-in-out;
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+`;
+
+
 const Iconscss = styled('div')(({ theme }) => ({
     width: "40px",
     height: "40px",
@@ -80,11 +96,11 @@ const Setting = () => {
                 <AdminNavbar />
                 <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
                     <DrawerHeader />
-                    <Grid>
+                    <AnimatedGridItem>
                         <Item sx={tableCSS} >
                             <Typography variant='h4'> Configurations</Typography>
                         </Item>
-                    </Grid>
+                    </AnimatedGridItem>
                     <br />
                     <Grid
                         container
@@ -93,7 +109,7 @@ const Setting = () => {
                         alignItems="center"
                         spacing={0} sx={tableCSS}
                     >
-                        <Grid item xs={12} sm={6} md={3}>
+                        <AnimatedGridItem item xs={12} sm={6} md={3}>
                             <Item sx={{ height: "640px" }}>
                                 <List >
                                     <ListItem >
@@ -108,15 +124,12 @@ const Setting = () => {
                                         <ListItemText sx={ListItemCSS} primary="Letter Head" onClick={NoticeConfig} />
                                     </ListItem>
                                     <ListItem>
-                                        <ListItemText sx={ListItemCSS} primary="Template" onClick={Noticetemp} />
-                                    </ListItem>
-                                    <ListItem>
                                         <ListItemText sx={ListItemCSS} primary="Signatory authority" onClick={AuthNotice} />
                                     </ListItem>
                                 </List>
                             </Item>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
+                        </AnimatedGridItem>
+                        <AnimatedGridItem item xs={12} sm={6} md={3}>
                             <Item sx={{ height: "640px" }}>
                                 <List >
                                     <ListItem >
@@ -138,8 +151,8 @@ const Setting = () => {
                                     </ListItem>
                                 </List>
                             </Item>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
+                        </AnimatedGridItem>
+                        <AnimatedGridItem item xs={12} sm={6} md={3}>
                             <Item sx={{ height: "640px" }}>
                                 <List>
                                     <ListItem >
@@ -158,8 +171,8 @@ const Setting = () => {
                                     </ListItem>
                                 </List>
                             </Item>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={3}>
+                        </AnimatedGridItem>
+                        <AnimatedGridItem item xs={12} sm={6} md={3}>
                             <Item sx={{ height: "640px" }}>
                                 <List>
                                     <ListItem >
@@ -175,7 +188,7 @@ const Setting = () => {
                                     </ListItem>
                                 </List>
                             </Item>
-                        </Grid>
+                        </AnimatedGridItem>
                     </Grid>
                 </Box>
             </Box>

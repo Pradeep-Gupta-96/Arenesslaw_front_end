@@ -23,6 +23,21 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
+const AnimatedGridItem = styled(Grid)`
+  animation: slideIn 1s ease-in-out;
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+`;
+
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -167,15 +182,15 @@ const Notice = () => {
                     <DrawerHeader />
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={10}>
+                            <AnimatedGridItem item xs={10}>
                                 <Item sx={tableCSS} >
                                     <Typography variant="subtitle1" gutterBottom>Hellow User!</Typography>
                                     <Typography variant="h4" gutterBottom>Welcome to {`${JSON.parse(localStorage.getItem("comapny"))}`}</Typography>
                                 </Item>
-                            </Grid>
+                            </AnimatedGridItem>
 
                             {/*================ Dialog ============== */}
-                            <Grid item xs={2}>
+                            <AnimatedGridItem item xs={2}>
                                 <Item>
                                     <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /> <br />
                                     <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
@@ -194,10 +209,10 @@ const Notice = () => {
                                         </DialogContent>
                                     </Dialog>
                                 </Item>
-                            </Grid>
+                            </AnimatedGridItem>
 
                             {/*================ Searchbar ============== */}
-                            <Grid item xs={12} >
+                            <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                     <TextField type='Search' placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={onChange} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
@@ -235,7 +250,7 @@ const Notice = () => {
                                         </Link>
                                     </Button>
                                 </Item>
-                            </Grid>
+                            </AnimatedGridItem>
 
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
@@ -292,7 +307,7 @@ const Notice = () => {
                                                                 )}
                                                             </TableCell>
                                                             <TableCell>
-                                                                <ButtonGroup variant="non">
+                                                                <ButtonGroup >
                                                                     {item.emailformail ? (
                                                                         <Button variant='contained' sx={{ px: 5 }} disabled>
                                                                             Sent
@@ -307,13 +322,13 @@ const Notice = () => {
                                                                     <Button variant='contained' sx={{ backgroundColor: "#0BBDDD" }}>
                                                                         Send SMS
                                                                     </Button>
-                                                                    <Button disabled={item.emailformail}>
+                                                                    <Button disabled={Boolean(item.emailformail)}>
                                                                         <VisibilityIcon />
                                                                     </Button>
-                                                                    <Button disabled={item.emailformail}>
+                                                                    <Button disabled={Boolean(item.emailformail)}>
                                                                         <AccessTimeIcon />
                                                                     </Button>
-                                                                    <Button disabled={item.emailformail}>
+                                                                    <Button disabled={Boolean(item.emailformail)}>
                                                                         <FileDownloadIcon />
                                                                     </Button>
                                                                 </ButtonGroup>

@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminDashboard from './Component/Pages/AdminDashboard'
 import Notice from './Component/Pages/Notice'
-import Report from './Component/Pages/Report'
 import Setting from './Component/Pages/Setting'
 import Signin from './Component/Users/Signin'
 import Totalexceldata from './Component/Dashboard/Totalexceldata'
@@ -36,7 +35,6 @@ const App = () => {
           <Route path='/adminNavbar' element={<AdminNavbar />} />
           <Route path='/admindashboard' element={<AdminDashboard />} />
           <Route path='/notice' element={<Notice />} />
-          <Route path='/report' element={<Report />} />
           <Route path='/setting' element={<Setting />} />
           <Route path='/totalexceldata/:id' element={<Totalexceldata />} />
           <Route path='/createnotice' element={<Createnotice />} />

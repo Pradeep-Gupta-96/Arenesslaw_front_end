@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
-import { Grid, Paper, Typography, InputBase, ButtonGroup, Button, TableHead, TableContainer, TableRow, TableCell, TableBody, Table } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Grid, Paper, Typography, ButtonGroup, Button, } from '@mui/material';
 import { useNavigate } from 'react-router-dom'
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AdminNavbar from '../../../Navbar/AdminNavbar';
+import SendIcon from '@mui/icons-material/Send';
+import {
+    EditOutlined as EditOutlinedIcon,
+    RemoveRedEyeOutlined as RemoveRedEyeOutlinedIcon,
+    Inventory2Outlined as Inventory2OutlinedIcon,
+    Add as AddIcon
+} from '@mui/icons-material';
 import '../../../style/style.css'
 
 
@@ -29,48 +32,39 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
-}));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
+const AnimatedGridItem = styled(Grid)`
+  animation: slideIn 1s ease-in-out;
+
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+`;
+const hovereffect = {
+    cursor: 'pointer',
+    transition: 'transform 0.5s ease',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
+    flexWrap: 'wrap',
+    '& > :not(style)': {
+        m: 5,
+        width: 328,
+        height: 300,
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
     },
-}));
-const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
+    '&:hover': {
+        transform: 'scale(1.05)',
+        color: '#fff',
+    },
+}
+
+
 
 const Openemaildetails = () => {
     const [id, setId] = useState([])
@@ -82,10 +76,12 @@ const Openemaildetails = () => {
             navigate('/')
         }
     })
-    const ADDemail = () => {
+    const handleAddEmail = () => {
         navigate("/createemails")
     }
 
+
+    ///====== for pdf review 
     const onClickforViewPdf = async () => {
         try {
             setIsLoading(true);
@@ -106,6 +102,8 @@ const Openemaildetails = () => {
         }
     }
 
+
+    //==== fetching data for updates email templates of pdf content  
     const forupdating = async () => {
         try {
             const response = await fetch("http://localhost:4000/emailtemp/data", {
@@ -115,78 +113,127 @@ const Openemaildetails = () => {
             })
             const result = await response.json()
             setId(result)
+            
         } catch (error) {
             console.log(error)
         }
     }
 
-    const onClickforupdate = (id) => {
+    const onClickforUpdate = (id) => {
         navigate(`/editmailtemp/${id}`)
     }
 
     useEffect(() => {
         forupdating()
     }, [])
+    console.log(id._id)
 
     return (
         <>
             <Box sx={{ display: 'flex' }}>
                 <AdminNavbar />
-                <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
-                    <Grid>
-                        <Item sx={{ display: "flex", justifyContent: "space-between" }}>
-                            <Typography variant='h4'> Email - Template</Typography>
-                            <Button variant="contained" sx={{
-                                cursor: "pointer",
-                                transition: "transform 0.5s ease",
-                                "&:hover": {
-                                    transform: "scale(1.2)",
-                                    color: "#fff"
-                                }
-                            }} onClick={ADDemail}> + Add New</Button>
-                        </Item>
-                        <br />
-                        <Item sx={tableCSS}>
-                            <Item sx={{ ml: 110 }}>
-                                <Search>
-                                    <SearchIconWrapper>
-                                        <SearchIcon />
-                                    </SearchIconWrapper>
-                                    <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-                                </Search>
-                            </Item>
-                        </Item>
-                    </Grid><br />
-                    <Grid item xs={12}>
-                        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                            <TableContainer sx={{ maxHeight: 440 }}>
-                                <Table stickyHeader aria-label="sticky table">
-                                    <TableHead >
-                                        <TableRow  >
-                                            <TableCell><strong>Template Name</strong></TableCell>
-                                            <TableCell><strong>Actions</strong></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1}>
-                                            <TableCell sx={{ cursor: 'pointer' }} ><strong>0123-Notices </strong><br />Last Updated on: 04 Apr 2023</TableCell>
-                                            <TableCell >
-                                                <ButtonGroup>
-                                                    {id.map((item) => {
-                                                        return <Button variant='non' title='edit' key={item._id} onClick={() => onClickforupdate(item._id)}><EditOutlinedIcon /></Button>
-                                                    })}
-                                                    <Button variant='non' title='View Notice' onClick={onClickforViewPdf} disabled={isLoading}>
-                                                        {isLoading ? (<div className="posting"></div>) : <RemoveRedEyeOutlinedIcon />}
-                                                    </Button>
-                                                    <Button variant='non'><Inventory2OutlinedIcon /></Button>
-                                                </ButtonGroup>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Paper>
+                    <Grid container spacing={2} >
+                        <AnimatedGridItem item xs={12} >
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <Typography variant='h4'>Email - Template</Typography>
+                                <SendIcon />
+                            </div>
+                        </AnimatedGridItem>
+
+                        {/* =========email template============ */}
+                        <AnimatedGridItem item xs={12} sm={6}>
+                            <Box
+                                sx={hovereffect}
+                            > <Paper elevation={3} >
+                                    <Item>
+                                        <Typography variant='h5'>Email templates</Typography>
+                                        <Typography>0123-Notices <br />Last Updated on: 04 Apr 2023</Typography>
+                                    </Item >
+                                    <ButtonGroup sx={{ backgroundColor: '#f0f0f0', borderRadius: '5px', m: 8 }}>
+                                        {id.map((item) => (
+                                            <Button
+                                                key={item._id}
+                                                variant='non'
+                                                title='Edit'
+                                                onClick={() => onClickforUpdate(item._id)}
+                                                sx={{ color: '#3f51b5' }}
+                                            >
+                                                <EditOutlinedIcon />
+                                            </Button>
+                                        ))}
+                                        <Button
+                                            variant='non'
+                                            title='View Notice'
+                                            onClick={onClickforViewPdf}
+                                            disabled={isLoading}
+                                            sx={{ color: isLoading ? '#757575' : '#f50057' }}
+                                        >
+                                            {isLoading ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
+                                        </Button>
+                                        <Button variant='non' sx={{ color: '#009688' }} >
+                                            <Inventory2OutlinedIcon />
+                                        </Button>
+                                        {/* <Button 
+                                            variant='contained'
+                                            sx={{ height: 100, width: 100, borderRadius: '50%' }}
+                                            onClick={handleAddEmail}
+                                        >
+                                            <AddIcon />
+                                            Add New
+                                        </Button> */}
+                                    </ButtonGroup>
+                                </Paper>
+                            </Box>
+                        </AnimatedGridItem>
+
+                        {/* email scripte */}
+                        <AnimatedGridItem item xs={12} sm={6}>
+                            <Box
+                                sx={hovereffect}
+                            > <Paper elevation={3} >
+                                    <Item>
+                                        <Typography variant='h5'>Email Script</Typography>
+                                        <Typography>0123-Notices <br />Last Updated on: 04 Apr 2023</Typography>
+                                    </Item>
+                                    <ButtonGroup sx={{ backgroundColor: '#f0f0f0', borderRadius: '5px', m: 8 }}>
+                                        {id.map((item) => (
+                                            <Button
+                                                key={item._id}
+                                                variant='non'
+                                                title='Edit'
+                                                onClick={() => onClickforUpdate(item._id)}
+                                                sx={{ color: '#3f51b5' }}
+                                            >
+                                                <EditOutlinedIcon />
+                                            </Button>
+                                        ))}
+                                        <Button
+                                            variant='non'
+                                            title='View Notice'
+                                            onClick={onClickforViewPdf}
+                                            disabled={isLoading}
+                                            sx={{ color: isLoading ? '#757575' : '#f50057' }}
+                                        >
+                                            {isLoading ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
+                                        </Button>
+                                        <Button variant='non' sx={{ color: '#009688' }} >
+                                            <Inventory2OutlinedIcon />
+                                        </Button>
+                                        {/* <Button
+                                            variant='contained'
+                                            sx={{ height: 100, width: 100, borderRadius: '50%' }}
+                                            onClick={handleAddEmail}
+                                        >
+                                            <AddIcon />
+                                            Add New
+                                        </Button> */}
+                                    </ButtonGroup>
+                                </Paper>
+                            </Box>
+                        </AnimatedGridItem>
+                      
                     </Grid>
                 </Box>
             </Box>
