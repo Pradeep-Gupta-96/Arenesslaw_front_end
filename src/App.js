@@ -23,6 +23,8 @@ import CreatedetailsAuth from './Component/settings/Notices/SigningAuthority2/Cr
 import Openemailauth from './Component/settings/Emails/SigningAuthority1/Openemailauth';
 import Createemailauth from './Component/settings/Emails/SigningAuthority1/Createemailauth';
 import Editmailtemp from './Component/settings/Emails/Temp1/Editmailtemp';
+import Createscript from './Component/settings/Emails/Temp1/Createscript';
+import Editmailscript from './Component/settings/Emails/Temp1/Editmailscript';
 
 const App = () => {
   return (
@@ -50,6 +52,8 @@ const App = () => {
           <Route path='/createemailauth' element={<Createemailauth />} />
           <Route path='/openemailauth' element={<Openemailauth />} />
           <Route path='/editmailtemp/:id' element={<Editmailtemp/>}/>
+          <Route path='/createscript' element={<Createscript/>}/>
+          <Route path='/editmailscript/:id' element={<Editmailscript/>}/>
         </Routes>
       </Router>
       <ToastContainer />

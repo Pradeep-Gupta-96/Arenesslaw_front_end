@@ -12,6 +12,7 @@ import {
     Add as AddIcon
 } from '@mui/icons-material';
 import '../../../style/style.css'
+import { toast } from 'react-toastify';
 
 
 
@@ -67,8 +68,12 @@ const hovereffect = {
 
 
 const Openemaildetails = () => {
-    const [id, setId] = useState([])
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoading1, setIsLoading1] = useState(false);
+    const [hasScript, setHasScript] = useState(false);
+    const [hasTemp, setHasTemp] = useState(false);
+    const [Scriptid, setScriptid] = useState();
+    const [Tempid, setTempid] = useState();
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -79,19 +84,22 @@ const Openemaildetails = () => {
     const handleAddEmail = () => {
         navigate("/createemails")
     }
+    const handleAddScript = () => {
+        navigate("/createscript")
+    }
 
-
-    ///====== for pdf review 
+    ///====== for pdf review of temp
     const onClickforViewPdf = async () => {
         try {
             setIsLoading(true);
-            const response = await fetch("http://localhost:4000/emailtemp", {
+            const url = `http://localhost:4000/emailtemp/viewpdf/${Tempid}`
+            const options = {
                 headers: {
                     authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
                 }
-            })
+            }
+            const response = await fetch(url, options)
             const result = await response.blob()
-            console.log(result.size)
             const file = new Blob([result], { type: 'application/pdf' });
             const pdfUrl = URL.createObjectURL(file);
             window.open(pdfUrl);
@@ -102,31 +110,137 @@ const Openemaildetails = () => {
         }
     }
 
+    // ======== for pdf review of script
+    const onclickforViewscriptpdf = async () => {
+        try {
+            setIsLoading1(true);
+            const url = `http://localhost:4000/emailscript/pdfview/${Scriptid}`
+            const token = JSON.parse(localStorage.getItem("token"))
+            const options = {
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            }
+            const response = await fetch(url, options)
+            const result = await response.blob()
+            const file = new Blob([result], { type: 'application/pdf' })
+            const pdfurl = URL.createObjectURL(file)
+            window.open(pdfurl)
+            setIsLoading1(false);
+        } catch (error) {
+            setIsLoading1(false);
+            console.log(error)
+        }
+    }
 
     //==== fetching data for updates email templates of pdf content  
     const forupdating = async () => {
         try {
-            const response = await fetch("http://localhost:4000/emailtemp/data", {
+            const token = JSON.parse(localStorage.getItem("token"))
+            const username = JSON.parse(localStorage.getItem("username"))
+            const url = `http://localhost:4000/emailtemp/data?username=${username}`
+            const options = {
                 headers: {
-                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                    authorization: `Bearer ${token}`
                 }
-            })
+            }
+            const response = await fetch(url, options)
             const result = await response.json()
-            setId(result)
-            
+            setHasTemp(!!result._id)
+            setTempid(result._id)
+
         } catch (error) {
             console.log(error)
         }
     }
 
-    const onClickforUpdate = (id) => {
-        navigate(`/editmailtemp/${id}`)
+    //==== fetching data for updates email scripte 
+    const forUpdatingScript = async () => {
+        try {
+            const token = JSON.parse(localStorage.getItem("token"));
+            const username = JSON.parse(localStorage.getItem("username"));
+
+            const url = `http://localhost:4000/emailscript/getscript?username=${username}`;
+            const options = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            const response = await fetch(url, options);
+            const result = await response.json();
+
+            setHasScript(!!result._id);
+            setScriptid(result._id)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    //for delet temp
+  const onClickfordelettem=async()=>{
+    try {
+        const url=`http://localhost:4000/emailtemp/deletpdf/${Tempid}`
+        const token=JSON.parse(localStorage.getItem("token"));
+        const option={
+            method:"delete",
+            headers:{
+                authorization: `bearer ${token}`
+            }
+        }
+        const response =await fetch(url,option)
+        const result=await response.json()
+        if(result.message==="succcess"){
+            toast('Script Created Successfully', {
+                position: 'top-center',
+                autoClose: 1000,
+                type: 'success',
+            });
+            forupdating()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+  }
+    //for delet script
+  const onClickfordelescript=async()=>{
+    try {
+        const url=`http://localhost:4000/emailscript/deletescript/${Scriptid}`
+        const token=JSON.parse(localStorage.getItem("token"));
+        const option={
+            method:"delete",
+            headers:{
+                authorization: `bearer ${token}`
+            }
+        }
+        const response =await fetch(url,option)
+        const result=await response.json()
+        if(result.message==="succcess"){
+            toast('Script Created Successfully', {
+                position: 'top-center',
+                autoClose: 1000,
+                type: 'success',
+            });
+            forUpdatingScript()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+    const onClickfortempupdate = () => {
+        navigate(`/editmailtemp/${Tempid}`)
+    }
+
+    const onClickforScriptupdate = () => {
+        navigate(`/editmailscript/${Scriptid}`)
     }
 
     useEffect(() => {
         forupdating()
+        forUpdatingScript()
     }, [])
-    console.log(id._id)
+
 
     return (
         <>
@@ -152,37 +266,48 @@ const Openemaildetails = () => {
                                         <Typography>0123-Notices <br />Last Updated on: 04 Apr 2023</Typography>
                                     </Item >
                                     <ButtonGroup sx={{ backgroundColor: '#f0f0f0', borderRadius: '5px', m: 8 }}>
-                                        {id.map((item) => (
-                                            <Button
-                                                key={item._id}
-                                                variant='non'
-                                                title='Edit'
-                                                onClick={() => onClickforUpdate(item._id)}
-                                                sx={{ color: '#3f51b5' }}
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Button>
-                                        ))}
-                                        <Button
-                                            variant='non'
-                                            title='View Notice'
-                                            onClick={onClickforViewPdf}
-                                            disabled={isLoading}
-                                            sx={{ color: isLoading ? '#757575' : '#f50057' }}
-                                        >
-                                            {isLoading ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
-                                        </Button>
-                                        <Button variant='non' sx={{ color: '#009688' }} >
-                                            <Inventory2OutlinedIcon />
-                                        </Button>
-                                        {/* <Button 
-                                            variant='contained'
-                                            sx={{ height: 100, width: 100, borderRadius: '50%' }}
-                                            onClick={handleAddEmail}
-                                        >
-                                            <AddIcon />
-                                            Add New
-                                        </Button> */}
+                                        {hasTemp ? (
+                                            <>
+                                                <Button
+                                                    variant='non'
+                                                    title='Edit'
+                                                    onClick={() => onClickfortempupdate()}
+                                                    sx={{ color: '#3f51b5' }}
+                                                >
+                                                    <EditOutlinedIcon />
+                                                </Button>
+                                                <Button
+                                                    variant='non'
+                                                    title='View Notice'
+                                                    onClick={onClickforViewPdf}
+                                                    disabled={isLoading}
+                                                    sx={{ color: '#009688' }}
+                                                >
+                                                    {isLoading ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
+                                                </Button>
+                                                <Button 
+                                                variant='non' 
+                                                sx={{ color: '#f50057' }}
+                                                title='delete'
+                                                onClick={onClickfordelettem}
+                                                 >
+                                                    <Inventory2OutlinedIcon />
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Button
+                                                    variant='contained'
+                                                    sx={{ height: 100, width: 100, borderRadius: '50%' }}
+                                                    onClick={handleAddEmail}
+                                                >
+                                                    <AddIcon />
+                                                    Add New
+                                                </Button>
+                                            </>
+                                        )}
+
+
                                     </ButtonGroup>
                                 </Paper>
                             </Box>
@@ -198,42 +323,49 @@ const Openemaildetails = () => {
                                         <Typography>0123-Notices <br />Last Updated on: 04 Apr 2023</Typography>
                                     </Item>
                                     <ButtonGroup sx={{ backgroundColor: '#f0f0f0', borderRadius: '5px', m: 8 }}>
-                                        {id.map((item) => (
-                                            <Button
-                                                key={item._id}
+                                        {hasScript ? (
+                                            <>
+                                                <Button
+                                                    variant='non'
+                                                    title='Edit'
+                                                    sx={{ color: '#3f51b5' }}
+                                                    onClick={() => onClickforScriptupdate()}
+                                                >
+                                                    <EditOutlinedIcon />
+                                                </Button>
+                                                <Button
+                                                    variant='non'
+                                                    title='View Notice'
+                                                    onClick={onclickforViewscriptpdf}
+                                                    disabled={isLoading1}
+                                                    sx={{ color: '#009688' }}
+                                                >
+                                                    {isLoading1 ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
+                                                </Button>
+                                                <Button 
                                                 variant='non'
-                                                title='Edit'
-                                                onClick={() => onClickforUpdate(item._id)}
-                                                sx={{ color: '#3f51b5' }}
+                                                 sx={{ color: '#f50057' }}
+                                                 title='delete'
+                                                 onClick={onClickfordelescript}
+                                                 >
+                                                    <Inventory2OutlinedIcon />
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <Button
+                                                variant='contained'
+                                                sx={{ height: 100, width: 100, borderRadius: '50%' }}
+                                                onClick={handleAddScript}
                                             >
-                                                <EditOutlinedIcon />
+                                                <AddIcon />
+                                                Add New
                                             </Button>
-                                        ))}
-                                        <Button
-                                            variant='non'
-                                            title='View Notice'
-                                            onClick={onClickforViewPdf}
-                                            disabled={isLoading}
-                                            sx={{ color: isLoading ? '#757575' : '#f50057' }}
-                                        >
-                                            {isLoading ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
-                                        </Button>
-                                        <Button variant='non' sx={{ color: '#009688' }} >
-                                            <Inventory2OutlinedIcon />
-                                        </Button>
-                                        {/* <Button
-                                            variant='contained'
-                                            sx={{ height: 100, width: 100, borderRadius: '50%' }}
-                                            onClick={handleAddEmail}
-                                        >
-                                            <AddIcon />
-                                            Add New
-                                        </Button> */}
+                                        )}
                                     </ButtonGroup>
                                 </Paper>
                             </Box>
                         </AnimatedGridItem>
-                      
+
                     </Grid>
                 </Box>
             </Box>

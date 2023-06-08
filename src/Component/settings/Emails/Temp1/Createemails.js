@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { Avatar, Button, ButtonGroup, Grid, Paper, TextField, Typography } from '@mui/material';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 import { useNavigate } from 'react-router-dom';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -102,48 +103,55 @@ const Createemails = () => {
     }
 
     const Createemailtemplate = async () => {
- try {
-    const formData = new FormData();
-    formData.append("Emaillogo", Emaillogo);
-    formData.append("title", inpudata.title)
-    formData.append("subtitle", inpudata.subtitle)
-    formData.append("noticeid", inpudata.noticeid)
-    formData.append("noticeidEg", inpudata.noticeidEg)
-    formData.append("noticedate", inpudata.noticedate)
-    formData.append("noticedateEg", inpudata.noticedateEg)
-    formData.append("to", inpudata.to)
-    formData.append("address", inpudata.address)
-    formData.append("subject", inpudata.subject)
-    formData.append("subjecttitle", inpudata.subjecttitle)
-    formData.append("ContentInner", ContentInner)
-    formData.append("ContentFooter", ContentFooter)
-    formData.append('role', `${JSON.parse(localStorage.getItem("role"))}`)
-    const response = await fetch('http://localhost:4000/emailtemp', {
-        method: 'POST',
-        headers: {
-            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
-            'Content-Type': 'multipart/form-data'
-        },
-        body: formData
-    });
-    const result = response.json()
-    if(!result.title){
-        toast("You have already created template which you can edit", {
-            position: "top-center",
-            autoClose: 1000,
-            type: "error"
-          })
-    }else{
-        toast("Template Created Successfully", {
-            position: "top-center",
-            autoClose: 1000,
-            type: "success"
-          })
-    }
- } catch (error) {
-    console.log(error)
- }
-    }
+        try {
+          const formData = new FormData();
+          formData.append("Emaillogo", Emaillogo);
+          formData.append("title", inpudata.title);
+          formData.append("subtitle", inpudata.subtitle);
+          formData.append("noticeid", inpudata.noticeid);
+          formData.append("noticeidEg", inpudata.noticeidEg);
+          formData.append("noticedate", inpudata.noticedate);
+          formData.append("noticedateEg", inpudata.noticedateEg);
+          formData.append("to", inpudata.to);
+          formData.append("address", inpudata.address);
+          formData.append("subject", inpudata.subject);
+          formData.append("subjecttitle", inpudata.subjecttitle);
+          formData.append("ContentInner", ContentInner);
+          formData.append("ContentFooter", ContentFooter);
+          formData.append(
+            "username",
+            `${JSON.parse(localStorage.getItem("username"))}`
+          );
+          formData.append("role", `${JSON.parse(localStorage.getItem("role"))}`);
+      
+          const response = await fetch('http://localhost:4000/emailtemp', {
+            method: 'POST',
+            headers: {
+              authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            },
+            body: formData,
+          });
+      
+          const result = await response.json();
+          if (!result) {
+            toast('You have already created a template which you can edit', {
+                position: 'top-center',
+                autoClose: 1000,
+                type: 'error',
+            });
+        } else {
+            toast('Script Created Successfully', {
+                position: 'top-center',
+                autoClose: 1000,
+                type: 'success',
+            });
+            onClickforreset()
+        }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
 
 
     useEffect(() => {
@@ -152,7 +160,7 @@ const Createemails = () => {
         }
     }, [])
 
-   
+
 
 
     return (
