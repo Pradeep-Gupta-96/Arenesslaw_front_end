@@ -57,7 +57,11 @@ const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hove
 
 const Notice = () => {
     const [open, setOpen] = useState(false);
-    const [emailformaill, setEmailformail] = useState({ emailformail: "" });
+    const intupvalue={
+        emailformail: "" ,
+        username:`${JSON.parse(localStorage.getItem('username'))}`
+    }
+    const [emailformaill, setEmailformail] = useState(intupvalue);
     const [results, setResults] = useState([])
     const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [inputsearchmail, setinputsearchmail] = useState('');
