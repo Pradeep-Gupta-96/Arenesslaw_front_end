@@ -178,55 +178,55 @@ const Openemaildetails = () => {
     };
 
     //for delet temp
-  const onClickfordelettem=async()=>{
-    try {
-        const url=`http://localhost:4000/emailtemp/deletpdf/${Tempid}`
-        const token=JSON.parse(localStorage.getItem("token"));
-        const option={
-            method:"delete",
-            headers:{
-                authorization: `bearer ${token}`
+    const onClickfordelettem = async () => {
+        try {
+            const url = `http://localhost:4000/emailtemp/deletpdf/${Tempid}`
+            const token = JSON.parse(localStorage.getItem("token"));
+            const option = {
+                method: "delete",
+                headers: {
+                    authorization: `bearer ${token}`
+                }
             }
+            const response = await fetch(url, option)
+            const result = await response.json()
+            if (result.message === "succcess") {
+                toast('Script Created Successfully', {
+                    position: 'top-center',
+                    autoClose: 1000,
+                    type: 'success',
+                });
+                forupdating()
+            }
+        } catch (error) {
+            console.log(error)
         }
-        const response =await fetch(url,option)
-        const result=await response.json()
-        if(result.message==="succcess"){
-            toast('Script Created Successfully', {
-                position: 'top-center',
-                autoClose: 1000,
-                type: 'success',
-            });
-            forupdating()
-        }
-    } catch (error) {
-        console.log(error)
     }
-  }
     //for delet script
-  const onClickfordelescript=async()=>{
-    try {
-        const url=`http://localhost:4000/emailscript/deletescript/${Scriptid}`
-        const token=JSON.parse(localStorage.getItem("token"));
-        const option={
-            method:"delete",
-            headers:{
-                authorization: `bearer ${token}`
+    const onClickfordelescript = async () => {
+        try {
+            const url = `http://localhost:4000/emailscript/deletescript/${Scriptid}`
+            const token = JSON.parse(localStorage.getItem("token"));
+            const option = {
+                method: "delete",
+                headers: {
+                    authorization: `bearer ${token}`
+                }
             }
+            const response = await fetch(url, option)
+            const result = await response.json()
+            if (result.message === "succcess") {
+                toast('Script Created Successfully', {
+                    position: 'top-center',
+                    autoClose: 1000,
+                    type: 'success',
+                });
+                forUpdatingScript()
+            }
+        } catch (error) {
+            console.log(error)
         }
-        const response =await fetch(url,option)
-        const result=await response.json()
-        if(result.message==="succcess"){
-            toast('Script Created Successfully', {
-                position: 'top-center',
-                autoClose: 1000,
-                type: 'success',
-            });
-            forUpdatingScript()
-        }
-    } catch (error) {
-        console.log(error)
     }
-  }
 
     const onClickfortempupdate = () => {
         navigate(`/editmailtemp/${Tempid}`)
@@ -285,12 +285,12 @@ const Openemaildetails = () => {
                                                 >
                                                     {isLoading ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
                                                 </Button>
-                                                <Button 
-                                                variant='non' 
-                                                sx={{ color: '#f50057' }}
-                                                title='delete'
-                                                onClick={onClickfordelettem}
-                                                 >
+                                                <Button
+                                                    variant='non'
+                                                    sx={{ color: '#f50057' }}
+                                                    title='delete'
+                                                    onClick={onClickfordelettem}
+                                                >
                                                     <Inventory2OutlinedIcon />
                                                 </Button>
                                             </>
@@ -342,12 +342,12 @@ const Openemaildetails = () => {
                                                 >
                                                     {isLoading1 ? <div className="posting"></div> : <RemoveRedEyeOutlinedIcon />}
                                                 </Button>
-                                                <Button 
-                                                variant='non'
-                                                 sx={{ color: '#f50057' }}
-                                                 title='delete'
-                                                 onClick={onClickfordelescript}
-                                                 >
+                                                <Button
+                                                    variant='non'
+                                                    sx={{ color: '#f50057' }}
+                                                    title='delete'
+                                                    onClick={onClickfordelescript}
+                                                >
                                                     <Inventory2OutlinedIcon />
                                                 </Button>
                                             </>
@@ -370,8 +370,6 @@ const Openemaildetails = () => {
                 </Box>
             </Box>
         </>
-
-
     )
 
 }
