@@ -182,8 +182,8 @@ const Totalexceldata = () => {
                                                                     <PictureAsPdfIcon variant="contained" onClick={() => openPDF(id, item._id)} />
                                                                 </TableCell>
                                                                 <TableCell sx={{ display: "flex", justifyContent: "space-between" }}>
-                                                                    <Button variant='contained' sx={{ backgroundColor: "#00AEC6" }}>Re-Send Email</Button>
-                                                                    <Button variant='contained' sx={{ backgroundColor: "#24D555" }}>Re-Send SMS</Button>
+                                                                    <Button variant="contained" size="small">Re-Send Email</Button>
+                                                                    <Button variant='contained' size="small" sx={{ backgroundColor: "#24D555" }}>Re-Send SMS</Button>
                                                                     <Button variant='non'><WhatsAppIcon sx={{
                                                                         color: "#24D555",
                                                                         transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" }

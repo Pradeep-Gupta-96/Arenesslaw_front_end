@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import { Link, useNavigate } from 'react-router-dom';
 import {
     ButtonGroup, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, InputLabel, MenuItem, FormControl, Select, TextField
+    TableHead, TableBody, TableCell, TableContainer, InputLabel, MenuItem, FormControl, Select, TextField, TablePagination
 } from '@mui/material';
 import Dialogfordata from '../Dashboard/Dialogfordata';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -51,15 +51,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
 const UploadFileIconCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" } }
 const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "rotate(360deg)" } }
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 const Notice = () => {
     const [open, setOpen] = useState(false);
-    const intupvalue={
-        emailformail: "" ,
-        username:`${JSON.parse(localStorage.getItem('username'))}`
+    const intupvalue = {
+        emailformail: "",
+        username: `${JSON.parse(localStorage.getItem('username'))}`
     }
     const [emailformaill, setEmailformail] = useState(intupvalue);
     const [results, setResults] = useState([])
@@ -70,6 +71,9 @@ const Notice = () => {
     const [issendloading, setissendloading] = useState(false)
     const navigate = useNavigate();
     const revData = [...results].reverse()
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -83,6 +87,15 @@ const Notice = () => {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage + 1);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(1);
     };
 
     const totalexceldata = (id) => {
@@ -259,89 +272,134 @@ const Notice = () => {
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                    <TableContainer sx={{ maxHeight: 440 }}>
+                                    <TableContainer sx={{ maxHeight: 440 , overflow: 'auto'}}>
                                         {isloading ? (
                                             <div className="loading"></div>
-                                        ) :
-                                            <Table stickyHeader aria-label="sticky table">
-                                                <TableHead >
-                                                    <TableRow>
-                                                        <TableCell>S. No.</TableCell>
-                                                        <TableCell>File Name</TableCell>
-                                                        <TableCell> Created Date</TableCell>
-                                                        <TableCell>Notice Type</TableCell>
-                                                        <TableCell>Email ID</TableCell>
-                                                        <TableCell>Actions</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {filteredData.map((item, index) => (
-                                                        <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
-                                                            <TableCell>{index + 1}</TableCell>
-                                                            <TableCell onClick={() => totalexceldata(item._id)} sx={{ cursor: 'pointer' }}>
-                                                                {item.filename} <br />Count - {item.xlData.length}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {new Date(item.createdAt).toLocaleDateString('en-US', {
-                                                                    day: 'numeric',
-                                                                    month: 'short',
-                                                                    year: 'numeric',
-                                                                })}
-                                                            </TableCell>
-                                                            <TableCell>{item.template}</TableCell>
-                                                            <TableCell>
-                                                                {item.emailformail ? (
-                                                                    item.emailformail
-                                                                ) : (
-                                                                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                                                        <InputLabel id="demo-simple-select-label">Select email</InputLabel>
-                                                                        <Select
-                                                                            labelId="demo-simple-select-label"
-                                                                            id="demo-simple-select"
-                                                                            name='emailformail'
-                                                                            value={emailformaill.emailformail}
-                                                                            label="Select email"
-                                                                            onChange={handleChange}
-                                                                        >
-                                                                            <MenuItem value=''><em>none</em></MenuItem>
-                                                                            <MenuItem value={"noreply@areness.com"}>noreply@areness.com</MenuItem>
-                                                                            <MenuItem value={"cc@arness.com"}>cc@arness.com</MenuItem>
-                                                                        </Select>
-                                                                    </FormControl>
-                                                                )}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <ButtonGroup >
-                                                                    {item.emailformail ? (
-                                                                        <Button variant='contained' sx={{ px: 5 }} disabled>
-                                                                            Sent
-                                                                        </Button>
-                                                                    ) : issendloading ? (
-                                                                        <div className="mailpost"></div>
-                                                                    ) : (
-                                                                        <Button variant='contained' sx={{ backgroundColor: "#24D555" }} onClick={() => sendEmail(item._id)}>
-                                                                            Send email
-                                                                        </Button>
-                                                                    )}
-                                                                    <Button variant='contained' sx={{ backgroundColor: "#0BBDDD" }}>
-                                                                        Send SMS
-                                                                    </Button>
-                                                                    <Button disabled={Boolean(item.emailformail)}>
-                                                                        <VisibilityIcon />
-                                                                    </Button>
-                                                                    <Button disabled={Boolean(item.emailformail)}>
-                                                                        <AccessTimeIcon />
-                                                                    </Button>
-                                                                    <Button disabled={Boolean(item.emailformail)}>
-                                                                        <FileDownloadIcon />
-                                                                    </Button>
-                                                                </ButtonGroup>
-                                                            </TableCell>
+                                        ) : (
+                                            <>
+                                                <Table stickyHeader aria-label="sticky table">
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell>S. No.</TableCell>
+                                                            <TableCell>File Name</TableCell>
+                                                            <TableCell>Created Date</TableCell>
+                                                            <TableCell>Notice Type</TableCell>
+                                                            <TableCell>Email ID</TableCell>
+                                                            <TableCell>Actions</TableCell>
                                                         </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        }
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {filteredData
+                                                            .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+                                                            .map((item, index) => (
+                                                                <TableRow
+                                                                    sx={tableCSS}
+                                                                    hover
+                                                                    role="checkbox"
+                                                                    tabIndex={-1}
+                                                                    key={item._id}
+                                                                >
+                                                                    <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
+                                                                    <TableCell
+                                                                        onClick={() => totalexceldata(item._id)}
+                                                                        sx={{ cursor: 'pointer' }}
+                                                                    >
+                                                                        {item.filename} <br />
+                                                                        Count - {item.xlData.length}
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        {new Date(item.createdAt).toLocaleDateString('en-US', {
+                                                                            day: 'numeric',
+                                                                            month: 'short',
+                                                                            year: 'numeric',
+                                                                        })}
+                                                                    </TableCell>
+                                                                    <TableCell>{item.template}</TableCell>
+                                                                    <TableCell>
+                                                                        {item.emailformail ? (
+                                                                            item.emailformail
+                                                                        ) : (
+                                                                            <FormControl
+                                                                                sx={{ m: 1, minWidth: 200 }}
+                                                                                size="small"
+                                                                            >
+                                                                                <InputLabel id="demo-simple-select-label">
+                                                                                    Select email
+                                                                                </InputLabel>
+                                                                                <Select
+                                                                                    labelId="demo-simple-select-label"
+                                                                                    id="demo-simple-select"
+                                                                                    name="emailformail"
+                                                                                    value={emailformaill.emailformail}
+                                                                                    label="Select email"
+                                                                                    onChange={handleChange}
+                                                                                >
+                                                                                    <MenuItem value="">
+                                                                                        <em>none</em>
+                                                                                    </MenuItem>
+                                                                                    <MenuItem value={'noreply@areness.com'}>
+                                                                                        noreply@areness.com
+                                                                                    </MenuItem>
+                                                                                    <MenuItem value={'cc@arness.com'}>
+                                                                                        cc@arness.com
+                                                                                    </MenuItem>
+                                                                                </Select>
+                                                                            </FormControl>
+                                                                        )}
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <ButtonGroup>
+                                                                            {item.emailformail ? (
+                                                                                <Button
+                                                                                    variant="contained"
+                                                                                    sx={{ px: 5 }}
+                                                                                    disabled
+                                                                                >
+                                                                                    Sent
+                                                                                </Button>
+                                                                            ) : issendloading ? (
+                                                                                <div className="mailpost"></div>
+                                                                            ) : (
+                                                                                <Button
+                                                                                    variant="contained"
+                                                                                    sx={{ backgroundColor: '#24D555' }}
+                                                                                    onClick={() => sendEmail(item._id)}
+                                                                                >
+                                                                                    Send email
+                                                                                </Button>
+                                                                            )}
+                                                                            <Button
+                                                                                variant="contained"
+                                                                                sx={{ backgroundColor: '#0BBDDD' }}
+                                                                            >
+                                                                                Send SMS
+                                                                            </Button>
+                                                                            <Button disabled={Boolean(item.emailformail)}>
+                                                                                <VisibilityIcon />
+                                                                            </Button>
+                                                                            <Button disabled={Boolean(item.emailformail)}>
+                                                                                <AccessTimeIcon />
+                                                                            </Button>
+                                                                            <Button disabled={Boolean(item.emailformail)}>
+                                                                                <FileDownloadIcon />
+                                                                            </Button>
+                                                                        </ButtonGroup>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                    </TableBody>
+                                                </Table>
+                                                <TablePagination
+                                                    rowsPerPageOptions={[10, 25, 100]}
+                                                    component="div"
+                                                    count={filteredData.length}
+                                                    rowsPerPage={rowsPerPage}
+                                                    page={page - 1}
+                                                    onPageChange={handleChangePage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                />
+                                            </>
+                                        )}
                                     </TableContainer>
                                 </Paper>
                             </Grid>
