@@ -337,8 +337,8 @@ const Notice = () => {
                                                                                     <MenuItem value="">
                                                                                         <em>none</em>
                                                                                     </MenuItem>
-                                                                                    <MenuItem value={'noreply@areness.com'}>
-                                                                                        noreply@areness.com
+                                                                                    <MenuItem value={'Mrlucifer9651@gmail.com'}>
+                                                                                    Mrlucifer9651@gmail.com
                                                                                     </MenuItem>
                                                                                     <MenuItem value={'cc@arness.com'}>
                                                                                         cc@arness.com

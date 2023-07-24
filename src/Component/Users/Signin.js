@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { useNavigate } from 'react-router-dom';
+import {  Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -140,6 +140,9 @@ export default function Signin() {
               </Button>
               <Grid container>
                 <Grid item xs>
+                  <Typography variant='subtitle2'>
+                    <RouterLink to='/ResetwithOTP'>Forgot password?</RouterLink>
+                  </Typography>
                 </Grid>
               </Grid>
             </Box>

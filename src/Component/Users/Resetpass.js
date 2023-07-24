@@ -221,7 +221,6 @@ export default function Resetpass() {
             </Box>
           </Container>
         </ThemeProvider>
-
       </Box>
     </Box>
     </>

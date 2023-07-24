@@ -25,6 +25,7 @@ import Createemailauth from './Component/settings/Emails/SigningAuthority1/Creat
 import Editmailtemp from './Component/settings/Emails/Temp1/Editmailtemp';
 import Createscript from './Component/settings/Emails/Temp1/Createscript';
 import Editmailscript from './Component/settings/Emails/Temp1/Editmailscript';
+import ResetwithOTP from './Component/Users/ResetwithOTP';
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
           <Route path='/' element={<Signin />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/resetpass' element={<Resetpass />} />
+          <Route path='/resetwithOTP' element={<ResetwithOTP/>}/>
           <Route path='/adminNavbar' element={<AdminNavbar />} />
           <Route path='/admindashboard' element={<AdminDashboard />} />
           <Route path='/notice' element={<Notice />} />
