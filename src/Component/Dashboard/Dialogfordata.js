@@ -10,7 +10,7 @@ import Select from '@mui/material/Select';
 import { Button, Typography } from '@mui/material';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import TextField from '@mui/material/TextField';
-import { Link } from 'react-router-dom';
+import { Link, json } from 'react-router-dom';
 import DialogActions from '@mui/material/DialogActions';
 import * as FileServer from 'file-saver'
 import XLSX from 'sheetjs-style'
@@ -109,11 +109,12 @@ const Dialogfordata = () => {
     const handleSubmit = async () => {
         setisLoading(true);
         const formData = new FormData();
-        formData.append('template', temp);
-        formData.append('filename', filename);
-        formData.append('file', excelFile);
-        formData.append('role', JSON.parse(localStorage.getItem('role')));
+        formData.append('comapny',JSON.parse(localStorage.getItem('comapny')))
         formData.append('username', JSON.parse(localStorage.getItem('username')))
+        formData.append('role', JSON.parse(localStorage.getItem('role')));
+        formData.append('filename', filename);
+        formData.append('template', temp);
+        formData.append('file', excelFile);
         try {
             if (!temp || !excelFile) {
                 toast('Please fill all details!', {

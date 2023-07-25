@@ -55,7 +55,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const UploadFileIconCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" } }
 const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "rotate(360deg)" } }
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
-
 const Notice = () => {
     const [open, setOpen] = useState(false);
     const intupvalue = {
@@ -63,23 +62,21 @@ const Notice = () => {
         username: `${JSON.parse(localStorage.getItem('username'))}`
     }
     const [emailformaill, setEmailformail] = useState(intupvalue);
-    const [results, setResults] = useState([])
     const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [inputsearchmail, setinputsearchmail] = useState('');
     const [inputsearchtemp, setinputsearchtemp] = useState('');
     const [isloading, setisLoading] = useState(true)
     const [issendloading, setissendloading] = useState(false)
     const navigate = useNavigate();
-    const revData = [...results].reverse()
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
+    const [results, setResults] = useState([])
+    const revData = Array.isArray(results) ? [...results].reverse() : [];
 
     const handleChange = (event) => {
         const { name, value } = event.target
         setEmailformail({ ...emailformaill, [name]: value });
     };
-    // console.log(emailformaill)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -102,7 +99,9 @@ const Notice = () => {
         navigate(`/totalexceldata/${id}`)
     }
 
-    const API = (JSON.parse(localStorage.getItem("role")) === "Admin") ? "http://localhost:4000/excel/all" : "http://localhost:4000/excel"
+    const company = JSON.parse(localStorage.getItem("comapny"));
+    const username = JSON.parse(localStorage.getItem("username"));
+    const API = `http://localhost:4000/excel/client_user?company=${encodeURIComponent(company)}&username=${encodeURIComponent(username)}`;
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {
@@ -113,7 +112,8 @@ const Notice = () => {
         setResults(result.message)
         setisLoading(false)
     }
-    // console.log(revData)
+    console.log(revData)
+
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/')
@@ -269,10 +269,11 @@ const Notice = () => {
                                 </Item>
                             </AnimatedGridItem>
 
+
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                    <TableContainer sx={{ maxHeight: 440 , overflow: 'auto'}}>
+                                    <TableContainer sx={{ maxHeight: 440, overflow: 'auto' }}>
                                         {isloading ? (
                                             <div className="loading"></div>
                                         ) : (
@@ -338,7 +339,7 @@ const Notice = () => {
                                                                                         <em>none</em>
                                                                                     </MenuItem>
                                                                                     <MenuItem value={'Mrlucifer9651@gmail.com'}>
-                                                                                    Mrlucifer9651@gmail.com
+                                                                                        Mrlucifer9651@gmail.com
                                                                                     </MenuItem>
                                                                                     <MenuItem value={'cc@arness.com'}>
                                                                                         cc@arness.com
