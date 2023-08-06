@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, json, useNavigate } from 'react-router-dom';
 import {
     ButtonGroup, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
     TableHead, TableBody, TableCell, TableContainer, InputLabel, MenuItem, FormControl, Select, TextField, TablePagination
@@ -14,6 +14,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import '../style/style.css'
 import { toast } from 'react-toastify'
 import AdminNavbar from '../Navbar/AdminNavbar';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -67,11 +68,14 @@ const Notice = () => {
     const [inputsearchtemp, setinputsearchtemp] = useState('');
     const [isloading, setisLoading] = useState(true)
     const [issendloading, setissendloading] = useState(false)
+    const [greeting, setGreeting] = useState('');
+    const [currentDateTime, setCurrentDateTime] = useState('');
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
+  
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -99,21 +103,26 @@ const Notice = () => {
         navigate(`/totalexceldata/${id}`)
     }
 
-    const company = JSON.parse(localStorage.getItem("comapny"));
-    const username = JSON.parse(localStorage.getItem("username"));
-    const API = `http://localhost:4000/excel/client_user?company=${encodeURIComponent(company)}&username=${encodeURIComponent(username)}`;
-    const callapi = async (url) => {
-        const res = await fetch(url, {
-            headers: {
-                authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-            },
-        })
-        const result = await res.json()
-        setResults(result.message)
-        setisLoading(false)
-    }
-    console.log(revData)
 
+    const API = `http://localhost:4000/excel`;
+
+     const callapi=async(url)=>{
+        try {
+            const responce= await fetch(url,{
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                },
+            })
+        const results= await responce.json()
+        console.log(results.message)
+        setResults(results.message)
+        } catch (error) {
+            console.log(error)
+        }
+     }
+
+
+  
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/')
@@ -122,38 +131,7 @@ const Notice = () => {
     }, [])
 
 
-    const sendEmail = async (id) => {
-        if (!emailformaill.emailformail) {
-            toast("select email!", {
-                position: "top-center",
-                autoClose: 1000,
-                type: "error"
-            })
-            return
-        }
-        try {
-            setissendloading(true)
-            const res = await fetch(`http://localhost:4000/notice/sendemail/${id}`, {
-                method: "put",
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(emailformaill)
-            })
-            const result = await res.json()
-            setissendloading(false)
-            if (result.message === "Saved") {
-                toast("email sent successfull!", {
-                    position: "top-center",
-                    autoClose: 1000,
-                    type: "success"
-                })
-            }
-            reloadPage();
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  
 
     const reloadPage = () => {
         window.location.reload(); // Reload the page
@@ -176,19 +154,35 @@ const Notice = () => {
         setinputsearchmail('')
     }
 
-    const filteredData = revData.filter((item) => {
-        const inputsearch = inputsearchvalue.toLowerCase();
-        const inputsearchtempp = inputsearchtemp.toLowerCase();
-        const inputsearchmaill = inputsearchmail.toLowerCase();
-        const outputsearch = item.filename.toLowerCase();
-        const outputsearchtemp = item.template.toLowerCase();
-        const outputsearchmailll = item.emailformail ? item.emailformail.toLowerCase() : " ";
-        return (
-            outputsearch.startsWith(inputsearch) &&
-            outputsearchtemp.startsWith(inputsearchtempp) &&
-            outputsearchmailll.startsWith(inputsearchmaill)
-        );
-    });
+    //Greetins with time and date
+    useEffect(() => {
+        const getCurrentDateTime = () => {
+            const date = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDateTime = date.toLocaleDateString(undefined, options) + ' ' + date.toLocaleTimeString();
+
+            if (date.getHours() >= 0 && date.getHours() < 12) {
+                setGreeting('Good morning!');
+            } else if (date.getHours() >= 12 && date.getHours() < 18) {
+                setGreeting('Good afternoon!');
+            } else {
+                setGreeting('Good evening!');
+            }
+
+            setCurrentDateTime(formattedDateTime);
+        };
+
+        // Initial call to getCurrentDateTime
+        getCurrentDateTime();
+
+        // Update time every second using setInterval
+        const intervalId = setInterval(getCurrentDateTime, 1000);
+
+        // Cleanup function to clear the interval when component unmounts
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
 
     return (
@@ -199,10 +193,17 @@ const Notice = () => {
                     <DrawerHeader />
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={2}>
-                            <AnimatedGridItem item xs={10}>
-                                <Item sx={tableCSS} >
-                                    <Typography variant="subtitle1" gutterBottom>Hellow User!</Typography>
-                                    <Typography variant="h4" gutterBottom>Welcome to {`${JSON.parse(localStorage.getItem("comapny"))}`}</Typography>
+                            <AnimatedGridItem item xs={10} >
+                                <Typography variant="h6">{greeting}, RECQARZ!</Typography>
+                                <Typography variant='subtitle2'>{currentDateTime}</Typography>
+                                <Item>
+                                    <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
+
+                                    <Typography component="h1" variant="h5">
+                                        Dashboard
+                                        <br />
+                                        <DashboardIcon fontSize="large" color="secondary" />
+                                    </Typography>
                                 </Item>
                             </AnimatedGridItem>
 
@@ -261,11 +262,7 @@ const Notice = () => {
                                         </Select>
                                     </FormControl>
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
-                                    <Button>
-                                        <Link>
-
-                                        </Link>
-                                    </Button>
+                                   
                                 </Item>
                             </AnimatedGridItem>
 
@@ -274,23 +271,20 @@ const Notice = () => {
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                     <TableContainer sx={{ maxHeight: 440, overflow: 'auto' }}>
-                                        {isloading ? (
+                                        {/* {isloading ? (
                                             <div className="loading"></div>
-                                        ) : (
+                                        ) : ( */}
                                             <>
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
                                                             <TableCell>S. No.</TableCell>
                                                             <TableCell>File Name</TableCell>
-                                                            <TableCell>Created Date</TableCell>
-                                                            <TableCell>Notice Type</TableCell>
-                                                            <TableCell>Email ID</TableCell>
                                                             <TableCell>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
-                                                        {filteredData
+                                                        {revData
                                                             .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                                                             .map((item, index) => (
                                                                 <TableRow
@@ -300,107 +294,29 @@ const Notice = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-                                                                    <TableCell>{(page - 1) * rowsPerPage + index + 1}</TableCell>
-                                                                    <TableCell
-                                                                        onClick={() => totalexceldata(item._id)}
-                                                                        sx={{ cursor: 'pointer' }}
-                                                                    >
-                                                                        {item.filename} <br />
-                                                                        Count - {item.xlData.length}
+                                                                    <TableCell component="th" scope="row">{index+1}  </TableCell>
+                                                                    <TableCell align="left"> {item.filename}</TableCell>
+                                                                    <TableCell align="left"> 
+                                                                    <Button variant='contained' onClick={()=>{totalexceldata(item._id)}} >
+                                                                            Open!
+                                                                    </Button>
                                                                     </TableCell>
-                                                                    <TableCell>
-                                                                        {new Date(item.createdAt).toLocaleDateString('en-US', {
-                                                                            day: 'numeric',
-                                                                            month: 'short',
-                                                                            year: 'numeric',
-                                                                        })}
-                                                                    </TableCell>
-                                                                    <TableCell>{item.template}</TableCell>
-                                                                    <TableCell>
-                                                                        {item.emailformail ? (
-                                                                            item.emailformail
-                                                                        ) : (
-                                                                            <FormControl
-                                                                                sx={{ m: 1, minWidth: 200 }}
-                                                                                size="small"
-                                                                            >
-                                                                                <InputLabel id="demo-simple-select-label">
-                                                                                    Select email
-                                                                                </InputLabel>
-                                                                                <Select
-                                                                                    labelId="demo-simple-select-label"
-                                                                                    id="demo-simple-select"
-                                                                                    name="emailformail"
-                                                                                    value={emailformaill.emailformail}
-                                                                                    label="Select email"
-                                                                                    onChange={handleChange}
-                                                                                >
-                                                                                    <MenuItem value="">
-                                                                                        <em>none</em>
-                                                                                    </MenuItem>
-                                                                                    <MenuItem value={'Mrlucifer9651@gmail.com'}>
-                                                                                        Mrlucifer9651@gmail.com
-                                                                                    </MenuItem>
-                                                                                    <MenuItem value={'cc@arness.com'}>
-                                                                                        cc@arness.com
-                                                                                    </MenuItem>
-                                                                                </Select>
-                                                                            </FormControl>
-                                                                        )}
-                                                                    </TableCell>
-                                                                    <TableCell>
-                                                                        <ButtonGroup>
-                                                                            {item.emailformail ? (
-                                                                                <Button
-                                                                                    variant="contained"
-                                                                                    sx={{ px: 5 }}
-                                                                                    disabled
-                                                                                >
-                                                                                    Sent
-                                                                                </Button>
-                                                                            ) : issendloading ? (
-                                                                                <div className="mailpost"></div>
-                                                                            ) : (
-                                                                                <Button
-                                                                                    variant="contained"
-                                                                                    sx={{ backgroundColor: '#24D555' }}
-                                                                                    onClick={() => sendEmail(item._id)}
-                                                                                >
-                                                                                    Send email
-                                                                                </Button>
-                                                                            )}
-                                                                            <Button
-                                                                                variant="contained"
-                                                                                sx={{ backgroundColor: '#0BBDDD' }}
-                                                                            >
-                                                                                Send SMS
-                                                                            </Button>
-                                                                            <Button disabled={Boolean(item.emailformail)}>
-                                                                                <VisibilityIcon />
-                                                                            </Button>
-                                                                            <Button disabled={Boolean(item.emailformail)}>
-                                                                                <AccessTimeIcon />
-                                                                            </Button>
-                                                                            <Button disabled={Boolean(item.emailformail)}>
-                                                                                <FileDownloadIcon />
-                                                                            </Button>
-                                                                        </ButtonGroup>
-                                                                    </TableCell>
+
                                                                 </TableRow>
-                                                            ))}
+                                                           ))}
                                                     </TableBody>
                                                 </Table>
                                                 <TablePagination
                                                     rowsPerPageOptions={[10, 25, 100]}
                                                     component="div"
-                                                    count={filteredData.length}
+                                                    count={revData.length}
                                                     rowsPerPage={rowsPerPage}
                                                     page={page - 1}
                                                     onPageChange={handleChangePage}
                                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                                 />
                                             </>
-                                        )}
+                                        {/* )} */}
                                     </TableContainer>
                                 </Paper>
                             </Grid>

@@ -109,22 +109,9 @@ const Dialogfordata = () => {
     const handleSubmit = async () => {
         setisLoading(true);
         const formData = new FormData();
-        formData.append('comapny',JSON.parse(localStorage.getItem('comapny')))
-        formData.append('username', JSON.parse(localStorage.getItem('username')))
-        formData.append('role', JSON.parse(localStorage.getItem('role')));
         formData.append('filename', filename);
-        formData.append('template', temp);
         formData.append('file', excelFile);
         try {
-            if (!temp || !excelFile) {
-                toast('Please fill all details!', {
-                    position: 'top-center',
-                    autoClose: 1000,
-                    type: 'error'
-                });
-                setisLoading(false);
-                return;
-            }
             if (excelFile !== null) {
                 const res = await fetch('http://localhost:4000/excel', {
                     method: 'POST',
@@ -174,21 +161,7 @@ const Dialogfordata = () => {
             <Box sx={{ width: '100%' }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={12}>
-                        <Item sx={{ width: 450 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select Template</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={temp}
-                                    label="Select Template"
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={"areness attorneys"}>areness attorneys </MenuItem>
-                                    <MenuItem value={"Legal & Associates"}>Legal & Associates</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Item>
+                       
                         <Typography component="h1" variant="subtitle1" > Upload File</Typography>
                         <Item sx={{ height: 200 }}>
                             <DriveFileMoveIcon fontSize='large' />

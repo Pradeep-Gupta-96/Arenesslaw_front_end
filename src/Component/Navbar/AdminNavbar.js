@@ -11,7 +11,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import HomeIcon from '@mui/icons-material/Home';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 
@@ -97,7 +96,7 @@ const Iconscss = styled('div')(({ theme }) => ({
 export default function AdminNavbar() {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
-  const [campany] = useState('');
+  const [company] = useState('');
   let [DrawerList] = useState('');
   let [settings] = useState('');
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -119,43 +118,15 @@ export default function AdminNavbar() {
     setAnchorElUser(null);
   };
 
-  if (!localStorage.getItem("comapny")) {
-    DrawerList = [
-      {
-        text: "Dashboard",
-        icons: <HomeIcon />,
-        forNavigation: () => {
-          navigation('/admindashboard')
-          localStorage.removeItem('comapny')
-        }
+  DrawerList = [
+    {
+      text: "Dashboard",
+      icons: <HomeIcon />,
+      forNavigation: () => {
+        navigation('/notice')
       }
-    ]
-  } else {
-    DrawerList = [
-      {
-        text: "Dashboard",
-        icons: <HomeIcon />,
-        forNavigation: () => {
-          navigation('/admindashboard')
-          localStorage.removeItem('comapny')
-        }
-      },
-      {
-        text: "Notices",
-        icons: <SummarizeIcon />,
-        forNavigation: () => {
-          navigation('/notice')
-        }
-      },
-      {
-        text: "Settings",
-        icons: <SettingsIcon />,
-        forNavigation: () => {
-          navigation('/Setting')
-        }
-      }
-    ]
-  }
+    },
+  ]
 
   const ListItemCSS = { display: 'block', cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(1.2)" } }
   const settingsCSS = { display: 'block', cursor: "pointer", p: 1, px: 5, transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(1.2)" } }
@@ -207,11 +178,11 @@ export default function AdminNavbar() {
     }
   })
 
- 
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} >
+      <AppBar position="fixed" open={open} sx={{backgroundColor:"#ffffff", color:"#808080"}}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -229,7 +200,7 @@ export default function AdminNavbar() {
             transition: "transform 0.5s ease",
             "&:hover": { transform: "scale(1.2)" }
           }} noWrap component="div">
-            {(campany === "") ? JSON.parse(localStorage.getItem("comapny")) : " "}
+            {(company === "") ? JSON.parse(localStorage.getItem("company")) : " "}
           </Typography>
 
           {/* ============== profile ========= */}
@@ -304,7 +275,7 @@ export default function AdminNavbar() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-
+        
       </Box>
     </Box>
   );

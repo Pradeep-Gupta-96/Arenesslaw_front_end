@@ -69,7 +69,7 @@ export default function Signin() {
         type: "success"
       });
 
-      Navigate('/admindashboard');
+      Navigate('/notice');
     } catch (error) {
       console.log(error);
     }
