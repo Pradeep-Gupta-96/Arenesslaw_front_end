@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import {
-    Button, Dialog, Grid, Link, List, ListItem, ListItemText, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography
+     Grid, Link, List, ListItem, ListItemText, Paper,Typography
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -16,50 +16,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
-const AnimatedGridItem = styled(Grid)`
-  animation: slideIn 1s ease-in-out;
-
-  @keyframes slideIn {
-    0% {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-`;
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const IconsCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", borderRadius: "50%", transform: "scale(1.2)" } }
-const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 const DetailsPage = () => {
-
     const [data, setData] = useState('')
-
-
     const navigate = useNavigate()
     const { Xlid, singleid } = useParams()
-
-
-    console.log(data)
-
-
-
-
-
 
     const API = `http://localhost:4000/excel/details/${Xlid}/${singleid}`
     const callapi = async (url) => {
@@ -71,9 +32,6 @@ const DetailsPage = () => {
         const result = await res.json()
         setData(result.message)
     }
-
-
-
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/');
@@ -95,8 +53,6 @@ const DetailsPage = () => {
                                     <ListItem>
                                         <ListItemText primary="Mail Date" secondary={data.Mail_Date} />
                                     </ListItem>
-
-
                                     <ListItem>
                                         <ListItemText primary="To" secondary={data.To} />
                                     </ListItem>
@@ -206,7 +162,6 @@ const DetailsPage = () => {
                 </Box>
             </Box>
         </>
-
     )
 
 }
