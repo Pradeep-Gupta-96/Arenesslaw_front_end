@@ -47,6 +47,7 @@ export default function Signin() {
       });
 
       const result = await response.json();
+      console.log(result)
 
       if (result.message === "invalid") {
         toast("Invalid credentials!", {
@@ -57,19 +58,25 @@ export default function Signin() {
         return;
       }
 
+
+
       const { username, _id, role } = result.user;
       localStorage.setItem("username", JSON.stringify(username));
       localStorage.setItem("id", JSON.stringify(_id));
       localStorage.setItem("token", JSON.stringify(result.Token));
       localStorage.setItem("role", JSON.stringify(role));
-
+      
       toast("Login Successful!", {
         position: "top-center",
         autoClose: 1000,
         type: "success"
       });
 
-      Navigate('/notice');
+  if(result.user.role==="User"){
+    Navigate('/userdata');
+  }else{
+    Navigate('/notice');
+  }
     } catch (error) {
       console.log(error);
     }

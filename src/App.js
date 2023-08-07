@@ -10,6 +10,7 @@ import Signup from './Component/Users/Signup';
 import AdminNavbar from './Component/Navbar/AdminNavbar';
 import ResetwithOTP from './Component/Users/ResetwithOTP';
 import DetailsPage from './Component/Dashboard/DetailsPage';
+import UserData from './Component/Pages/UserData';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path='/notice' element={<Notice />} />
           <Route path='/totalexceldata/:id' element={<Totalexceldata />} />
           <Route path='/detailspage/:Xlid/:singleid' element={<DetailsPage/>}/>
+          <Route path='/userdata' element={<UserData/>}/>
         </Routes>
       </Router>
       <ToastContainer />

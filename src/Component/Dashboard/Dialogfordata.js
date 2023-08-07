@@ -26,6 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
+
 const Dialogfordata = () => {
     const [temp, setTemp] = useState('');
     const [excelFile, setExcelFile] = useState(null);
@@ -39,42 +40,49 @@ const Dialogfordata = () => {
     };
 
     //sample file download 
-    const number = Math.floor(100000 + Math.random() * 900000);
+    const currentDate = formatDate(Date.now());
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}/${month}/${year}`;
+    };
     const Excelldata = [{
-        "Notice_ID": `sample${number}`,
-        'DATE': "",
-        'ACCOUNT': "",
-        'CARDNO': "",
-        'FPR_NAME': "",
-        'FPR_LD_LIN': "",
-        'FPR_MOB': "",
-        'EMBONAME': "",
-        'ADDRESS1': "",
-        'ADDRESS2': "",
-        'CITY': "",
-        'STATE': "",
-        'PINCODE': "",
-        'NEWRISKREGION': "",
-        'NEW_CURR_BAL': "",
-        'RISKCLASS': "",
-        'BLOCK1': "",
-        'BLOCK2': "",
-        'ZONE': "",
-        'SENDER': "",
-        'BKT': "",
-        'MOBILEPHONE_HOME': "",
-        'TRIGGER': "",
-        'ACTIVITY': "",
-        'STAGE': "",
-        'DPI_Amount': "",
-        'Cur_Bal': "",
-        'Notice_Amount_total': "",
-        'E_mail': "",
-        'REF_NO': "",
-        'NOTICE_DATE': "",
+        "Mail_Date": "",
+        "To": "",
+        "Serial_Number": "",
+        "Name": "",
+        "Address": "",
+        "Description_Client": Number,
+        "Address_Of_Client": "",
+        "Credit_type": "",
+        "Account_No": Number,
+        "Cheque_No": "",
+        "Cheque_Date": "",
+        "Cheque_Amount": "",
+        "Cheque_Branch": "",
+        "Cheque_Bouncing": "",
+        "Return_Memo": "",
+        "Our_Bank": "",
+        "Ecs_Date": "",
+        "Ecs_Bank": "",
+        "Ecs_Provider_Name": "",
+        "Overdue_Amount": "",
+        "Overdue_Date": "",
+        "Emi_Amount": "",
+        "SPOC_Name": "",
+        "SPOC_Number": "",
+        "SPOC_Email": "",
+        "Payment_Link_For_Emi": "",
+        "Payment_Link_For_Total_Dues": "",
+        "Date": "",
+        "Short_Link": "",
+        "Mail_Status": "",
+        "E_mail_Status": ""
     }]
     const downloadfiletype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const downloadfileName = `sample${number}`
+    const downloadfileName = `sample${currentDate}`
     const downloadfilextention = '.xlsx';
     const exporttoexcel = async () => {
         const ws = XLSX.utils.json_to_sheet(Excelldata);
@@ -161,7 +169,7 @@ const Dialogfordata = () => {
             <Box sx={{ width: '100%' }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={12}>
-                       
+
                         <Typography component="h1" variant="subtitle1" > Upload File</Typography>
                         <Item sx={{ height: 200 }}>
                             <DriveFileMoveIcon fontSize='large' />

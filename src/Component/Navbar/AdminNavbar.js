@@ -95,8 +95,8 @@ const Iconscss = styled('div')(({ theme }) => ({
 
 export default function AdminNavbar() {
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
-  const [company] = useState('');
+  const [open, setOpen] = useState(false);
+  const [username] = useState('');
   let [DrawerList] = useState('');
   let [settings] = useState('');
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -118,15 +118,25 @@ export default function AdminNavbar() {
     setAnchorElUser(null);
   };
 
-  DrawerList = [
-    {
-      text: "Dashboard",
-      icons: <HomeIcon />,
-      forNavigation: () => {
-        navigation('/notice')
-      }
-    },
-  ]
+  if (JSON.parse(localStorage.getItem("role")) === "Admin"){
+    DrawerList = [
+      {
+        text: "Dashboard",
+        icons: <HomeIcon />,
+        forNavigation: () => {
+          navigation('/notice')
+        }
+      },
+    ]
+  }else{
+    DrawerList = [
+      {
+        text: "Dashboard",
+        icons: <HomeIcon />,
+      
+      },
+    ]
+  }
 
   const ListItemCSS = { display: 'block', cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(1.2)" } }
   const settingsCSS = { display: 'block', cursor: "pointer", p: 1, px: 5, transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(1.2)" } }
@@ -200,7 +210,7 @@ export default function AdminNavbar() {
             transition: "transform 0.5s ease",
             "&:hover": { transform: "scale(1.2)" }
           }} noWrap component="div">
-            {(company === "") ? JSON.parse(localStorage.getItem("company")) : " "}
+            {(username === "") ? JSON.parse(localStorage.getItem("username")) : " "}
           </Typography>
 
           {/* ============== profile ========= */}

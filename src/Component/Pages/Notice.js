@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
-import { Link, json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-    ButtonGroup, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
+    LinearProgress, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
     TableHead, TableBody, TableCell, TableContainer, InputLabel, MenuItem, FormControl, Select, TextField, TablePagination
 } from '@mui/material';
 import Dialogfordata from '../Dashboard/Dialogfordata';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import '../style/style.css'
-import { toast } from 'react-toastify'
 import AdminNavbar from '../Navbar/AdminNavbar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 
@@ -66,8 +62,7 @@ const Notice = () => {
     const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [inputsearchmail, setinputsearchmail] = useState('');
     const [inputsearchtemp, setinputsearchtemp] = useState('');
-    const [isloading, setisLoading] = useState(true)
-    const [issendloading, setissendloading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
     const navigate = useNavigate();
@@ -75,7 +70,7 @@ const Notice = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
-  
+
 
     const handleChange = (event) => {
         const { name, value } = event.target
@@ -105,24 +100,24 @@ const Notice = () => {
 
 
     const API = `http://localhost:4000/excel`;
-
-     const callapi=async(url)=>{
+    const callapi = async (url) => {
         try {
-            const responce= await fetch(url,{
+            const responce = await fetch(url, {
                 headers: {
                     authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
                 },
             })
-        const results= await responce.json()
-        console.log(results.message)
-        setResults(results.message)
+            const results = await responce.json()
+            setResults(results.message)
+            setIsLoading(false);
         } catch (error) {
             console.log(error)
+            setIsLoading(false);
         }
-     }
+    }
 
 
-  
+
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/')
@@ -131,7 +126,7 @@ const Notice = () => {
     }, [])
 
 
-  
+
 
     const reloadPage = () => {
         window.location.reload(); // Reload the page
@@ -233,47 +228,19 @@ const Notice = () => {
                             <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                     <TextField type='Search' placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={onChange} />
-                                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                        <InputLabel id="demo-simple-select-label">Notice Type</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={inputsearchtemp}
-                                            label="Notice Type"
-                                            onChange={searchhandleChangeT}
-                                        >
-                                            <MenuItem value=''><em>none</em></MenuItem>
-                                            <MenuItem value={"areness attorneys"}>areness attorneys </MenuItem>
-                                            <MenuItem value={"Legal & Associates"}>Legal & Associates</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                        <InputLabel id="demo-simple-select-label">Email ID</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={inputsearchmail}
-                                            label="Email ID"
-                                            onChange={searchhandleChangeM}
-                                        >
-                                            <MenuItem value=''><em>none</em></MenuItem>
-                                            <MenuItem value={"noreply@areness.com"}>noreply@areness.com</MenuItem>
-                                            <MenuItem value={"cc@arness.com"}>cc@arness.com</MenuItem>
-                                        </Select>
-                                    </FormControl>
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
-                                   
                                 </Item>
                             </AnimatedGridItem>
-
 
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                     <TableContainer sx={{ maxHeight: 440, overflow: 'auto' }}>
-                                        {/* {isloading ? (
-                                            <div className="loading"></div>
-                                        ) : ( */}
+                                        {isLoading ? (
+                                            <Box sx={{ width: '100%', marginTop: '20px' }}>
+                                                <LinearProgress />
+                                            </Box>
+                                        ) : (
                                             <>
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
@@ -294,16 +261,15 @@ const Notice = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-                                                                    <TableCell component="th" scope="row">{index+1}  </TableCell>
+                                                                    <TableCell component="th" scope="row">{index + 1}  </TableCell>
                                                                     <TableCell align="left"> {item.filename}</TableCell>
-                                                                    <TableCell align="left"> 
-                                                                    <Button variant='contained' onClick={()=>{totalexceldata(item._id)}} >
+                                                                    <TableCell align="left">
+                                                                        <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >
                                                                             Open!
-                                                                    </Button>
+                                                                        </Button>
                                                                     </TableCell>
-
                                                                 </TableRow>
-                                                           ))}
+                                                            ))}
                                                     </TableBody>
                                                 </Table>
                                                 <TablePagination
@@ -316,7 +282,7 @@ const Notice = () => {
                                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                                 />
                                             </>
-                                        {/* )} */}
+                                        )}
                                     </TableContainer>
                                 </Paper>
                             </Grid>
