@@ -89,7 +89,7 @@ const UserData = () => {
 
     const navigate = useNavigate()
 
-    const API = `http://localhost:4000/user/userdetails/${JSON.parse(localStorage.getItem("id"))}`
+    const API = `http://16.16.45.44:4000/user/userdetails/${JSON.parse(localStorage.getItem("id"))}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {

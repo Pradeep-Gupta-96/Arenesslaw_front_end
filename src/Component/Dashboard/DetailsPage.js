@@ -22,7 +22,7 @@ const DetailsPage = () => {
     const navigate = useNavigate()
     const { Xlid, singleid } = useParams()
 
-    const API = `http://localhost:4000/excel/details/${Xlid}/${singleid}`
+    const API = `http://16.16.45.44:4000/excel/details/${Xlid}/${singleid}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {

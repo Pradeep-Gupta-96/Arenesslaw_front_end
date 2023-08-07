@@ -40,7 +40,7 @@ export default function ResetwithOTP() {
             event.preventDefault()
             const data = new FormData(event.currentTarget);
             console.log(data.get('email'))
-            const api = "http://localhost:4000/user/sendopt"
+            const api = "http://16.16.45.44:4000/user/sendopt"
             const response = await fetch(api, {
                 method: "POST",
                 headers: {
