@@ -139,8 +139,9 @@ export default function Signup() {
                 alignItems: 'center',
                 '& > :not(style)': {
                   m: 1,
-                  width: 600,
+                  width: "100%",
                   height: 550,
+                  maxWidth:600
                 },
               }}
             >
@@ -212,13 +213,7 @@ export default function Signup() {
                   >
                     Register
                   </Button>
-                  <Grid container>
-                    <Grid item xs>
-                      {/* <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link> */}
-                    </Grid>
-                  </Grid>
+                  
                 </Box>
               </Paper>
             </Box>

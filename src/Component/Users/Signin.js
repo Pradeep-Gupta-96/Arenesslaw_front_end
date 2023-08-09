@@ -73,7 +73,7 @@ export default function Signin() {
       });
 
   if(result.user.role==="User"){
-    Navigate('/userdata');
+    Navigate('/emplyeeDashboard');
   }else{
     Navigate('/notice');
   }
@@ -85,7 +85,7 @@ export default function Signin() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs"  >
+      <Container component="main"   >
         <CssBaseline />
         <Box
           sx={{
@@ -96,8 +96,9 @@ export default function Signin() {
             alignItems: 'center',
             '& > :not(style)': {
               m: 1,
-              width: 600,
-              height: 550,
+              width: "100%",
+                  height: 550,
+                  maxWidth:600
             },
           }}
         >
@@ -105,10 +106,10 @@ export default function Signin() {
             <Avatar sx={{ mx: 'auto', mt: 5, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5" sx={{ mx: 32, my: 1 }}>
+            <Typography component="h1" variant="h5" sx={{ my: 1,textAlign:"center" }}>
               Sign-in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ m: 6, mx: 9 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ m: "8%"}}>
               <TextField
                 margin="normal"
                 required

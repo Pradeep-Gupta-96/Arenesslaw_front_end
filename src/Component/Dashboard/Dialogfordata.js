@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import TextField from '@mui/material/TextField';
 import { Link, json } from 'react-router-dom';
@@ -24,7 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 const Dialogfordata = () => {
-    const [temp, setTemp] = useState('');
+    const [temp, setTemp] = useState("SBI");
     const [excelFile, setExcelFile] = useState(null);
     const [excelFileError, setExcelFileError] = useState(null);
     const [isLoading, setisLoading] = useState(false)
@@ -35,7 +35,8 @@ const Dialogfordata = () => {
         setTemp(event.target.value);
     };
 
-   
+    console.log(temp)
+
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
         const day = String(date.getDate()).padStart(2, '0');
@@ -43,18 +44,18 @@ const Dialogfordata = () => {
         const year = String(date.getFullYear()).slice(-2);
         return `${day}/${month}/${year}`;
     };
-     //sample file download 
-     const currentDate = formatDate(Date.now());
+    //sample file download 
+    const currentDate = formatDate(Date.now());
     const Excelldata = [{
         "Mail_Date": "",
         "To": "",
         "Serial_Number": "",
         "Name": "",
         "Address": "",
-        "Description_Client": Number,
+        "Description_Client": "",
         "Address_Of_Client": "",
         "Credit_type": "",
-        "Account_No": Number,
+        "Account_No":"" ,
         "Cheque_No": "",
         "Cheque_Date": "",
         "Cheque_Amount": "",
@@ -115,6 +116,7 @@ const Dialogfordata = () => {
         setisLoading(true);
         const formData = new FormData();
         formData.append('filename', filename);
+        formData.append('Bank', temp);
         formData.append('file', excelFile);
         try {
             if (excelFile !== null) {
@@ -166,7 +168,20 @@ const Dialogfordata = () => {
             <Box sx={{ width: '100%' }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={12}>
-
+                        <Item sx={{ width: 450 }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Select Bank</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={temp}
+                                    label="Select Template"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value={"SBI"}>SBI</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Item>
                         <Typography component="h1" variant="subtitle1" > Upload File</Typography>
                         <Item sx={{ height: 200 }}>
                             <DriveFileMoveIcon fontSize='large' />

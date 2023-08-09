@@ -10,7 +10,8 @@ import Signup from './Component/Users/Signup';
 import AdminNavbar from './Component/Navbar/AdminNavbar';
 import ResetwithOTP from './Component/Users/ResetwithOTP';
 import DetailsPage from './Component/Dashboard/DetailsPage';
-import UserData from './Component/Pages/UserData';
+import EmplyeeDashboard from './Component/Pages/EmplyeeDashboard';
+import EmpolyeeTotaldata from './Component/Dashboard/EmpolyeeTotaldata';
 
 const App = () => {
   return (
@@ -24,8 +25,9 @@ const App = () => {
           <Route path='/adminNavbar' element={<AdminNavbar />} />
           <Route path='/notice' element={<Notice />} />
           <Route path='/totalexceldata/:id' element={<Totalexceldata />} />
+          <Route path='/empolyeeTotaldata/:id' element={<EmpolyeeTotaldata />} />
           <Route path='/detailspage/:Xlid/:singleid' element={<DetailsPage/>}/>
-          <Route path='/userdata' element={<UserData/>}/>
+          <Route path='/emplyeeDashboard' element={<EmplyeeDashboard/>}/>
         </Routes>
       </Router>
       <ToastContainer />

@@ -3,14 +3,11 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
-    LinearProgress, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
+    LinearProgress, Paper, Grid, Button, Slide, Table, TableRow,
     TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link
 } from '@mui/material';
-import Dialogfordata from '../Dashboard/Dialogfordata';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import '../style/style.css'
 import AdminNavbar from '../Navbar/AdminNavbar';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -44,24 +41,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
 }));
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 
-const UploadFileIconCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "scale(1.2)" } }
-const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { transform: "rotate(360deg)" } }
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
-const Notice = () => {
+const EmplyeeDashboard = () => {
     const [open, setOpen] = useState(false);
     const intupvalue = {
         emailformail: "",
         username: `${JSON.parse(localStorage.getItem('username'))}`
     }
-    const [emailformaill, setEmailformail] = useState(intupvalue);
     const [inputsearchvalue, setInputsearchvalue] = useState('')
-    const [inputsearchmail, setinputsearchmail] = useState('');
-    const [inputsearchtemp, setinputsearchtemp] = useState('');
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
@@ -72,19 +61,6 @@ const Notice = () => {
     const revData = Array.isArray(results) ? [...results].reverse() : [];
 
 
-    const handleChange = (event) => {
-        const { name, value } = event.target
-        setEmailformail({ ...emailformaill, [name]: value });
-    };
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage + 1);
     };
@@ -94,8 +70,8 @@ const Notice = () => {
         setPage(1);
     };
 
-    const totalexceldata = (id) => {
-        navigate(`/totalexceldata/${id}`)
+    const EmpolyeeTotaldata = (id) => {
+        navigate(`/empolyeeTotaldata/${id}`)
     }
 
 
@@ -126,27 +102,12 @@ const Notice = () => {
     }, [])
 
 
-
-
-    const reloadPage = () => {
-        window.location.reload(); // Reload the page
-    };
-
     const onChange = (event) => {
         setInputsearchvalue(event.target.value)
     }
-    const searchhandleChangeT = (event) => {
-        setinputsearchtemp(event.target.value);
-    };
-
-    const searchhandleChangeM = (event) => {
-        setinputsearchmail(event.target.value);
-    };
 
     const resetsearchbar = () => {
         setInputsearchvalue('')
-        setinputsearchtemp('')
-        setinputsearchmail('')
     }
 
     //Greetins with time and date
@@ -188,44 +149,7 @@ const Notice = () => {
                     <DrawerHeader />
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={2}>
-                            <AnimatedGridItem item xs={10} >
-                                <Typography variant="h6">{greeting}, RECQARZ!</Typography>
-                                <Typography variant='subtitle2'>{currentDateTime}</Typography>
-                                <Item sx={{ mt: "20px", py: "12px", px: "15px", textAlign: "left" }}>
 
-
-                                    <Typography component="h1" variant="h5">
-                                        <DashboardIcon sx={{ float: "left" }} fontSize="large" color="secondary" />
-                                        <span>
-                                            Dashboard
-                                        </span>
-
-                                    </Typography>
-                                    <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
-                                </Item>
-                            </AnimatedGridItem>
-
-                            {/*================ Dialog ============== */}
-                            <AnimatedGridItem item xs={2}>
-                                <Item>
-                                    <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /> <br />
-                                    <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
-                                        Bulk Upload
-                                    </Button>
-                                    <Dialog
-                                        open={open}
-                                        TransitionComponent={Transition}
-                                        keepMounted
-                                        onClose={handleClose}
-                                        aria-describedby="alert-dialog-slide-description"
-                                    >
-                                        <DialogTitle>{"Bulk Upload File!"}</DialogTitle>
-                                        <DialogContent>
-                                            <Dialogfordata />
-                                        </DialogContent>
-                                    </Dialog>
-                                </Item>
-                            </AnimatedGridItem>
 
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
@@ -276,7 +200,7 @@ const Notice = () => {
                                                                         })}
                                                                     </TableCell>
                                                                     <TableCell align="left">
-                                                                        <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >
+                                                                        <Button variant='contained' onClick={() => { EmpolyeeTotaldata(item._id) }} >
                                                                             Open!
                                                                         </Button>
                                                                     </TableCell>
@@ -294,15 +218,11 @@ const Notice = () => {
                                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                                 />
                                             </>
-                                            
                                         )}
-
                                     </TableContainer>
                                 </Paper>
+                            
                             </Grid>
-                            <Link>
-                                Back
-                            </Link>
                         </Grid>
                     </Box>
                 </Box>
@@ -311,4 +231,5 @@ const Notice = () => {
     )
 }
 
-export default Notice
+
+export default EmplyeeDashboard

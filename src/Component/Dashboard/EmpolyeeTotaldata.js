@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import {
-    Button, Dialog, Grid, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, makeStyles
+    Button, Dialog, Grid, Link, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, makeStyles
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminNavbar from '../Navbar/AdminNavbar';
@@ -45,7 +45,7 @@ const IconsCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hove
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 
-const Totalexceldata = () => {
+const EmpolyeeTotaldata = () => {
     const [open1, setopen1] = useState(false);
     const [open2, setopen2] = useState(false);
     const [results, setResults] = useState([])
@@ -60,8 +60,9 @@ const Totalexceldata = () => {
     };
 
     const filteredResults = results.filter((item) => {
+        const account=item.Account_No ? String(item.Account_No):"";
         const searchData = item.Name ? item.Name.toLowerCase() : '';  // Check if Name exists
-        return searchData.includes(searchValue);
+        return searchData.includes(searchValue)|| account.includes(searchValue);
     });
 
     const reset = () => {
@@ -107,7 +108,7 @@ const Totalexceldata = () => {
                     <Grid container spacing={2}>
                         <AnimatedGridItem item xs={12} >
                             <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                <TextField type='Search' value={searchValue} placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
+                                <TextField type='Search' value={searchValue} placeholder='Search by Customer Name/Account No' size="small" sx={{ m: 1, minWidth: 400 }} onChange={handleOnChange} />
 
 
                                 <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={reset} >Reset</Button>
@@ -124,7 +125,7 @@ const Totalexceldata = () => {
                                         <Table stickyHeader aria-label="sticky table">
                                             <TableHead >
                                                 <TableRow  >
-                                                <TableCell><strong> S. No.</strong></TableCell>
+                                                    <TableCell><strong> S. No.</strong></TableCell>
                                                     <TableCell><strong> Customer Name</strong> </TableCell>
                                                     <TableCell><strong> Customer Email</strong> </TableCell>
                                                     <TableCell><strong> Account No</strong> </TableCell>
@@ -134,24 +135,26 @@ const Totalexceldata = () => {
                                             </TableHead>
                                             <TableBody>
                                                 {
-                                                    filteredResults.map((item, index) => {
-                                                        return (
-                                                            <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
+                                                    filteredResults
+                                                        .filter(item => item.SPOC_Email === `${JSON.parse(localStorage.getItem("username"))}`)
+                                                        .map((item, index) => {
+                                                            return (
+                                                                <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
 
-                                                                <TableCell  >{index + 1} </TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.To}</TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.Name}</TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.Account_No}</TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.E_mail_Status}</TableCell>
-                                                                <TableCell >
-                                                                    <Button onClick={() => { clickfordeatils(id, item._id) }}>
-                                                                        open
-                                                                    </Button>
-                                                                </TableCell>
+                                                                    <TableCell  >{index + 1} </TableCell>
+                                                                    <TableCell sx={{ cursor: 'pointer' }} >{item.Name}</TableCell>
+                                                                    <TableCell sx={{ cursor: 'pointer' }} >{item.To.toLowerCase()}</TableCell>
+                                                                    <TableCell sx={{ cursor: 'pointer' }} >{item.Account_No}</TableCell>
+                                                                    <TableCell sx={{ cursor: 'pointer' }} >{item.E_mail_Status}</TableCell>
+                                                                    <TableCell >
+                                                                        <Link onClick={() => { clickfordeatils(id, item._id) }}>
+                                                                            View Details
+                                                                        </Link>
+                                                                    </TableCell>
 
-                                                            </TableRow>
-                                                        )
-                                                    })
+                                                                </TableRow>
+                                                            )
+                                                        })
                                                 }
                                             </TableBody>
                                         </Table>
@@ -177,4 +180,5 @@ const Totalexceldata = () => {
 
 }
 
-export default Totalexceldata 
+
+export default EmpolyeeTotaldata
