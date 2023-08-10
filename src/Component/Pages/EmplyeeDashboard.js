@@ -55,6 +55,7 @@ const EmplyeeDashboard = () => {
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
+    const [dateSearchValue, setDateSearchValue] = useState('');
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -69,6 +70,10 @@ const EmplyeeDashboard = () => {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(1);
+    };
+
+    const onChangeDate = (event) => {
+        setDateSearchValue(event.target.value);
     };
 
     const EmpolyeeTotaldata = (id) => {
@@ -116,15 +121,27 @@ const EmplyeeDashboard = () => {
     }
 
     const filteredData = revData.filter((item) => {
-        const inputsearch = inputsearchvalue.toLowerCase();
-        const inputsearchmaill = noticetype
-        const outputsearch = item.filename.toLowerCase();
-        const outputsearchmailll = item.noticetype ? item.noticetype : " ";
+        const inputSearch = dateSearchValue.toLowerCase();
+        const inputsearchtempp = noticetype.toLowerCase();
+    
+        const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        }).toLowerCase();
+        
+        const outputsearch = formattedDateTime;
+        const outputsearchtemp = item.NoticeType.toLowerCase();
+        
         return (
-            outputsearch.startsWith(inputsearch) &&
-            outputsearchmailll.startsWith(inputsearchmaill)
+            outputsearch.startsWith(inputSearch) &&
+            outputsearchtemp.startsWith(inputsearchtempp)
         );
     });
+
 
     //Greetins with time and date
     useEffect(() => {
@@ -170,7 +187,7 @@ const EmplyeeDashboard = () => {
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                    <TextField type='Search' placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={onChange} />
+                                <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                         <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
                                         <Select
@@ -215,6 +232,7 @@ const EmplyeeDashboard = () => {
                                                         <TableRow>
                                                             <TableCell>S. No.</TableCell>
                                                             <TableCell>Date</TableCell>
+                                                            <TableCell>Notice Type</TableCell>
                                                             <TableCell>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>

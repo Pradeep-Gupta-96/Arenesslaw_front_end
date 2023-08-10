@@ -40,7 +40,6 @@ const Dialogfordata = () => {
         setNoticetype(event.target.value);
     };
 
-    console.log(noticetype)
 
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -177,7 +176,6 @@ const Dialogfordata = () => {
     };
 
 
-    console.log("testing")
 
 
     return (

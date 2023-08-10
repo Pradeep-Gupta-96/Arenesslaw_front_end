@@ -59,7 +59,7 @@ const Notice = () => {
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
-       const [dateSearchValue, setDateSearchValue] = useState(''); 
+    const [dateSearchValue, setDateSearchValue] = useState('');
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -67,9 +67,10 @@ const Notice = () => {
     const revData = Array.isArray(results) ? [...results].reverse() : [];
 
 
+
     const handleClickOpen = () => {
         setOpen(true);
-    };
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -91,7 +92,7 @@ const Notice = () => {
     const onChangeDate = (event) => {
         setDateSearchValue(event.target.value);
     };
-console.log(setDateSearchValue)
+
     const resetsearchbar = () => {
         setDateSearchValue('')
         setNoticetype('')
@@ -130,23 +131,33 @@ console.log(setDateSearchValue)
         fetchData();
     }, []);
 
-    const filteredData = useMemo(() => {
-        const inputSearch = inputsearchvalue.toLowerCase();
-        const dateSearch = dateSearchValue.toLocaleLowerCase();
 
-        return revData.filter(item =>
-            item.filename.toLowerCase().startsWith(inputSearch) &&
-            (item.noticetype ? item.noticetype.startsWith(noticetype) : true) &&
-            new Date(item.createdAt).toLocaleDateString('en-US', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-            }).toLocaleLowerCase().startsWith(dateSearch)
+    const filteredData = revData.filter((item) => {
+        const inputSearch = dateSearchValue.toLowerCase();
+        const inputsearchtempp = noticetype.toLowerCase();
+    
+        const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        }).toLowerCase();
+        
+        const outputsearch = formattedDateTime;
+        const outputsearchtemp = item.NoticeType.toLowerCase();
+        
+        return (
+            outputsearch.startsWith(inputSearch) &&
+            outputsearchtemp.startsWith(inputsearchtempp)
         );
-    }, [inputsearchvalue, noticetype, dateSearchValue, revData]);
+    });
+    
+    
+
+
+
 
     //Greetins with time and date
     useEffect(() => {
@@ -177,7 +188,6 @@ console.log(setDateSearchValue)
             clearInterval(intervalId);
         };
     }, []);
-
 
 
 
@@ -231,16 +241,17 @@ console.log(setDateSearchValue)
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                <TextField type='date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
+                                    <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                         <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
-                                        <Select
+                                        <Select 
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={noticetype}
                                             label="Select Notice type"
                                             onChange={handleChangefornoticetype}
                                         >
+                                            <MenuItem value=''><em>none</em></MenuItem>
                                             <MenuItem value={"QLD"}> QLD</MenuItem>
                                             <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
                                             <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
@@ -302,8 +313,7 @@ console.log(setDateSearchValue)
                                                                             second: 'numeric'
                                                                         })}
                                                                     </TableCell>
-                                                                    <TableCell component="th" scope="row" >
-                                                                        {console.log('Rendering:', item.NoticeType)}{item.NoticeType}</TableCell>
+                                                                    <TableCell component="th" scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
                                                                         <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >
                                                                             Open!

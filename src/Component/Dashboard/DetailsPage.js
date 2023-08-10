@@ -140,9 +140,7 @@ const DetailsPage = () => {
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         <ListItem sx={{ display: "flex", justifyContent: "space-between", }}>
-                            <Link>
-                                Back
-                            </Link>
+                          
                             <Button
                                 variant="contained"
                                 onClick={generatePDF}
