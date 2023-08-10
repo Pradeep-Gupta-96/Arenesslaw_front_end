@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import {
-    Button, Dialog, Grid, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, makeStyles
+    Button, Dialog, Grid, Link, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, makeStyles
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminNavbar from '../Navbar/AdminNavbar';
@@ -51,6 +51,8 @@ const Totalexceldata = () => {
     const [results, setResults] = useState([])
     const [heders, setheaders] = useState([])
     const [isloading, setisLoading] = useState(true)
+    const [page, setPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const navigate = useNavigate()
     const { id } = useParams()
     const [searchValue, setSearchValue] = useState('');
@@ -60,7 +62,7 @@ const Totalexceldata = () => {
     };
 
     const filteredResults = results.filter((item) => {
-        const searchData = item.Name ? item.Name.toLowerCase() : '';  // Check if Name exists
+        const searchData = item.EMBONAME ? item.EMBONAME.toLowerCase() : '';  // Check if Name exists
         return searchData.includes(searchValue);
     });
 
@@ -71,6 +73,15 @@ const Totalexceldata = () => {
 
     const handleClose2 = () => {
         setopen2(false);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage + 1);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(1);
     };
 
     const API = `http://16.16.45.44:4000/excel/${id}`
@@ -117,57 +128,62 @@ const Totalexceldata = () => {
 
                         <AnimatedGridItem item xs={12}>
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                <TableContainer sx={{ maxHeight: 440 }}>
+                                <TableContainer sx={{ maxHeight: 600 }}>
                                     {isloading ? (
                                         <div className="loading"></div>
                                     ) :
-                                        <Table stickyHeader aria-label="sticky table">
-                                            <TableHead >
-                                                <TableRow  >
-                                                <TableCell><strong> S. No.</strong></TableCell>
-                                                    <TableCell><strong> Customer Name</strong> </TableCell>
-                                                    <TableCell><strong> Customer Email</strong> </TableCell>
-                                                    <TableCell><strong> Account No</strong> </TableCell>
-                                                    <TableCell><strong> E-mail Status</strong> </TableCell>
-                                                    <TableCell><strong>Actions</strong></TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {
-                                                    filteredResults.map((item, index) => {
-                                                        return (
-                                                            <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
+                                        <>
+                                            <Table stickyHeader aria-label="sticky table">
+                                                <TableHead >
+                                                    <TableRow  >
+                                                        <TableCell><strong> S. No.</strong></TableCell>
+                                                        <TableCell><strong> Customer Name</strong> </TableCell>
+                                                        <TableCell><strong> MOBILEPHONE_HOME</strong> </TableCell>
+                                                        <TableCell><strong> Account No</strong> </TableCell>
+                                                        <TableCell><strong> SMS Status</strong> </TableCell>
+                                                        <TableCell><strong> EMAIL STATUS</strong> </TableCell>
+                                                        <TableCell><strong>Actions</strong></TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {
+                                                        filteredResults
+                                                            .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+                                                            .map((item, index) => {
+                                                                return (
+                                                                    <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
 
-                                                                <TableCell  >{index + 1} </TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.To}</TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.Name}</TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.Account_No}</TableCell>
-                                                                <TableCell sx={{ cursor: 'pointer' }} >{item.E_mail_Status}</TableCell>
-                                                                <TableCell >
-                                                                    <Button onClick={() => { clickfordeatils(id, item._id) }}>
-                                                                        open
-                                                                    </Button>
-                                                                </TableCell>
-
-                                                            </TableRow>
-                                                        )
-                                                    })
-                                                }
-                                            </TableBody>
-                                        </Table>
+                                                                        <TableCell  >{index + 1} </TableCell>
+                                                                        <TableCell sx={{ cursor: 'pointer' }} >{item.EMBONAME}</TableCell>
+                                                                        <TableCell sx={{ cursor: 'pointer' }} >{item["MOBILEPHONE_HOME"]}</TableCell>
+                                                                        <TableCell sx={{ cursor: 'pointer' }} >{item.ACCOUNT}</TableCell>
+                                                                        <TableCell sx={{ cursor: 'pointer' }} >{item["SMS Status"]}</TableCell>
+                                                                        <TableCell sx={{ cursor: 'pointer' }} >{item["EMAIL STATUS"]}</TableCell>
+                                                                        <TableCell >
+                                                                            <Link onClick={() => { clickfordeatils(id, item._id) }}>
+                                                                                View Details
+                                                                            </Link>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                )
+                                                            })
+                                                    }
+                                                </TableBody>
+                                            </Table>
+                                            <TablePagination
+                                                rowsPerPageOptions={[10, 25, 100]}
+                                                component="div"
+                                                count={results.length}
+                                                rowsPerPage={rowsPerPage}
+                                                page={page - 1}
+                                                onPageChange={handleChangePage}
+                                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                            />
+                                        </>
                                     }
                                 </TableContainer>
                             </Paper>
                         </AnimatedGridItem>
-                        <Dialog
-                            open={open2}
-                            TransitionComponent={Transition}
-                            keepMounted
-                            onClose={handleClose2}
-                            aria-describedby="alert-dialog-slide-description"
-                        >
-
-                        </Dialog>
                     </Grid>
                 </Box>
             </Box>

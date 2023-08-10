@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import TextField from '@mui/material/TextField';
-import { Link, json } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import DialogActions from '@mui/material/DialogActions';
 import * as FileServer from 'file-saver'
 import XLSX from 'sheetjs-style'
@@ -25,6 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Dialogfordata = () => {
     const [temp, setTemp] = useState("SBI");
+    const [noticetype, setNoticetype] = useState("");
     const [excelFile, setExcelFile] = useState(null);
     const [excelFileError, setExcelFileError] = useState(null);
     const [isLoading, setisLoading] = useState(false)
@@ -35,7 +36,11 @@ const Dialogfordata = () => {
         setTemp(event.target.value);
     };
 
-    console.log(temp)
+    const handleChangefornoticetype = (event) => {
+        setNoticetype(event.target.value);
+    };
+
+    console.log(noticetype)
 
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -46,49 +51,57 @@ const Dialogfordata = () => {
     };
     //sample file download 
     const currentDate = formatDate(Date.now());
-    const Excelldata = [{
-        "Mail_Date": "",
-        "To": "",
-        "Serial_Number": "",
-        "Name": "",
-        "Address": "",
-        "Description_Client": "",
-        "Address_Of_Client": "",
-        "Credit_type": "",
-        "Account_No":"" ,
-        "Cheque_No": "",
-        "Cheque_Date": "",
-        "Cheque_Amount": "",
-        "Cheque_Branch": "",
-        "Cheque_Bouncing": "",
-        "Return_Memo": "",
-        "Our_Bank": "",
-        "Ecs_Date": "",
-        "Ecs_Bank": "",
-        "Ecs_Provider_Name": "",
-        "Overdue_Amount": "",
-        "Overdue_Date": "",
-        "Emi_Amount": "",
-        "SPOC_Name": "",
-        "SPOC_Number": "",
-        "SPOC_Email": "",
-        "Payment_Link_For_Emi": "",
-        "Payment_Link_For_Total_Dues": "",
-        "Date": "",
-        "Short_Link": "",
-        "Mail_Status": "",
-        "E_mail_Status": ""
-    }]
+
+    const memoizedExcelData = useMemo(() => {
+        return [{
+            "REF_NO": "",
+            "DATE": "",
+            "ACCOUNT": "",
+            "CARDNO": "",
+            "FPR_NAME": "",
+            "FPR_LD_LIN": "",
+            "FPR_MOB": "",
+            "EMBONAME": "",
+            "ADDRESS1": "",
+            "ADDRESS2": "",
+            "CITY": "",
+            "STATE": "",
+            "PINCODE": "",
+            "NNR": "",
+            "NEW_CURR BAL": "",
+            "RISKCLASS": "",
+            "BLOCK1": "",
+            "BLOCK2": "",
+            "INT FLAG": "",
+            "ZONE": "",
+            "SENDER": "",
+            "BKT": "",
+            "MOBILEPHONE_HOME": "",
+            "TREGGER": "",
+            "ACTIVITY": "",
+            "STAGE": "",
+            "Email Id": "",
+            "REQUEST RAISE BY": "",
+            "Region": "",
+            "Language": "",
+            "Opertaional Status": "",
+            "Short Link": "",
+            "SMS Status": "",
+            "EMAIL STATUS": ""
+        }]
+    }, [])
+
     const downloadfiletype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const downloadfileName = `sample${currentDate}`
     const downloadfilextention = '.xlsx';
-    const exporttoexcel = async () => {
-        const ws = XLSX.utils.json_to_sheet(Excelldata);
+
+    const exporttoexcel = () => {
+        const ws = XLSX.utils.json_to_sheet(memoizedExcelData);
         const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], { type: downloadfiletype });
-        FileServer.saveAs(data, downloadfileName + downloadfilextention)
-    }
+        FileServer.saveAs(data, downloadfileName + downloadfilextention);
+    };
 
     // handle File for upload
     const fileType = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
@@ -117,6 +130,7 @@ const Dialogfordata = () => {
         const formData = new FormData();
         formData.append('filename', filename);
         formData.append('Bank', temp);
+        formData.append('NoticeType', noticetype);
         formData.append('file', excelFile);
         try {
             if (excelFile !== null) {
@@ -163,6 +177,9 @@ const Dialogfordata = () => {
     };
 
 
+    console.log("testing")
+
+
     return (
         <>
             <Box sx={{ width: '100%' }}>
@@ -170,15 +187,42 @@ const Dialogfordata = () => {
                     <Grid item xs={12}>
                         <Item sx={{ width: 450 }}>
                             <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Select Bank</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Bank</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={temp}
-                                    label="Select Template"
+                                    label="Bank"
                                     onChange={handleChange}
                                 >
                                     <MenuItem value={"SBI"}>SBI</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Item>
+                        <Item sx={{ width: 450 }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={noticetype}
+                                    label="Select Notice type"
+                                    onChange={handleChangefornoticetype}
+                                >
+                                    <MenuItem value={"QLD"}> QLD</MenuItem>
+                                    <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
+                                    <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                    <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
+                                    <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
+                                    <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
+                                    <MenuItem value={"E-Conciliation Bilingual"}> E-Conciliation Bilingual</MenuItem>
                                 </Select>
                             </FormControl>
                         </Item>

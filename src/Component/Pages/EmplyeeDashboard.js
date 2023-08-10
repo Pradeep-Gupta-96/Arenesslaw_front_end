@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
     LinearProgress, Paper, Grid, Button, Slide, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link
+    TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link, MenuItem, InputLabel, Select, FormControl
 } from '@mui/material';
 import '../style/style.css'
 import AdminNavbar from '../Navbar/AdminNavbar';
@@ -51,6 +51,7 @@ const EmplyeeDashboard = () => {
         username: `${JSON.parse(localStorage.getItem('username'))}`
     }
     const [inputsearchvalue, setInputsearchvalue] = useState('')
+    const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
@@ -105,10 +106,25 @@ const EmplyeeDashboard = () => {
     const onChange = (event) => {
         setInputsearchvalue(event.target.value)
     }
+    const handleChangefornoticetype = (event) => {
+        setNoticetype(event.target.value);
+    };
 
     const resetsearchbar = () => {
         setInputsearchvalue('')
+        setNoticetype('')
     }
+
+    const filteredData = revData.filter((item) => {
+        const inputsearch = inputsearchvalue.toLowerCase();
+        const inputsearchmaill = noticetype
+        const outputsearch = item.filename.toLowerCase();
+        const outputsearchmailll = item.noticetype ? item.noticetype : " ";
+        return (
+            outputsearch.startsWith(inputsearch) &&
+            outputsearchmailll.startsWith(inputsearchmaill)
+        );
+    });
 
     //Greetins with time and date
     useEffect(() => {
@@ -155,6 +171,31 @@ const EmplyeeDashboard = () => {
                             <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                     <TextField type='Search' placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={onChange} />
+                                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                                        <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={noticetype}
+                                            label="Select Notice type"
+                                            onChange={handleChangefornoticetype}
+                                        >
+                                            <MenuItem value={"QLD"}> QLD</MenuItem>
+                                            <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
+                                            <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                            <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
+                                            <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
+                                            <MenuItem value={"E-Conciliation Bilingual"}> E-Conciliation Bilingual</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                 </Item>
                             </AnimatedGridItem>
@@ -178,7 +219,7 @@ const EmplyeeDashboard = () => {
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
-                                                        {revData
+                                                        {filteredData
                                                             .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                                                             .map((item, index) => (
                                                                 <TableRow
@@ -199,6 +240,7 @@ const EmplyeeDashboard = () => {
                                                                             second: 'numeric'
                                                                         })}
                                                                     </TableCell>
+                                                                    <TableCell component="th" scope="row">{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
                                                                         <Button variant='contained' onClick={() => { EmpolyeeTotaldata(item._id) }} >
                                                                             Open!
@@ -221,7 +263,7 @@ const EmplyeeDashboard = () => {
                                         )}
                                     </TableContainer>
                                 </Paper>
-                            
+
                             </Grid>
                         </Grid>
                     </Box>

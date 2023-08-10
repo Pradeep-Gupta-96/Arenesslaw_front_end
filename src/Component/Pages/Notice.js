@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
     LinearProgress, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link
+    TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link, FormControl, InputLabel, Select, MenuItem
 } from '@mui/material';
 import Dialogfordata from '../Dashboard/Dialogfordata';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -54,28 +54,18 @@ const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 const Notice = () => {
     const [open, setOpen] = useState(false);
-    const intupvalue = {
-        emailformail: "",
-        username: `${JSON.parse(localStorage.getItem('username'))}`
-    }
-    const [emailformaill, setEmailformail] = useState(intupvalue);
     const [inputsearchvalue, setInputsearchvalue] = useState('')
-    const [inputsearchmail, setinputsearchmail] = useState('');
-    const [inputsearchtemp, setinputsearchtemp] = useState('');
+    const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
+       const [dateSearchValue, setDateSearchValue] = useState(''); 
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
 
-
-    const handleChange = (event) => {
-        const { name, value } = event.target
-        setEmailformail({ ...emailformaill, [name]: value });
-    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -94,20 +84,37 @@ const Notice = () => {
         setPage(1);
     };
 
+    const handleChangefornoticetype = (event) => {
+        setNoticetype(event.target.value);
+    };
+
+    const onChangeDate = (event) => {
+        setDateSearchValue(event.target.value);
+    };
+console.log(setDateSearchValue)
+    const resetsearchbar = () => {
+        setDateSearchValue('')
+        setNoticetype('')
+    }
+
     const totalexceldata = (id) => {
         navigate(`/totalexceldata/${id}`)
     }
 
 
+
     const API = `http://16.16.45.44:4000/excel`;
-    const callapi = async (url) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
+    const requestOptions = {
+        method: 'get',
+        headers: myHeaders,
+    };
+
+    const fetchData = async (url) => {
         try {
-            const responce = await fetch(url, {
-                headers: {
-                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-                },
-            })
-            const results = await responce.json()
+            const response = await fetch(API, requestOptions)
+            const results = await response.json()
             setResults(results.message)
             setIsLoading(false);
         } catch (error) {
@@ -116,38 +123,30 @@ const Notice = () => {
         }
     }
 
-
-
     useEffect(() => {
         if (!localStorage.getItem('token')) {
-            navigate('/')
+            navigate('/');
         }
-        callapi(API)
-    }, [])
+        fetchData();
+    }, []);
 
+    const filteredData = useMemo(() => {
+        const inputSearch = inputsearchvalue.toLowerCase();
+        const dateSearch = dateSearchValue.toLocaleLowerCase();
 
-
-
-    const reloadPage = () => {
-        window.location.reload(); // Reload the page
-    };
-
-    const onChange = (event) => {
-        setInputsearchvalue(event.target.value)
-    }
-    const searchhandleChangeT = (event) => {
-        setinputsearchtemp(event.target.value);
-    };
-
-    const searchhandleChangeM = (event) => {
-        setinputsearchmail(event.target.value);
-    };
-
-    const resetsearchbar = () => {
-        setInputsearchvalue('')
-        setinputsearchtemp('')
-        setinputsearchmail('')
-    }
+        return revData.filter(item =>
+            item.filename.toLowerCase().startsWith(inputSearch) &&
+            (item.noticetype ? item.noticetype.startsWith(noticetype) : true) &&
+            new Date(item.createdAt).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            }).toLocaleLowerCase().startsWith(dateSearch)
+        );
+    }, [inputsearchvalue, noticetype, dateSearchValue, revData]);
 
     //Greetins with time and date
     useEffect(() => {
@@ -180,6 +179,8 @@ const Notice = () => {
     }, []);
 
 
+
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -205,7 +206,7 @@ const Notice = () => {
                                 </Item>
                             </AnimatedGridItem>
 
-                            {/*================ Dialog ============== */}
+                            {/* ================ Dialog ============== */}
                             <AnimatedGridItem item xs={2}>
                                 <Item>
                                     <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /> <br />
@@ -230,7 +231,32 @@ const Notice = () => {
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                    <TextField type='Search' placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={onChange} />
+                                <TextField type='date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
+                                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                                        <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={noticetype}
+                                            label="Select Notice type"
+                                            onChange={handleChangefornoticetype}
+                                        >
+                                            <MenuItem value={"QLD"}> QLD</MenuItem>
+                                            <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
+                                            <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                            <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
+                                            <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
+                                            <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
+                                            <MenuItem value={"E-Conciliation Bilingual"}> E-Conciliation Bilingual</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                 </Item>
                             </AnimatedGridItem>
@@ -250,11 +276,12 @@ const Notice = () => {
                                                         <TableRow>
                                                             <TableCell>S. No.</TableCell>
                                                             <TableCell>Date</TableCell>
+                                                            <TableCell>Notice Type</TableCell>
                                                             <TableCell>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
-                                                        {revData
+                                                        {filteredData
                                                             .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                                                             .map((item, index) => (
                                                                 <TableRow
@@ -275,6 +302,8 @@ const Notice = () => {
                                                                             second: 'numeric'
                                                                         })}
                                                                     </TableCell>
+                                                                    <TableCell component="th" scope="row" >
+                                                                        {console.log('Rendering:', item.NoticeType)}{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
                                                                         <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >
                                                                             Open!
@@ -294,7 +323,7 @@ const Notice = () => {
                                                     onRowsPerPageChange={handleChangeRowsPerPage}
                                                 />
                                             </>
-                                            
+
                                         )}
 
                                     </TableContainer>
