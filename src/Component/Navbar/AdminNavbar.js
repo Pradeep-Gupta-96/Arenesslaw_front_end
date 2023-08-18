@@ -131,7 +131,9 @@ export default function AdminNavbar() {
       {
         text: "Dashboard",
         icons: <HomeIcon />,
-      
+        forNavigation: () => {
+          navigation('/emplyeeDashboard')
+        }
       },
     ]
   }
