@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import {
-    Button, Dialog, Grid, Link, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, makeStyles
+    Button, Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import AdminNavbar from '../Navbar/AdminNavbar';
 import '../style/style.css'
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -37,19 +38,12 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
-const IconsCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", borderRadius: "50%", transform: "scale(1.2)" } }
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 
 
 const Totalexceldata = () => {
-    const [open1, setopen1] = useState(false);
-    const [open2, setopen2] = useState(false);
     const [results, setResults] = useState([])
-    const [heders, setheaders] = useState([])
     const [isloading, setisLoading] = useState(true)
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -70,11 +64,6 @@ const Totalexceldata = () => {
         setSearchValue()
     }
 
-
-    const handleClose2 = () => {
-        setopen2(false);
-    };
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage + 1);
     };
@@ -92,7 +81,6 @@ const Totalexceldata = () => {
             },
         })
         const result = await res.json()
-        setheaders(result.message)
         setResults(result.message.xlData)
         setisLoading(false)
     }
@@ -137,11 +125,12 @@ const Totalexceldata = () => {
                                                 <TableHead >
                                                     <TableRow  >
                                                         <TableCell><strong> S. No.</strong></TableCell>
-                                                        <TableCell><strong> Customer Name</strong> </TableCell>
-                                                        <TableCell><strong> MOBILEPHONE_HOME</strong> </TableCell>
-                                                        <TableCell><strong> Account No</strong> </TableCell>
-                                                        <TableCell><strong> SMS Status</strong> </TableCell>
+                                                        <TableCell><strong> CUSTOMER NAME</strong> </TableCell>
+                                                        <TableCell><strong> MOBILE </strong> </TableCell>
+                                                        <TableCell><strong> ACCOUNT </strong> </TableCell>
+                                                        <TableCell><strong> SMS STATUS</strong> </TableCell>
                                                         <TableCell><strong> EMAIL STATUS</strong> </TableCell>
+                                                        <TableCell><strong> SHORT LINK</strong> </TableCell>
                                                         <TableCell><strong>Actions</strong></TableCell>
                                                     </TableRow>
                                                 </TableHead>
@@ -159,6 +148,11 @@ const Totalexceldata = () => {
                                                                         <TableCell sx={{ cursor: 'pointer' }} >{item.ACCOUNT}</TableCell>
                                                                         <TableCell sx={{ cursor: 'pointer' }} >{item["SMS Status"]}</TableCell>
                                                                         <TableCell sx={{ cursor: 'pointer' }} >{item["EMAIL STATUS"]}</TableCell>
+                                                                        <TableCell sx={{ cursor: 'pointer' }} >
+                                                                            <Link href={item['Short Link']} target="_blank" rel="noopener noreferrer">
+                                                                                <PictureAsPdfIcon />
+                                                                            </Link>
+                                                                        </TableCell>
                                                                         <TableCell >
                                                                             <Link onClick={() => { clickfordeatils(id, item._id) }}>
                                                                                 View Details
