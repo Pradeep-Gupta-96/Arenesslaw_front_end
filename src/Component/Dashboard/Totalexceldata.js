@@ -84,7 +84,7 @@ const Totalexceldata = () => {
         setPage(1);
     };
 
-    const API = `http://16.16.45.44:4000/excel/${id}`
+    const API = `http://16.16.45.44:3000/excel/${id}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {
@@ -118,7 +118,7 @@ const Totalexceldata = () => {
                     <Grid container spacing={2}>
                         <AnimatedGridItem item xs={12} >
                             <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                <TextField type='Search' value={searchValue} placeholder='file name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
+                                <TextField type='Search' value={searchValue} placeholder='Customer Name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
 
 
                                 <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={reset} >Reset</Button>

@@ -35,7 +35,7 @@ export default function Signin() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch("http://16.16.45.44:4000/user/signin", {
+      const response = await fetch("http://16.16.45.44:3000/user/signin", {
         method: "post",
         headers: {
           "content-type": "application/json"
@@ -115,7 +115,7 @@ export default function Signin() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="username"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -146,13 +146,6 @@ export default function Signin() {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Typography variant='subtitle2'>
-                    <RouterLink to='/ResetwithOTP'>Forgot password?</RouterLink>
-                  </Typography>
-                </Grid>
-              </Grid>
             </Box>
           </Paper>
         </Box>

@@ -66,8 +66,6 @@ const Notice = () => {
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
 
-
-
     const handleClickOpen = () => {
         setOpen(true);
     }
@@ -104,7 +102,7 @@ const Notice = () => {
 
 
 
-    const API = `http://16.16.45.44:4000/excel`;
+    const API = `http://16.16.45.44:3000/excel`;
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
     const requestOptions = {
@@ -339,9 +337,6 @@ const Notice = () => {
                                     </TableContainer>
                                 </Paper>
                             </Grid>
-                            <Link>
-                                Back
-                            </Link>
                         </Grid>
                     </Box>
                 </Box>

@@ -126,7 +126,7 @@ export default function ResetwithOTP() {
                 return;
               }
             if (Npassword === Cpassword) {
-                const api = "http://localhost:4000/user/updatepass"
+                const api = "http://16.16.45.44:3000/user/updatepass"
                 const response = await fetch(api, {
                     method: "POST",
                     headers: {

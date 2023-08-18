@@ -82,7 +82,7 @@ const DetailsPage = () => {
     const [pdfDownloadLink, setPdfDownloadLink] = useState(null);
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-    const API = `http://16.16.45.44:4000/excel/details/${Xlid}/${singleid}`
+    const API = `http://16.16.45.44:3000/excel/details/${Xlid}/${singleid}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {
@@ -107,12 +107,46 @@ const DetailsPage = () => {
             <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.table}>
-                        {Object.entries(data).map(([key, value]) => (
-                            <View style={styles.tableRow} key={key}>
-                                <Text style={styles.tableCellHeader}>{key}:</Text>
-                                <Text style={styles.tableCellHeader}>{value}</Text>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"REF_NO"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data.REF_NO}</Text>
                             </View>
-                        ))}
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"ACCOUNT"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data.ACCOUNT}</Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"FPR_NAME"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data.FPR_NAME} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"EMBONAME"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data.EMBONAME} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"STATE"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data.STATE} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"NEW_CURR BAL"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data['NEW_CURR BAL']} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"SMS Status"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data['SMS Status']} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"EMAIL STATUS"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data['EMAIL STATUS']} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"Email Id"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data['Email Id']} </Text>
+                            </View>
+                            <View style={styles.tableRow}>
+                                <Text style={styles.tableCellHeader}>{"Short Link"}:</Text>
+                                <Text style={styles.tableCellHeader}>{data['Short Link']}</Text>
+                            </View>
                     </View>
                 </Page>
             </Document>
@@ -128,7 +162,7 @@ const DetailsPage = () => {
         setIsGeneratingPDF(false);
     };
 
-
+    console.log(data)
 
 
     return (
@@ -140,7 +174,7 @@ const DetailsPage = () => {
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         <ListItem sx={{ display: "flex", justifyContent: "space-between", }}>
-                          
+
                             <Button
                                 variant="contained"
                                 onClick={generatePDF}
@@ -154,12 +188,44 @@ const DetailsPage = () => {
 
                         {/* Render the PDFViewer */}
                         {pdfDownloadLink}
-                        {Object.entries(data).map(([key, value]) => (
-                            <Grid item xs={4} key={key}>
-                                <ListItemText primary={key} secondary={value} />
-                            </Grid>
-                        ))}
 
+                        <Grid item xs={4} >
+                            <ListItemText primary={"REF_NO"} secondary={data.REF_NO} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"ACCOUNT"} secondary={data.ACCOUNT} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"FPR_NAME"} secondary={data.FPR_NAME} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"EMBONAME"} secondary={data.EMBONAME} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"STATE"} secondary={data.STATE} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"NEW_CURR BAL"} secondary={data['NEW_CURR BAL']} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"SMS Status"} secondary={data['SMS Status']} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"EMAIL STATUS"} secondary={data['EMAIL STATUS']} />
+                        </Grid>
+                        <Grid item xs={4} >
+                            <ListItemText primary={"Email Id"} secondary={data['Email Id']} />
+                        </Grid>
+
+                        <Grid item xs={4}>
+                            <ListItemText primary="Short_Link" secondary={
+                                <Typography color="primary">
+                                    <Link href={data['Short Link']} target="_blank" rel="noopener noreferrer">
+                                        {data['Short Link']}
+                                    </Link>
+                                </Typography>
+                            } />
+                        </Grid>
 
                     </Grid >
                 </Box >

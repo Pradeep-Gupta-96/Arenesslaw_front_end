@@ -84,7 +84,7 @@ const EmpolyeeTotaldata = () => {
         setPage(1);
     };
 
-    const API = `http://16.16.45.44:4000/excel/${id}`
+    const API = `http://16.16.45.44:3000/excel/${id}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {
