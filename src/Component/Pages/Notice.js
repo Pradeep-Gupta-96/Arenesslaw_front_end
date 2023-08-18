@@ -110,10 +110,11 @@ const Notice = () => {
         headers: myHeaders,
     };
 
-    const fetchData = async (url) => {
+    const fetchData = async () => {
         try {
             const response = await fetch(API, requestOptions)
             const results = await response.json()
+           
             setResults(results.message)
             setIsLoading(false);
         } catch (error) {
@@ -133,7 +134,7 @@ const Notice = () => {
     const filteredData = revData.filter((item) => {
         const inputSearch = dateSearchValue.toLowerCase();
         const inputsearchtempp = noticetype.toLowerCase();
-    
+
         const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'short',
@@ -142,19 +143,15 @@ const Notice = () => {
             minute: 'numeric',
             second: 'numeric'
         }).toLowerCase();
-        
+
         const outputsearch = formattedDateTime;
         const outputsearchtemp = item.NoticeType.toLowerCase();
-        
+
         return (
             outputsearch.startsWith(inputSearch) &&
             outputsearchtemp.startsWith(inputsearchtempp)
         );
     });
-    
-    
-
-
 
 
     //Greetins with time and date
@@ -242,7 +239,7 @@ const Notice = () => {
                                     <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                         <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
-                                        <Select 
+                                        <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={noticetype}

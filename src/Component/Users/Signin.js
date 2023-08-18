@@ -47,9 +47,9 @@ export default function Signin() {
       });
 
       const result = await response.json();
-      console.log(result)
+ 
 
-      if (result.message === "invalid") {
+      if (result.message === "Invalid credentials.") {
         toast("Invalid credentials!", {
           position: "top-center",
           autoClose: 1000,
@@ -63,7 +63,7 @@ export default function Signin() {
       const { username, _id, role } = result.user;
       localStorage.setItem("username", JSON.stringify(username));
       localStorage.setItem("id", JSON.stringify(_id));
-      localStorage.setItem("token", JSON.stringify(result.Token));
+      localStorage.setItem("token", JSON.stringify(result.token));
       localStorage.setItem("role", JSON.stringify(role));
       
       toast("Login Successful!", {

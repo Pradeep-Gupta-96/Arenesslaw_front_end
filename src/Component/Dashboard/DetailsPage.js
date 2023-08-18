@@ -162,7 +162,7 @@ const DetailsPage = () => {
         setIsGeneratingPDF(false);
     };
 
-    console.log(data)
+
 
 
     return (

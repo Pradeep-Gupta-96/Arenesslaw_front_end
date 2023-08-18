@@ -53,8 +53,6 @@ const EmplyeeDashboard = () => {
     const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
-    const [greeting, setGreeting] = useState('');
-    const [currentDateTime, setCurrentDateTime] = useState('');
     const [dateSearchValue, setDateSearchValue] = useState('');
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
@@ -108,9 +106,7 @@ const EmplyeeDashboard = () => {
     }, [])
 
 
-    const onChange = (event) => {
-        setInputsearchvalue(event.target.value)
-    }
+  
     const handleChangefornoticetype = (event) => {
         setNoticetype(event.target.value);
     };
@@ -142,37 +138,7 @@ const EmplyeeDashboard = () => {
         );
     });
 
-
-    //Greetins with time and date
-    useEffect(() => {
-        const getCurrentDateTime = () => {
-            const date = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDateTime = date.toLocaleDateString(undefined, options) + ' ' + date.toLocaleTimeString();
-
-            if (date.getHours() >= 0 && date.getHours() < 12) {
-                setGreeting('Good morning!');
-            } else if (date.getHours() >= 12 && date.getHours() < 18) {
-                setGreeting('Good afternoon!');
-            } else {
-                setGreeting('Good evening!');
-            }
-
-            setCurrentDateTime(formattedDateTime);
-        };
-
-        // Initial call to getCurrentDateTime
-        getCurrentDateTime();
-
-        // Update time every second using setInterval
-        const intervalId = setInterval(getCurrentDateTime, 1000);
-
-        // Cleanup function to clear the interval when component unmounts
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-
+   
 
     return (
         <>
