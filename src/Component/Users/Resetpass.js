@@ -88,7 +88,7 @@ export default function Resetpass() {
           type: "error"
         });
       } else {
-        const response = await fetch(`http://16.16.45.44:3000/user/resetpass/${id}`, {
+        const response = await fetch(`http://16.16.45.44:4000/user/resetpass/${id}`, {
           method: "PATCH",
           headers: {
             "content-type": "application/json",

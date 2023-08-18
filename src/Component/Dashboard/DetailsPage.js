@@ -82,7 +82,7 @@ const DetailsPage = () => {
     const [pdfDownloadLink, setPdfDownloadLink] = useState(null);
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-    const API = `http://16.16.45.44:3000/excel/details/${Xlid}/${singleid}`
+    const API = `http://16.16.45.44:4000/excel/details/${Xlid}/${singleid}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {
