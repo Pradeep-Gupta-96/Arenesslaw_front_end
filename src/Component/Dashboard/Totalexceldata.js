@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import {
-    Button, Grid, Link, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography
+    Button, Grid, Link, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -120,14 +120,16 @@ const Totalexceldata = () => {
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         <AnimatedGridItem item xs={12}>
-                            <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}>
-                                <TextField type='Search' value={searchValue} placeholder='Customer Name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
-                                <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={reset}>Reset</Button>
-                            </Item>
+                            <div className='topbar'>
+                                <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}>
+                                    <TextField type='Search' value={searchValue} placeholder='Customer Name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
+                                    <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={reset}>Reset</Button>
+                                </Item>
+                            </div>
                         </AnimatedGridItem>
                         <AnimatedGridItem item xs={12}>
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                <TableContainer sx={{ maxHeight: 1220 }}>
+                                <TableContainer >
                                     {isloading ? (
                                         <div className="loading"></div>
                                     ) : (
@@ -135,14 +137,14 @@ const Totalexceldata = () => {
                                             <Table stickyHeader aria-label="sticky table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell><strong> S. No.</strong></TableCell>
-                                                        <TableCell><strong> CUSTOMER NAME</strong></TableCell>
-                                                        <TableCell><strong> MOBILE</strong></TableCell>
-                                                        <TableCell><strong> ACCOUNT</strong></TableCell>
-                                                        <TableCell><strong> SMS STATUS</strong></TableCell>
-                                                        <TableCell><strong> EMAIL STATUS</strong></TableCell>
-                                                        <TableCell><strong> SHORT LINK</strong></TableCell>
-                                                        <TableCell><strong>ACTION</strong></TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>S. No.</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>CUSTOMER NAME</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>MOBILE</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>ACCOUNT</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>SMS STATUS</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>EMAIL STATUS</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>SHORT LINK</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>ACTION</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -176,6 +178,8 @@ const Totalexceldata = () => {
                                                     onChange={(event, value) => setPage(value)}
                                                     showFirstButton
                                                     showLastButton
+                                                    color="secondary"
+
                                                 />
                                             </Stack>
                                         </>

@@ -116,7 +116,7 @@ export default function AdminNavbar() {
     setAnchorElUser(null);
   };
 
-  if (JSON.parse(localStorage.getItem("role")) === "Admin"){
+  if (JSON.parse(localStorage.getItem("role")) === "Admin") {
     DrawerList = [
       {
         text: "Dashboard",
@@ -126,7 +126,7 @@ export default function AdminNavbar() {
         }
       },
     ]
-  }else{
+  } else {
     DrawerList = [
       {
         text: "Dashboard",
@@ -192,7 +192,7 @@ export default function AdminNavbar() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{backgroundColor:"#ffffff", color:"#808080"}}>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#1976d2", color: "#fff", boxShadow:"none" }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -245,7 +245,7 @@ export default function AdminNavbar() {
           </Menu>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer className='drawer' variant="permanent" open={open} >
         <DrawerHeader>
           <Typography variant='h5' sx={{ position: "absolute", left: 25 }}>RECQARZ</Typography>
           <IconButton onClick={handleDrawerClose}>
@@ -283,7 +283,7 @@ export default function AdminNavbar() {
         </List>
 
       </Drawer>
-     
+
     </Box>
   );
 } 

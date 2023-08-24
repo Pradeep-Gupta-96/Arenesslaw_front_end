@@ -46,7 +46,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 const EmplyeeDashboard = () => {
    
-    const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [dateSearchValue, setDateSearchValue] = useState('');
@@ -110,7 +109,7 @@ const EmplyeeDashboard = () => {
     };
 
     const resetsearchbar = () => {
-        setInputsearchvalue('')
+        setDateSearchValue('')
         setNoticetype('')
     }
 
@@ -150,6 +149,7 @@ const EmplyeeDashboard = () => {
 
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
+                            <div className='topbar'>
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                     <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
@@ -179,12 +179,13 @@ const EmplyeeDashboard = () => {
                                     </FormControl>
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                 </Item>
+                                </div>
                             </AnimatedGridItem>
 
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                    <TableContainer sx={{ maxHeight: 440, overflow: 'auto' }}>
+                                    <TableContainer >
                                         {isLoading ? (
                                             <Box sx={{ width: '100%', marginTop: '20px' }}>
                                                 <LinearProgress />
@@ -194,10 +195,10 @@ const EmplyeeDashboard = () => {
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell>S. No.</TableCell>
-                                                            <TableCell>Date</TableCell>
-                                                            <TableCell>Notice Type</TableCell>
-                                                            <TableCell>Actions</TableCell>
+                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>S. No.</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Date</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Notice Type</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -238,6 +239,7 @@ const EmplyeeDashboard = () => {
                                                             onChange={(event, value) => setPage(value)}
                                                             showFirstButton
                                                             showLastButton
+                                                           
                                                         />
                                                     </Stack>
                                             </>

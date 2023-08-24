@@ -63,6 +63,7 @@ const styles = {
         width: "50%",
         borderBottomWidth: "1px",
         borderColor: '#bfbfbf',
+        color:"#1976d2"
 
     },
     tableCell: {
@@ -172,6 +173,7 @@ console.log(id)
 
                 <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
                     <DrawerHeader />
+                    <div className='userdetail'>
                     <Grid container spacing={2}>
                         <ListItem sx={{ display: "flex", justifyContent: "space-between", }}>
 
@@ -188,7 +190,7 @@ console.log(id)
 
                         {/* Render the PDFViewer */}
                         {pdfDownloadLink}
-
+                        
                         <Grid item xs={4} >
                             <ListItemText primary={"REF_NO"} secondary={data.REF_NO} />
                         </Grid>
@@ -226,8 +228,9 @@ console.log(id)
                                 </Typography>
                             } />
                         </Grid>
-
+                        
                     </Grid >
+                    </div>
                 </Box >
             </Box >
         </>

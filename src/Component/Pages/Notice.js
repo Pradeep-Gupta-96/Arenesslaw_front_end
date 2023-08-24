@@ -4,7 +4,7 @@ import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
     LinearProgress, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, TextField,  FormControl, InputLabel, Select, MenuItem, Stack, Pagination
+    TableHead, TableBody, TableCell, TableContainer, TextField, FormControl, InputLabel, Select, MenuItem, Stack, Pagination
 } from '@mui/material';
 import Dialogfordata from '../Dashboard/Dialogfordata';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -103,9 +103,9 @@ const Notice = () => {
     const fetchData = async (page) => {
         try {
             const response = await fetch(`${API}?page=${page}`, requestOptions)
-           
+
             const result = await response.json()
-            
+
             const resultArray = Array.isArray(result.message) ? result.message : [result.message];
 
             const adjustedResultArray = resultArray.map((item, index) => ({
@@ -192,47 +192,47 @@ const Notice = () => {
                     <DrawerHeader />
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={2}>
-                            <AnimatedGridItem item xs={10} >
-                                <Typography variant="h6">{greeting}, RECQARZ!</Typography>
-                                <Typography variant='subtitle2'>{currentDateTime}</Typography>
-                                <Item sx={{ mt: "20px", py: "12px", px: "15px", textAlign: "left" }}>
 
-
-                                    <Typography component="h1" variant="h5">
-                                        <DashboardIcon sx={{ float: "left" }} fontSize="large" color="secondary" />
-                                        <span>
-                                            Dashboard
-                                        </span>
-
-                                    </Typography>
-                                    <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
-                                </Item>
+                            <AnimatedGridItem item xs={12} >
+                               <div style={{borderBottom: "2px solid #1976d2",display:'flex', justifyContent:'space-between',padding: "0px 0px 10px",}}> 
+                                    <div>
+                                        <Typography variant="h6">{greeting}, RECQARZ!</Typography>
+                                        <Typography variant='subtitle2'>{currentDateTime}</Typography>
+                                    </div>
+                                    <div style={{ marginTop: "0px", padding: "0px 12px", textAlign: "left" }}>
+                                            <Typography component="h1" variant="h5" sx={{ display: "flex", alignItems: "center" }}>
+                                                <DashboardIcon fontSize="large" color="secondary" sx={{ marginRight: "10px" }} />
+                                                Dashboard
+                                            </Typography>
+                                            <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
+                                    </div>
+                                    {/* Bulk Upload */}
+                                    <div style={{ marginTop: "0px" }}>
+                                        <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /><br />
+                                        <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
+                                            Bulk Upload
+                                        </Button>
+                                        <Dialog
+                                            open={open}
+                                            TransitionComponent={Transition}
+                                            keepMounted
+                                            onClose={handleClose}
+                                            aria-describedby="alert-dialog-slide-description"
+                                        >
+                                            <DialogTitle>{"Bulk Upload File!"}</DialogTitle>
+                                            <DialogContent>
+                                                <Dialogfordata /> {/* Replace with your Dialog content */}
+                                            </DialogContent>
+                                        </Dialog>
+                                    </div>
+                                </div>
                             </AnimatedGridItem>
 
-                            {/* ================ Dialog ============== */}
-                            <AnimatedGridItem item xs={2}>
-                                <Item>
-                                    <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /> <br />
-                                    <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
-                                        Bulk Upload
-                                    </Button>
-                                    <Dialog
-                                        open={open}
-                                        TransitionComponent={Transition}
-                                        keepMounted
-                                        onClose={handleClose}
-                                        aria-describedby="alert-dialog-slide-description"
-                                    >
-                                        <DialogTitle>{"Bulk Upload File!"}</DialogTitle>
-                                        <DialogContent>
-                                            <Dialogfordata />
-                                        </DialogContent>
-                                    </Dialog>
-                                </Item>
-                            </AnimatedGridItem>
+
 
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
+                            <div className='topbar'>
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                     <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
@@ -263,12 +263,13 @@ const Notice = () => {
                                     </FormControl>
                                     <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                 </Item>
+                                </div>
                             </AnimatedGridItem>
 
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                    <TableContainer sx={{ maxHeight: 440, overflow: 'auto' }}>
+                                    <TableContainer >
                                         {isLoading ? (
                                             <Box sx={{ width: '100%', marginTop: '20px' }}>
                                                 <LinearProgress />
@@ -278,10 +279,10 @@ const Notice = () => {
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell>S. No.</TableCell>
-                                                            <TableCell>Date</TableCell>
-                                                            <TableCell>Notice Type</TableCell>
-                                                            <TableCell>Actions</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>S. No.</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Date</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Notice Type</TableCell>
+                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
