@@ -26,7 +26,7 @@ const App = () => {
           <Route path='/notice' element={<Notice />} />
           <Route path='/totalexceldata/:id' element={<Totalexceldata />} />
           <Route path='/empolyeeTotaldata/:id' element={<EmpolyeeTotaldata />} />
-          <Route path='/detailspage/:Xlid/:singleid' element={<DetailsPage/>}/>
+          <Route path='/detailspage/:id' element={<DetailsPage/>}/>
           <Route path='/emplyeeDashboard' element={<EmplyeeDashboard/>}/>
         </Routes>
       </Router>

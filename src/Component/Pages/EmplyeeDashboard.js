@@ -3,8 +3,8 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
-    LinearProgress, Paper, Grid, Button, Slide, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link, MenuItem, InputLabel, Select, FormControl
+    LinearProgress, Paper, Grid, Button,  Table, TableRow,
+    TableHead, TableBody, TableCell, TableContainer, TextField,  MenuItem, InputLabel, Select, FormControl, Stack, Pagination
 } from '@mui/material';
 import '../style/style.css'
 import AdminNavbar from '../Navbar/AdminNavbar';
@@ -45,30 +45,17 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 const EmplyeeDashboard = () => {
-    const [open, setOpen] = useState(false);
-    const intupvalue = {
-        emailformail: "",
-        username: `${JSON.parse(localStorage.getItem('username'))}`
-    }
+   
     const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [dateSearchValue, setDateSearchValue] = useState('');
+    const [totalDataCount, setTotalDataCount] = useState(null);
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
 
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage + 1);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1);
-    };
 
     const onChangeDate = (event) => {
         setDateSearchValue(event.target.value);
@@ -79,16 +66,29 @@ const EmplyeeDashboard = () => {
     }
 
 
-    const API = `http://16.16.45.44:4000/excel`;
-    const callapi = async (url) => {
+    const API = `http://16.16.45.44:4000/excel/getAllexceldata`;
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
+    const requestOptions = {
+        method: 'get',
+        headers: myHeaders,
+    };
+
+    const fetchData = async (page) => {
         try {
-            const responce = await fetch(url, {
-                headers: {
-                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
-                },
-            })
-            const results = await responce.json()
-            setResults(results.message)
+            const response = await fetch(`${API}?page=${page}`, requestOptions)
+
+            const result = await response.json()
+
+            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
+
+            const adjustedResultArray = resultArray.map((item, index) => ({
+                ...item,
+                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+            }));
+
+            setResults(adjustedResultArray)
+            setTotalDataCount(parseInt(result.pageInfo.totalPages));
             setIsLoading(false);
         } catch (error) {
             console.log(error)
@@ -96,17 +96,15 @@ const EmplyeeDashboard = () => {
         }
     }
 
-
-
     useEffect(() => {
         if (!localStorage.getItem('token')) {
-            navigate('/')
+            navigate('/');
         }
-        callapi(API)
-    }, [])
+        fetchData(page);
+
+    }, [page]);
 
 
-  
     const handleChangefornoticetype = (event) => {
         setNoticetype(event.target.value);
     };
@@ -119,7 +117,7 @@ const EmplyeeDashboard = () => {
     const filteredData = revData.filter((item) => {
         const inputSearch = dateSearchValue.toLowerCase();
         const inputsearchtempp = noticetype.toLowerCase();
-    
+
         const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'short',
@@ -128,17 +126,17 @@ const EmplyeeDashboard = () => {
             minute: 'numeric',
             second: 'numeric'
         }).toLowerCase();
-        
+
         const outputsearch = formattedDateTime;
         const outputsearchtemp = item.NoticeType.toLowerCase();
-        
+
         return (
             outputsearch.startsWith(inputSearch) &&
             outputsearchtemp.startsWith(inputsearchtempp)
         );
     });
 
-   
+
 
     return (
         <>
@@ -153,7 +151,7 @@ const EmplyeeDashboard = () => {
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
+                                    <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
                                     <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                         <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
                                         <Select
@@ -204,7 +202,6 @@ const EmplyeeDashboard = () => {
                                                     </TableHead>
                                                     <TableBody>
                                                         {filteredData
-                                                            .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                                                             .map((item, index) => (
                                                                 <TableRow
                                                                     sx={tableCSS}
@@ -213,7 +210,7 @@ const EmplyeeDashboard = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-                                                                    <TableCell component="th" scope="row">{index + 1}  </TableCell>
+                                                                    <TableCell component="th" scope="row">{item.rowIndex}  </TableCell>
                                                                     <TableCell>
                                                                         {new Date(item.createdAt).toLocaleDateString('en-US', {
                                                                             day: 'numeric',
@@ -224,7 +221,7 @@ const EmplyeeDashboard = () => {
                                                                             second: 'numeric'
                                                                         })}
                                                                     </TableCell>
-                                                                    <TableCell component="th" scope="row">{item.NoticeType}</TableCell>
+                                                                    <TableCell component="th" scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
                                                                         <Button variant='contained' onClick={() => { EmpolyeeTotaldata(item._id) }} >
                                                                             Open!
@@ -234,17 +231,18 @@ const EmplyeeDashboard = () => {
                                                             ))}
                                                     </TableBody>
                                                 </Table>
-                                                <TablePagination
-                                                    rowsPerPageOptions={[10, 25, 100]}
-                                                    component="div"
-                                                    count={revData.length}
-                                                    rowsPerPage={rowsPerPage}
-                                                    page={page - 1}
-                                                    onPageChange={handleChangePage}
-                                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                                />
+                                                    <Stack spacing={2}>
+                                                        <Pagination
+                                                            count={totalDataCount}
+                                                            page={page}
+                                                            onChange={(event, value) => setPage(value)}
+                                                            showFirstButton
+                                                            showLastButton
+                                                        />
+                                                    </Stack>
                                             </>
                                         )}
+
                                     </TableContainer>
                                 </Paper>
 

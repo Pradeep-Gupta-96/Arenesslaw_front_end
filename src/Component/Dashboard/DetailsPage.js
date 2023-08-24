@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import {
     Button,
-    Grid, Link, ListItem, ListItemText, Paper, Typography
+    Grid, Link, ListItem, ListItemText,  Typography
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -78,11 +78,11 @@ const styles = {
 const DetailsPage = () => {
     const [data, setData] = useState('')
     const navigate = useNavigate()
-    const { Xlid, singleid } = useParams()
+    const { id } = useParams()
     const [pdfDownloadLink, setPdfDownloadLink] = useState(null);
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-
-    const API = `http://16.16.45.44:4000/excel/details/${Xlid}/${singleid}`
+console.log(id)
+    const API = `http://16.16.45.44:4000/excel/detailsPage/${id}`
     const callapi = async (url) => {
         const res = await fetch(url, {
             headers: {

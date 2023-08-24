@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
     LinearProgress, Typography, Paper, Grid, Button, Dialog, DialogContent, DialogTitle, Slide, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, TextField, TablePagination, Link, FormControl, InputLabel, Select, MenuItem
+    TableHead, TableBody, TableCell, TableContainer, TextField,  FormControl, InputLabel, Select, MenuItem, Stack, Pagination
 } from '@mui/material';
 import Dialogfordata from '../Dashboard/Dialogfordata';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -54,15 +54,14 @@ const UploadFileIconCSS1 = { cursor: "pointer", transition: "transform 0.5s ease
 const tableCSS = { cursor: "pointer", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }
 const Notice = () => {
     const [open, setOpen] = useState(false);
-    const [inputsearchvalue, setInputsearchvalue] = useState('')
     const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
     const [dateSearchValue, setDateSearchValue] = useState('');
+    const [totalDataCount, setTotalDataCount] = useState(null);
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
 
@@ -72,15 +71,6 @@ const Notice = () => {
 
     const handleClose = () => {
         setOpen(false);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage + 1);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1);
     };
 
     const handleChangefornoticetype = (event) => {
@@ -102,7 +92,7 @@ const Notice = () => {
 
 
 
-    const API = `http://16.16.45.44:4000/excel`;
+    const API = `http://16.16.45.44:4000/excel/getAllexceldata`;
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
     const requestOptions = {
@@ -110,12 +100,21 @@ const Notice = () => {
         headers: myHeaders,
     };
 
-    const fetchData = async () => {
+    const fetchData = async (page) => {
         try {
-            const response = await fetch(API, requestOptions)
-            const results = await response.json()
+            const response = await fetch(`${API}?page=${page}`, requestOptions)
            
-            setResults(results.message)
+            const result = await response.json()
+            
+            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
+
+            const adjustedResultArray = resultArray.map((item, index) => ({
+                ...item,
+                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+            }));
+
+            setResults(adjustedResultArray)
+            setTotalDataCount(parseInt(result.pageInfo.totalPages));
             setIsLoading(false);
         } catch (error) {
             console.log(error)
@@ -127,8 +126,9 @@ const Notice = () => {
         if (!localStorage.getItem('token')) {
             navigate('/');
         }
-        fetchData();
-    }, []);
+        fetchData(page);
+
+    }, [page]);
 
 
     const filteredData = revData.filter((item) => {
@@ -183,8 +183,6 @@ const Notice = () => {
             clearInterval(intervalId);
         };
     }, []);
-
-
 
     return (
         <>
@@ -288,7 +286,6 @@ const Notice = () => {
                                                     </TableHead>
                                                     <TableBody>
                                                         {filteredData
-                                                            .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                                                             .map((item, index) => (
                                                                 <TableRow
                                                                     sx={tableCSS}
@@ -297,7 +294,7 @@ const Notice = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-                                                                    <TableCell component="th" scope="row">{index + 1}  </TableCell>
+                                                                    <TableCell component="th" scope="row">{item.rowIndex}  </TableCell>
                                                                     <TableCell>
                                                                         {new Date(item.createdAt).toLocaleDateString('en-US', {
                                                                             day: 'numeric',
@@ -318,17 +315,16 @@ const Notice = () => {
                                                             ))}
                                                     </TableBody>
                                                 </Table>
-                                                <TablePagination
-                                                    rowsPerPageOptions={[10, 25, 100]}
-                                                    component="div"
-                                                    count={revData.length}
-                                                    rowsPerPage={rowsPerPage}
-                                                    page={page - 1}
-                                                    onPageChange={handleChangePage}
-                                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                                />
+                                                <Stack spacing={2}>
+                                                    <Pagination
+                                                        count={totalDataCount}
+                                                        page={page}
+                                                        onChange={(event, value) => setPage(value)}
+                                                        showFirstButton
+                                                        showLastButton
+                                                    />
+                                                </Stack>
                                             </>
-
                                         )}
 
                                     </TableContainer>
