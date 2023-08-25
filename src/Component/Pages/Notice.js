@@ -59,6 +59,7 @@ const Notice = () => {
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
     const [dateSearchValue, setDateSearchValue] = useState('');
+    const [pageconunt, setPageconunt] = useState(null);
     const [totalDataCount, setTotalDataCount] = useState(null);
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
@@ -112,9 +113,9 @@ const Notice = () => {
                 ...item,
                 rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
             }));
-
             setResults(adjustedResultArray)
-            setTotalDataCount(parseInt(result.pageInfo.totalPages));
+            setPageconunt(parseInt(result.pageInfo.totalPages));
+            setTotalDataCount(parseInt(result.pageInfo.totalItems));
             setIsLoading(false);
         } catch (error) {
             console.log(error)
@@ -153,6 +154,7 @@ const Notice = () => {
         );
     });
 
+  
 
     //Greetins with time and date
     useEffect(() => {
@@ -184,6 +186,8 @@ const Notice = () => {
         };
     }, []);
 
+
+
     return (
         <>
             <Box sx={{ display: 'flex' }}>
@@ -191,23 +195,25 @@ const Notice = () => {
                 <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
                     <DrawerHeader />
                     <Box sx={{ flexGrow: 1 }}>
+
                         <Grid container spacing={2}>
 
                             <AnimatedGridItem item xs={12} >
-                               <div style={{borderBottom: "2px solid #1976d2",display:'flex', justifyContent:'space-between',padding: "0px 0px 10px",}}> 
+                                <div className='dashboardtop'>
                                     <div>
                                         <Typography variant="h6">{greeting}, RECQARZ!</Typography>
                                         <Typography variant='subtitle2'>{currentDateTime}</Typography>
                                     </div>
                                     <div style={{ marginTop: "0px", padding: "0px 12px", textAlign: "left" }}>
-                                            <Typography component="h1" variant="h5" sx={{ display: "flex", alignItems: "center" }}>
-                                                <DashboardIcon fontSize="large" color="secondary" sx={{ marginRight: "10px" }} />
-                                                Dashboard
-                                            </Typography>
-                                            <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
+                                        <Typography component="h1" variant="h5" sx={{ display: "flex", alignItems: "center" }}>
+                                            <DashboardIcon fontSize="large" color="secondary" sx={{ marginRight: "10px" }} />
+                                            Dashboard
+                                        </Typography>
+                                        <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
                                     </div>
                                     {/* Bulk Upload */}
-                                    <div style={{ marginTop: "0px" }}>
+
+                                    {JSON.parse(localStorage.getItem("username")) === "SBI Card" ? "" : <div style={{ marginTop: "0px" }}>
                                         <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /><br />
                                         <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
                                             Bulk Upload
@@ -224,7 +230,9 @@ const Notice = () => {
                                                 <Dialogfordata /> {/* Replace with your Dialog content */}
                                             </DialogContent>
                                         </Dialog>
-                                    </div>
+                                    </div>}
+
+
                                 </div>
                             </AnimatedGridItem>
 
@@ -232,37 +240,37 @@ const Notice = () => {
 
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
-                            <div className='topbar'>
-                                <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                    <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
-                                    <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                        <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={noticetype}
-                                            label="Select Notice type"
-                                            onChange={handleChangefornoticetype}
-                                        >
-                                            <MenuItem value=''><em>none</em></MenuItem>
-                                            <MenuItem value={"QLD"}> QLD</MenuItem>
-                                            <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
-                                            <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
-                                            <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
-                                            <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
-                                            <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
-                                            <MenuItem value={"E-Conciliation Bilingual"}> E-Conciliation Bilingual</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
-                                </Item>
+                                <div className='topbar'>
+                                    <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                        <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
+                                        <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                                            <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={noticetype}
+                                                label="Select Notice type"
+                                                onChange={handleChangefornoticetype}
+                                            >
+                                                <MenuItem value=''><em>none</em></MenuItem>
+                                                <MenuItem value={"QLD"}> QLD</MenuItem>
+                                                <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
+                                                <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                                <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
+                                                <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
+                                                <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
+                                                <MenuItem value={"E-Conciliation Bilingual"}> E-Conciliation Bilingual</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
+                                    </Item>
                                 </div>
                             </AnimatedGridItem>
 
@@ -279,10 +287,9 @@ const Notice = () => {
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>S. No.</TableCell>
-                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Date</TableCell>
-                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Notice Type</TableCell>
-                                                            <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Actions</TableCell>
+                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Date</TableCell>
+                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Notice Type</TableCell>
+                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -295,7 +302,7 @@ const Notice = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-                                                                    <TableCell component="th" scope="row">{item.rowIndex}  </TableCell>
+
                                                                     <TableCell>
                                                                         {new Date(item.createdAt).toLocaleDateString('en-US', {
                                                                             day: 'numeric',
@@ -316,15 +323,19 @@ const Notice = () => {
                                                             ))}
                                                     </TableBody>
                                                 </Table>
+
                                                 <Stack spacing={2}>
+
                                                     <Pagination
-                                                        count={totalDataCount}
+                                                        count={pageconunt}
                                                         page={page}
                                                         onChange={(event, value) => setPage(value)}
                                                         showFirstButton
                                                         showLastButton
+
                                                     />
                                                 </Stack>
+                                                Total Records:{totalDataCount}
                                             </>
                                         )}
 

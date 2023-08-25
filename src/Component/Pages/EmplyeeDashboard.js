@@ -49,6 +49,7 @@ const EmplyeeDashboard = () => {
     const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [dateSearchValue, setDateSearchValue] = useState('');
+    const [pageconunt, setPageconunt] = useState(null);
     const [totalDataCount, setTotalDataCount] = useState(null);
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
@@ -85,9 +86,11 @@ const EmplyeeDashboard = () => {
                 ...item,
                 rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
             }));
+       
 
             setResults(adjustedResultArray)
-            setTotalDataCount(parseInt(result.pageInfo.totalPages));
+            setPageconunt(parseInt(result.pageInfo.totalPages));
+            setTotalDataCount(parseInt(result.pageInfo.totalItems));
             setIsLoading(false);
         } catch (error) {
             console.log(error)
@@ -195,7 +198,6 @@ const EmplyeeDashboard = () => {
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>S. No.</TableCell>
                                                             <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Date</TableCell>
                                                             <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Notice Type</TableCell>
                                                             <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>Actions</TableCell>
@@ -211,7 +213,6 @@ const EmplyeeDashboard = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-                                                                    <TableCell component="th" scope="row">{item.rowIndex}  </TableCell>
                                                                     <TableCell>
                                                                         {new Date(item.createdAt).toLocaleDateString('en-US', {
                                                                             day: 'numeric',
@@ -234,7 +235,7 @@ const EmplyeeDashboard = () => {
                                                 </Table>
                                                     <Stack spacing={2}>
                                                         <Pagination
-                                                            count={totalDataCount}
+                                                            count={pageconunt}
                                                             page={page}
                                                             onChange={(event, value) => setPage(value)}
                                                             showFirstButton
@@ -242,6 +243,7 @@ const EmplyeeDashboard = () => {
                                                            
                                                         />
                                                     </Stack>
+                                                    Total Records:{totalDataCount}
                                             </>
                                         )}
 

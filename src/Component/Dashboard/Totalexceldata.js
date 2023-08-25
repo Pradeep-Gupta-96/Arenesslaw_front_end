@@ -114,9 +114,9 @@ const Totalexceldata = () => {
 
     return (
         <>
-            <Box sx={{ display: 'flex' }}>
+            <Box className="mainpage" sx={{ display: 'flex' }}>
                 <AdminNavbar />
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                <Box className='rightpart' component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         <AnimatedGridItem item xs={12}>
@@ -171,7 +171,11 @@ const Totalexceldata = () => {
                                                         ))}
                                                 </TableBody>
                                             </Table>
-                                            <Stack spacing={2}>
+                                            
+                                        </>
+                                    )}
+                                </TableContainer>
+                                <Stack spacing={2}>
                                                 <Pagination
                                                     count={totalDataCount}
                                                     page={page}
@@ -182,9 +186,6 @@ const Totalexceldata = () => {
 
                                                 />
                                             </Stack>
-                                        </>
-                                    )}
-                                </TableContainer>
                             </Paper>
                         </AnimatedGridItem>
                     </Grid>

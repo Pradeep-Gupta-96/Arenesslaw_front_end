@@ -96,7 +96,7 @@ export default function AdminNavbar() {
   const [open, setOpen] = useState(false);
   const [username] = useState('');
   let [DrawerList] = useState('');
-  let [settings] = useState('');
+ 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigation = useNavigate()
 
@@ -142,148 +142,157 @@ export default function AdminNavbar() {
   const settingsCSS = { display: 'block', cursor: "pointer", p: 1, px: 5, transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(1.2)" } }
 
 
-  if (JSON.parse(localStorage.getItem("role")) === "Admin") {
-    settings = [
-      {
-        text: "Create New Account",
-        forClicke: () => {
-          navigation('/signup')
-        }
-      },
+  let settingss = [];
+
+  const role = JSON.parse(localStorage.getItem("role"));
+  const usernamee = JSON.parse(localStorage.getItem("username"));
+  
+  if (role === "Admin") {
+    settingss = [
+      // Check if username is not "SBI Card"
+      usernamee !== "SBI Card"
+        ? {
+            text: "Create New Account",
+            forClicke: () => {
+              navigation('/signup');
+            }
+          }
+        : "",
       {
         text: "Reset Password",
         forClicke: () => {
-          navigation('/resetpass')
+          navigation('/resetpass');
         }
       },
       {
         text: "Logout",
         forClicke: () => {
-          localStorage.clear()
-          navigation('/')
-        }
-      },
-    ]
-  } else {
-    settings = [
-      {
-        text: "Reset Password",
-        forClicke: () => {
-          navigation('/resetpass')
-        }
-      },
-      {
-        text: "Logout",
-        forClicke: () => {
-          localStorage.clear()
-          navigation('/')
+          localStorage.clear();
+          navigation('/');
         }
       }
-    ]
+    ];
+  } else {
+    settingss = [
+      {
+        text: "Reset Password",
+        forClicke: () => {
+          navigation('/resetpass');
+        }
+      },
+      {
+        text: "Logout",
+        forClicke: () => {
+          localStorage.clear();
+          navigation('/');
+        }
+      }
+    ];
   }
+  
 
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigation('/')
-    }
-  })
+useEffect(() => {
+  if (!localStorage.getItem('token')) {
+    navigation('/')
+  }
+})
 
 
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#1976d2", color: "#fff", boxShadow:"none" }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
+return (
+  <Box className="leftsidebar" sx={{ display: 'flex' }}>
+    <CssBaseline />
+    <AppBar position="fixed" open={open} sx={{ backgroundColor: "#1976d2", color: "#fff", boxShadow: "none" }}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={{
+            marginRight: 5,
+            ...(open && { display: 'none' }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" sx={{
+          transition: "transform 0.5s ease",
+          "&:hover": { transform: "scale(1.2)" }
+        }} noWrap component="div">
+          {(username === "") ? JSON.parse(localStorage.getItem("username")) : " "}
+        </Typography>
+
+        {/* ============== profile ========= */}
+        <Tooltip title="Open settings">
+          <IconButton onClick={handleOpenUserMenu} sx={{ marginLeft: "auto", p: 0 }}>
+            <Avatar sx={{
+              backgroundColor: "#9c27b0", transition: "transform 0.5s ease",
+              "&:hover": { transform: "scale(1.2)" }
+            }} alt={`${JSON.parse(localStorage.getItem("username"))}`} src="/static/images/avatar/2.jpg" />
           </IconButton>
-          <Typography variant="h6" sx={{
-            transition: "transform 0.5s ease",
-            "&:hover": { transform: "scale(1.2)" }
-          }} noWrap component="div">
-            {(username === "") ? JSON.parse(localStorage.getItem("username")) : " "}
-          </Typography>
+        </Tooltip>
+        <Menu
+          sx={{ mt: '45px' }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={handleCloseUserMenu}
+        >
+          {settingss.map((item, index) => {
+            const { text, forClicke } = item;
+            return <ListItem key={index} disablePadding sx={settingsCSS} onClick={forClicke}> {text}</ListItem>
+          })}
+        </Menu>
+      </Toolbar>
+    </AppBar>
+    <Drawer className='drawer' variant="permanent" open={open} >
+      <DrawerHeader>
+        <Typography variant='h5' sx={{ position: "absolute", left: 25 }}>RECQARZ</Typography>
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        </IconButton>
 
-          {/* ============== profile ========= */}
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ marginLeft: "auto", p: 0 }}>
-              <Avatar sx={{
-                backgroundColor: "#9c27b0", transition: "transform 0.5s ease",
-                "&:hover": { transform: "scale(1.2)" }
-              }} alt={`${JSON.parse(localStorage.getItem("username"))}`} src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            {settings.map((item, index) => {
-              const { text, forClicke } = item;
-              return <ListItem key={index} disablePadding sx={settingsCSS} onClick={forClicke}> {text}</ListItem>
-            })}
-          </Menu>
-        </Toolbar>
-      </AppBar>
-      <Drawer className='drawer' variant="permanent" open={open} >
-        <DrawerHeader>
-          <Typography variant='h5' sx={{ position: "absolute", left: 25 }}>RECQARZ</Typography>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
+      </DrawerHeader>
 
-        </DrawerHeader>
-
-        <List>
-          {DrawerList.map((item, index) => {
-            const { text, icons, forNavigation } = item;
-            return (
-              <ListItem key={index} disablePadding sx={ListItemCSS} onClick={forNavigation}>
-                <ListItemButton key={index}
+      <List>
+        {DrawerList.map((item, index) => {
+          const { text, icons, forNavigation } = item;
+          return (
+            <ListItem key={index} disablePadding sx={ListItemCSS} onClick={forNavigation}>
+              <ListItemButton key={index}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Iconscss> {icons}</Iconscss>
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            )
-          })}
-        </List>
+                  <Iconscss> {icons}</Iconscss>
+                </ListItemIcon>
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
+      </List>
 
-      </Drawer>
+    </Drawer>
 
-    </Box>
-  );
+  </Box>
+);
 } 

@@ -114,9 +114,9 @@ const Totalexceldata = () => {
 
     return (
         <>
-            <Box sx={{ display: 'flex' }}>
+            <Box className="mainpage" sx={{ display: 'flex' }}>
                 <AdminNavbar />
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                <Box className='rightpart' component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
                         
@@ -173,19 +173,20 @@ const Totalexceldata = () => {
                                                         ))}
                                                 </TableBody>
                                             </Table>
-                                            <Stack spacing={2}>
-                                                <Pagination
-                                                    count={totalDataCount}
-                                                    page={page}
-                                                    onChange={(event, value) => setPage(value)}
-                                                    showFirstButton
-                                                    showLastButton
-                                                    
-                                                />
-                                            </Stack>
+                                            
                                         </>
                                     )}
                                 </TableContainer>
+                                <Stack spacing={2}>
+                                    <Pagination
+                                        count={totalDataCount}
+                                        page={page}
+                                        onChange={(event, value) => setPage(value)}
+                                        showFirstButton
+                                        showLastButton
+                                        
+                                    />
+                                </Stack>
                             </Paper>
                         </AnimatedGridItem>
                     </Grid>

@@ -148,7 +148,7 @@ export default function Signup() {
                 <Avatar sx={{ mx: 'auto', mt: 5, bgcolor: 'secondary.main' }}>
                   <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5" sx={{ mx: 32, my: 1 }}>
+                <Typography component="h1" variant="h5" sx={{ mx: 23, my: 1 }}>
                   Sign-Up
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} sx={{ m: 6, mx: 9 }}>
