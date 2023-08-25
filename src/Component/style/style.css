@@ -93,7 +93,8 @@
   }
 }
 .css-1dm4zx6-MuiTableCell-root,.css-1ex1afd-MuiTableCell-root {padding: 5px 10px !important;line-height: 20px !important;}
-.MuiStack-root.css-1p5q5e5-MuiStack-root ul.MuiPagination-ul {
+.MuiStack-root.css-1p5q5e5-MuiStack-root ul.MuiPagination-ul,
+.MuiStack-root.css-1sazv7p-MuiStack-root ul.MuiPagination-ul {
   padding: 4px 10px !important; justify-content: center !important; background: #1976d2;}
   ul.MuiPagination-ul li div, ul.MuiPagination-ul li button {color: #fff !important;}
   tr:nth-child(even) {background-color: rgb(241, 241, 241);}
