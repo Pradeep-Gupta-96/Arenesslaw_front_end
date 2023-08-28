@@ -266,7 +266,7 @@ const Notice = () => {
                                                 <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
                                                 <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
                                                 <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
-                                                <MenuItem value={"E-Conciliation Bilingual"}> E-Conciliation Bilingual</MenuItem>
+                                                <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>

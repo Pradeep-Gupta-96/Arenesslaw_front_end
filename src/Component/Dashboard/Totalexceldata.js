@@ -63,10 +63,10 @@ const Totalexceldata = () => {
         setSearchValue(e.target.value.toLowerCase());
     };
 
-    const filteredResults = results.filter((item) => {
-        const searchData = item.EMBONAME ? item.EMBONAME.toLowerCase() : '';
-        return searchData.includes(searchValue);
-    });
+    // const filteredResults = results.filter((item) => {
+    //     const searchData = item.EMBONAME ? item.EMBONAME.toLowerCase() : '';
+    //     return searchData.includes(searchValue);
+    // });
 
     const reset = () => {
         setSearchValue('');
@@ -100,13 +100,48 @@ const Totalexceldata = () => {
         }
     };
 
+    const API2 = `http://16.16.45.44:4000/excel/searchingAdmindata/${id}/${searchValue}`;
+
+    const callSearchApi = async (page) => {
+        try {
+            const res = await fetch(`${API2}?page=${page}`, {
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+                },
+            });
+
+            const result = await res.json()
+
+            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
+
+            const adjustedResultArray = resultArray.map((item, index) => ({
+                ...item,
+                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+            }));
+
+            setResults(adjustedResultArray);
+            setTotalDataCount(parseInt(result.totalPages));
+
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/');
         }
-        callApi(page); // Fetch data based on current page
 
-    }, [page]);
+        if (searchValue.trim() === '') {
+            // Call API for regular data if search value is empty
+            callApi(page);
+        } else {
+            // Call search API if search value is present
+            callSearchApi(page);
+        }
+    }, [page, searchValue]);
+
 
     const clickfordeatils = (id) => {
         navigate(`/detailspage/${id}`);
@@ -148,7 +183,7 @@ const Totalexceldata = () => {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {filteredResults
+                                                    {results
                                                         .map((item, index) => (
                                                             <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
                                                                 <TableCell>{item.rowIndex}</TableCell>

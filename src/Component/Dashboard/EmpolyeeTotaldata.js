@@ -63,14 +63,10 @@ const Totalexceldata = () => {
         setSearchValue(e.target.value.toLowerCase());
     };
 
-    const filteredResults = results.filter((item) => {
-        const searchData = item.EMBONAME ? item.EMBONAME.toLowerCase() : '';
-        return searchData.includes(searchValue);
-    });
-
     const reset = () => {
         setSearchValue('');
     };
+
 
     const API = `http://16.16.45.44:4000/excel/exportExcelData/${id}/${JSON.parse(localStorage.getItem("username"))}`;
 
@@ -100,13 +96,48 @@ const Totalexceldata = () => {
         }
     };
 
+    const API2 = `http://16.16.45.44:4000/excel/searchingdata/${id}/${JSON.parse(localStorage.getItem("username"))}/${searchValue}`;
+
+    const callSearchApi = async (page) => {
+        try {
+            const res = await fetch(`${API2}?page=${page}`, {
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+                },
+            });
+
+            const result = await res.json()
+
+            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
+
+            const adjustedResultArray = resultArray.map((item, index) => ({
+                ...item,
+                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+            }));
+
+            setResults(adjustedResultArray);
+            setTotalDataCount(parseInt(result.totalPages));
+
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/');
         }
-        callApi(page); // Fetch data based on current page
 
-    }, [page]);
+        if (searchValue.trim() === '') {
+            // Call API for regular data if search value is empty
+            callApi(page);
+        } else {
+            // Call search API if search value is present
+            callSearchApi(page);
+        }
+    }, [page, searchValue]);
+
 
     const clickfordeatils = (id) => {
         navigate(`/detailspage/${id}`);
@@ -119,16 +150,16 @@ const Totalexceldata = () => {
                 <Box className='rightpart' component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
-                        
+
                         <AnimatedGridItem item xs={12}>
-                        <div className='topbar'>
-                            <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}>
-                                <TextField type='Search' value={searchValue} placeholder='Customer Name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
-                                <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={reset}>Reset</Button>
-                            </Item>
+                            <div className='topbar'>
+                                <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}>
+                                    <TextField type='Search' value={searchValue} placeholder='Customer Name' size="small" sx={{ m: 1, minWidth: 200 }} onChange={handleOnChange} />
+                                    <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={reset}>Reset</Button>
+                                </Item>
                             </div>
                         </AnimatedGridItem>
-                        
+
                         <AnimatedGridItem item xs={12}>
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                 <TableContainer >
@@ -139,18 +170,18 @@ const Totalexceldata = () => {
                                             <Table stickyHeader aria-label="sticky table">
                                                 <TableHead>
                                                     <TableRow>
-                                                    <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>S. No.</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>CUSTOMER NAME</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>MOBILE</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>ACCOUNT</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>SMS STATUS</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>EMAIL STATUS</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>SHORT LINK</TableCell>
-                                                        <TableCell sx={{background:"#1976d2", color:"#fff",padding: "8px 10px" }}>ACTION</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>S. No.</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>CUSTOMER NAME</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>MOBILE</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>ACCOUNT</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>SMS STATUS</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>EMAIL STATUS</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>SHORT LINK</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>ACTION</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {filteredResults
+                                                    {results
                                                         .map((item, index) => (
                                                             <TableRow sx={tableCSS} hover role="checkbox" tabIndex={-1} key={item._id}>
                                                                 <TableCell>{item.rowIndex}</TableCell>
@@ -173,7 +204,7 @@ const Totalexceldata = () => {
                                                         ))}
                                                 </TableBody>
                                             </Table>
-                                            
+
                                         </>
                                     )}
                                 </TableContainer>
@@ -184,7 +215,7 @@ const Totalexceldata = () => {
                                         onChange={(event, value) => setPage(value)}
                                         showFirstButton
                                         showLastButton
-                                        
+
                                     />
                                 </Stack>
                             </Paper>
