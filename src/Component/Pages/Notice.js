@@ -91,9 +91,12 @@ const Notice = () => {
         navigate(`/totalexceldata/${id}`)
     }
 
+  
 
+    const API1 = `http://16.16.45.44:4000/excel/getAllexceldata`;
+    const API2 = `http://16.16.45.44:4000/excel/getAllexceldatabydate/${dateSearchValue}`;
+    const API3 = `http://16.16.45.44:4000/excel/getAllexceldatabyNotice/${noticetype}`;
 
-    const API = `http://16.16.45.44:4000/excel/getAllexceldata`;
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
     const requestOptions = {
@@ -101,9 +104,51 @@ const Notice = () => {
         headers: myHeaders,
     };
 
-    const fetchData = async (page) => {
+    const fetchData1 = async (page) => {
         try {
-            const response = await fetch(`${API}?page=${page}`, requestOptions)
+            const response = await fetch(`${API1}?page=${page}`, requestOptions)
+
+            const result = await response.json()
+
+            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
+
+            const adjustedResultArray = resultArray.map((item, index) => ({
+                ...item,
+                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+            }));
+            setResults(adjustedResultArray)
+            setPageconunt(parseInt(result.pageInfo.totalPages));
+            setTotalDataCount(parseInt(result.pageInfo.totalItems));
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false);
+        }
+    }
+    const fetchData2 = async (page) => {
+        try {
+            const response = await fetch(`${API2}?page=${page}`, requestOptions)
+
+            const result = await response.json()
+
+            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
+
+            const adjustedResultArray = resultArray.map((item, index) => ({
+                ...item,
+                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+            }));
+            setResults(adjustedResultArray)
+            setPageconunt(parseInt(result.pageInfo.totalPages));
+            setTotalDataCount(parseInt(result.pageInfo.totalItems));
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error)
+            setIsLoading(false);
+        }
+    }
+    const fetchData3 = async (page) => {
+        try {
+            const response = await fetch(`${API3}?page=${page}`, requestOptions)
 
             const result = await response.json()
 
@@ -127,32 +172,41 @@ const Notice = () => {
         if (!localStorage.getItem('token')) {
             navigate('/');
         }
-        fetchData(page);
+    
+        if (dateSearchValue && noticetype.trim() === '') {
+            // Call API for date search if dateSearchValue is present and noticetype is empty
+            fetchData2(page);
+        } else if (noticetype.trim() !== '') {
+            // Call API for noticetype search if noticetype is present
+            fetchData3(page);
+        } else {
+            // Call API for regular data if no search criteria is present
+            fetchData1(page);
+        }
+    }, [page, dateSearchValue, noticetype]);
 
-    }, [page]);
 
+    // const filteredData = revData.filter((item) => {
+    //     const inputSearch = dateSearchValue.toLowerCase();
+    //     const inputsearchtempp = noticetype.toLowerCase();
 
-    const filteredData = revData.filter((item) => {
-        const inputSearch = dateSearchValue.toLowerCase();
-        const inputsearchtempp = noticetype.toLowerCase();
+    //     const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
+    //         day: 'numeric',
+    //         month: 'short',
+    //         year: 'numeric',
+    //         hour: 'numeric',
+    //         minute: 'numeric',
+    //         second: 'numeric'
+    //     }).toLowerCase();
 
-        const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric'
-        }).toLowerCase();
+    //     const outputsearch = formattedDateTime;
+    //     const outputsearchtemp = item.NoticeType.toLowerCase();
 
-        const outputsearch = formattedDateTime;
-        const outputsearchtemp = item.NoticeType.toLowerCase();
-
-        return (
-            outputsearch.startsWith(inputSearch) &&
-            outputsearchtemp.startsWith(inputsearchtempp)
-        );
-    });
+    //     return (
+    //         outputsearch.startsWith(inputSearch) &&
+    //         outputsearchtemp.startsWith(inputsearchtempp)
+    //     );
+    // });
 
   
 
@@ -242,7 +296,7 @@ const Notice = () => {
                             <AnimatedGridItem item xs={12} >
                                 <div className='topbar'>
                                     <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                        <TextField type='Search' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} defaultValue={dateSearchValue} onChange={onChangeDate} />
+                                        <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
                                         <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                             <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
                                             <Select
@@ -293,7 +347,7 @@ const Notice = () => {
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
-                                                        {filteredData
+                                                        {revData
                                                             .map((item, index) => (
                                                                 <TableRow
                                                                     sx={tableCSS}
