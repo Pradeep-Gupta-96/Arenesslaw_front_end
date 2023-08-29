@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import {
-    Button, Grid, Link, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField
+    Button, Grid, Link, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { Chart, CategoryScale, LinearScale, PieController, ArcElement, BarController, BarElement, Tooltip } from 'chart.js';
 import AdminNavbar from '../Navbar/AdminNavbar';
 import '../style/style.css';
 
@@ -55,9 +56,12 @@ const Totalexceldata = () => {
     const [isloading, setIsLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalDataCount, setTotalDataCount] = useState(null);
+    const [datacount, setdatacount] = useState('');
     const navigate = useNavigate();
     const { id } = useParams();
     const [searchValue, setSearchValue] = useState('');
+    const chartRefp = useRef(null);
+    const chartRef = useRef(null);
 
     const handleOnChange = (e) => {
         setSearchValue(e.target.value.toLowerCase());
@@ -128,10 +132,38 @@ const Totalexceldata = () => {
         }
     };
 
+
+    const Chart_data_visualization_API = `http://16.16.45.44:4000/excel/Chart_data_visualization_admin/${id}`;
+
+    const Chart_data_visualization_CallApi = async () => {
+        try {
+            const res = await fetch(`${Chart_data_visualization_API}`, {
+                headers: {
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+                },
+            });
+
+            const result = await res.json()
+
+            setdatacount(result)
+            setIsLoading(false);
+
+            // Render the chart here, after data is fetched
+            renderChart1(result);
+            renderChart2(result);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+
+
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/');
         }
+
+        Chart_data_visualization_CallApi()
 
         if (searchValue.trim() === '') {
             // Call API for regular data if search value is empty
@@ -147,6 +179,137 @@ const Totalexceldata = () => {
         navigate(`/detailspage/${id}`);
     };
 
+    const Indicator = ({ label, color, count }) => (
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+            <div style={{ width: '16px', height: '16px', backgroundColor: color, marginRight: '8px' }}></div>
+            <Typography variant="body2">{`${label}: ${count}`}</Typography>
+        </div>
+    );
+
+
+    const renderChart1 = (data) => {
+            Chart.register(CategoryScale, LinearScale, PieController, ArcElement, Tooltip);
+    
+            let chartInstance = null;
+            const ctx = chartRefp.current.getContext('2d');
+    
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+    
+            chartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Delivered', 'Bounce', 'Drop', 'NA', 'Open'],
+                    datasets: [{
+                        data: [data.deliveredCount, data.BounceCount, data.dropCount, data.naCount, data.openCount],
+                        backgroundColor: [
+                            'rgba(153, 102, 255, 0.8)', 
+                            "rgba(255, 205, 86, 0.8)",
+                            'rgba(54, 162, 235, 0.8)', 
+                            'rgba(255, 99, 132, 0.8)', 
+                            '#dcedc8' // Orange
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const label = context.label || '';
+                                    const value = context.formattedValue || '';
+                                    return `${label}: ${value}`;
+                                }
+                            }
+                        }
+                    },
+    
+                    elements: {
+                        arc: {
+                            borderWidth: 1,
+                        },
+                    },
+                }
+            });
+    
+            return () => {
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+            };
+      
+    }
+
+
+    const renderChart2 = (data) => {
+        Chart.register(CategoryScale, LinearScale, BarController, BarElement, Tooltip);
+
+        let chartInstance = null;
+        const ctx = chartRef.current.getContext('2d');
+
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Delivered', 'Undelivered', 'Expired'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [data.smsDeliveredCount, data.smsUndeliveredCount, data.smsExpiredCount],
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.8)', 
+                        'rgba(255, 99, 132, 0.8)', 
+                        'rgba(255, 205, 86, 0.8)', 
+                        'rgba(75, 192, 192, 0.8)', // Green
+                        'rgba(153, 102, 255, 0.8)', // Purple
+                        'rgba(255, 159, 64, 0.8)' // Orange
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 0.8)', // Blue
+                        'rgba(255, 205, 86, 0.8)', // Yellow
+                        'rgba(255, 99, 132, 0.8)', // Red
+                        'rgba(153, 102, 255, 0.8)', // Purple
+                        'rgba(255, 159, 64, 0.8)', // Orange
+                        'rgba(75, 192, 192, 0.8)', // Green
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const label = context.label || '';
+                                const value = context.formattedValue || '';
+                                return `${label}: ${value}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return () => {
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+        };
+    }
+
     return (
         <>
             <Box className="mainpage" sx={{ display: 'flex' }}>
@@ -154,6 +317,43 @@ const Totalexceldata = () => {
                 <Box className='rightpart' component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
                     <Grid container spacing={2}>
+                        <AnimatedGridItem className='data-vs' item xs={12} md={12}>
+                            <AnimatedGridItem item xs={6} md={6}>
+                                Data Visualization Email
+                               
+                                <Item sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                                        <Indicator label="Delivered" color="rgba(153, 102, 255, 0.8)" count={datacount.deliveredCount} />
+                                        <Indicator label="Bounce" color="rgba(255, 205, 86, 0.8)" count={datacount.BounceCount} />
+                                        <Indicator label="Drop" color="rgba(54, 162, 235, 0.8)" count={datacount.dropCount} />
+                                        <Indicator label="NA" color="rgba(255, 99, 132, 0.8)" count={datacount.naCount} />
+                                        <Indicator label="Open" color="#dcedc8" count={datacount.openCount} />
+                                    </div>
+                                    <div style={{ width: '300px', height: '300px' }}>
+                                        <canvas ref={chartRefp} id="myChart"></canvas>
+                                    </div>
+                                    <div></div>
+                                </Item>
+                            </AnimatedGridItem>
+
+                            <AnimatedGridItem item xs={6} md={6}>
+                                Data Visualization SMS
+                                <Item sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className='virtical-chart' style={{ width: '550px', height: '300px' }} >
+                                        <canvas ref={chartRef} id="myChart"></canvas>
+                                    </div>
+                                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                                        <Indicator label="Delivered" color="rgba(153, 102, 255, 0.8)" count={datacount.smsDeliveredCount} />
+                                        <Indicator label="Undelivered" color="rgba(255, 99, 132, 0.8)" count={datacount.smsUndeliveredCount} />
+                                        <Indicator label="Expired" color='rgba(255, 205, 86, 0.8)' count={datacount.smsExpiredCount} />
+                                    </div>
+                                    <div></div>
+                                </Item>
+                            </AnimatedGridItem>
+
+                            Total Data ={datacount.totalDataCount}
+                        </AnimatedGridItem>
+
                         <AnimatedGridItem item xs={12}>
                             <div className='topbar'>
                                 <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}>
@@ -172,14 +372,14 @@ const Totalexceldata = () => {
                                             <Table stickyHeader aria-label="sticky table">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>S. No.</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>CUSTOMER NAME</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>MOBILE</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>ACCOUNT</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>SMS STATUS</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>EMAIL STATUS</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>SHORT LINK</TableCell>
-                                                        <TableCell sx={{ background: "#1976d2", color: "#fff",padding: "8px 10px" }}>ACTION</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>S. No.</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>CUSTOMER NAME</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>MOBILE</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>ACCOUNT</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>SMS STATUS</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>EMAIL STATUS</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>SHORT LINK</TableCell>
+                                                        <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>ACTION</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -206,21 +406,21 @@ const Totalexceldata = () => {
                                                         ))}
                                                 </TableBody>
                                             </Table>
-                                            
+
                                         </>
                                     )}
                                 </TableContainer>
                                 <Stack spacing={2}>
-                                                <Pagination
-                                                    count={totalDataCount}
-                                                    page={page}
-                                                    onChange={(event, value) => setPage(value)}
-                                                    showFirstButton
-                                                    showLastButton
-                                                    color="secondary"
+                                    <Pagination
+                                        count={totalDataCount}
+                                        page={page}
+                                        onChange={(event, value) => setPage(value)}
+                                        showFirstButton
+                                        showLastButton
+                                        color="secondary"
 
-                                                />
-                                            </Stack>
+                                    />
+                                </Stack>
                             </Paper>
                         </AnimatedGridItem>
                     </Grid>

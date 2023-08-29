@@ -211,7 +211,6 @@ const DetailsPage = () => {
         <>
             <Box sx={{ display: 'flex' }}>
                 <AdminNavbar />
-
                 <Box component="main" sx={{ flexGrow: 1, p: 3, }}>
                     <DrawerHeader />
                     <div className='userdetail'>

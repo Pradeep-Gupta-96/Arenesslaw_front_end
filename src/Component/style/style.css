@@ -115,11 +115,10 @@
   font-size: 14px;
 }
 .dashboardtop { border-bottom: 2px solid #1976d2; display: flex; justify-content: space-between;padding: 0px 0px 10px;}
-.notice-type .MuiGrid-root.MuiGrid-item {
-  float: left;
-  width: 33%;
-  min-height: 60px;
-}
+.notice-type .MuiGrid-root.MuiGrid-item {float: left;width: 33%;min-height: 60px;}
+.data-vs {display: flex;}
+.data-vs > div:first-child {margin-right: 20px;}
+
 @media screen and (max-width: 767px) {
   /* main.MuiBox-root.css-zxdg2z {width: 100%;} */
   .topbar .MuiPaper-root {display: inherit;}
@@ -132,4 +131,8 @@
   .mainpage {width: 100%;flex-wrap: wrap;}
   .leftsidebar {width: 15%; max-width: 56px;}
   .rightpart {width: 85%; padding: 15px !important;}
+  .data-vs {display: inline-block;}
+  .data-vs > div {width: 100%;max-width: 100%;margin-bottom: 20px;}
+  .data-vs > div > div {display: inline-block;}
+  .virtical-chart {width: 100% !important;height: auto !important;}
 }
