@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import {
-    Button, Grid, Link, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography
+    Button, FormControl, Grid, InputLabel, Link, MenuItem, Pagination, Paper, Select, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
@@ -60,12 +60,32 @@ const Totalexceldata = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [searchValue, setSearchValue] = useState('');
+    const [pageSize, setpageSize] = useState(20)
     const chartRefp = useRef(null);
     const chartRef = useRef(null);
 
     const handleOnChange = (e) => {
         setSearchValue(e.target.value.toLowerCase());
     };
+
+    const PageSizeSelector = ({ pageSize, onChange }) => (
+        <FormControl variant="outlined" size="small" sx={{ marginLeft: 2 }}>
+            <Select
+                value={pageSize}
+                onChange={onChange}
+                label="Rows per page"
+                inputProps={{
+                    name: 'pageSize',
+                    id: 'page-size-select',
+                }}
+            >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+            </Select>
+        </FormControl>
+    );
 
     // const filteredResults = results.filter((item) => {
     //     const searchData = item.EMBONAME ? item.EMBONAME.toLowerCase() : '';
@@ -80,7 +100,7 @@ const Totalexceldata = () => {
 
     const callApi = async (page) => {
         try {
-            const res = await fetch(`${API}?page=${page}`, {
+            const res = await fetch(`${API}?pageSize=${pageSize}&page=${page}`, {
                 headers: {
                     authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
                 },
@@ -92,7 +112,7 @@ const Totalexceldata = () => {
 
             const adjustedResultArray = resultArray.map((item, index) => ({
                 ...item,
-                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+                rowIndex: (page - 1) * pageSize + index + 1, // Calculate the rowIndex based on the current page and index
             }));
 
             setResults(adjustedResultArray);
@@ -108,7 +128,7 @@ const Totalexceldata = () => {
 
     const callSearchApi = async (page) => {
         try {
-            const res = await fetch(`${API2}?page=${page}`, {
+            const res = await fetch(`${API2}?pageSize=${pageSize}&page=${page}`, {
                 headers: {
                     authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
                 },
@@ -120,7 +140,7 @@ const Totalexceldata = () => {
 
             const adjustedResultArray = resultArray.map((item, index) => ({
                 ...item,
-                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
+                rowIndex: (page - 1) * pageSize + index + 1, // Calculate the rowIndex based on the current page and index
             }));
 
             setResults(adjustedResultArray);
@@ -172,7 +192,7 @@ const Totalexceldata = () => {
             // Call search API if search value is present
             callSearchApi(page);
         }
-    }, [page, searchValue]);
+    }, [page, pageSize, searchValue]);
 
 
     const clickfordeatils = (id) => {
@@ -188,61 +208,61 @@ const Totalexceldata = () => {
 
 
     const renderChart1 = (data) => {
-            Chart.register(CategoryScale, LinearScale, PieController, ArcElement, Tooltip);
-    
-            let chartInstance = null;
-            const ctx = chartRefp.current.getContext('2d');
-    
+        Chart.register(CategoryScale, LinearScale, PieController, ArcElement, Tooltip);
+
+        let chartInstance = null;
+        const ctx = chartRefp.current.getContext('2d');
+
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Delivered', 'Bounce', 'Drop', 'NA', 'Open'],
+                datasets: [{
+                    data: [data.deliveredCount, data.BounceCount, data.dropCount, data.naCount, data.openCount],
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.8)',
+                        "rgba(255, 205, 86, 0.8)",
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        '#dcedc8' // Orange
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const label = context.label || '';
+                                const value = context.formattedValue || '';
+                                return `${label}: ${value}`;
+                            }
+                        }
+                    }
+                },
+
+                elements: {
+                    arc: {
+                        borderWidth: 1,
+                    },
+                },
+            }
+        });
+
+        return () => {
             if (chartInstance) {
                 chartInstance.destroy();
             }
-    
-            chartInstance = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Delivered', 'Bounce', 'Drop', 'NA', 'Open'],
-                    datasets: [{
-                        data: [data.deliveredCount, data.BounceCount, data.dropCount, data.naCount, data.openCount],
-                        backgroundColor: [
-                            'rgba(153, 102, 255, 0.8)', 
-                            "rgba(255, 205, 86, 0.8)",
-                            'rgba(54, 162, 235, 0.8)', 
-                            'rgba(255, 99, 132, 0.8)', 
-                            '#dcedc8' // Orange
-                        ],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => {
-                                    const label = context.label || '';
-                                    const value = context.formattedValue || '';
-                                    return `${label}: ${value}`;
-                                }
-                            }
-                        }
-                    },
-    
-                    elements: {
-                        arc: {
-                            borderWidth: 1,
-                        },
-                    },
-                }
-            });
-    
-            return () => {
-                if (chartInstance) {
-                    chartInstance.destroy();
-                }
-            };
-      
+        };
+
     }
 
 
@@ -264,9 +284,9 @@ const Totalexceldata = () => {
                     label: '# of Votes',
                     data: [data.smsDeliveredCount, data.smsUndeliveredCount, data.smsExpiredCount],
                     backgroundColor: [
-                        'rgba(153, 102, 255, 0.8)', 
-                        'rgba(255, 99, 132, 0.8)', 
-                        'rgba(255, 205, 86, 0.8)', 
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(255, 205, 86, 0.8)',
                         'rgba(75, 192, 192, 0.8)', // Green
                         'rgba(153, 102, 255, 0.8)', // Purple
                         'rgba(255, 159, 64, 0.8)' // Orange
@@ -309,7 +329,7 @@ const Totalexceldata = () => {
             }
         };
     }
-
+    console.log(pageSize)
     return (
         <>
             <Box className="mainpage" sx={{ display: 'flex' }}>
@@ -336,7 +356,7 @@ const Totalexceldata = () => {
 
                             <AnimatedGridItem item xs={6} md={6}>
                                 Data Visualization SMS
-                                <Item className='virtical' sx={{ display: 'inline-block',width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Item className='virtical' sx={{ display: 'inline-block', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div className='virtical-chart' style={{ width: '100%', height: '280px' }} >
                                         <canvas ref={chartRef} id="myChart"></canvas>
                                     </div>
@@ -349,7 +369,9 @@ const Totalexceldata = () => {
                             </AnimatedGridItem>
 
                         </AnimatedGridItem>
-                            Total Data ={datacount.totalDataCount}
+                        <AnimatedGridItem sx={{marginLeft:2}}>
+                        Total Data ={datacount.totalDataCount}
+                        </AnimatedGridItem>
 
                         <AnimatedGridItem item xs={12}>
                             <div className='topbar'>
@@ -407,16 +429,21 @@ const Totalexceldata = () => {
                                         </>
                                     )}
                                 </TableContainer>
-                                <Stack spacing={2}>
-                                    <Pagination
-                                        count={totalDataCount}
-                                        page={page}
-                                        onChange={(event, value) => setPage(value)}
-                                        showFirstButton
-                                        showLastButton
-                                        color="secondary"
-
-                                    />
+                                <Stack spacing={2} >
+                                    <div className="pagination-container">
+                                        <div className="pagination-row">
+                                            <Pagination
+                                                count={totalDataCount}
+                                                page={page}
+                                                onChange={(event, value) => setPage(value)}
+                                                showFirstButton
+                                                showLastButton
+                                                color="secondary"
+                                            />
+                                            <PageSizeSelector pageSize={pageSize} onChange={(event) => setpageSize(event.target.value)} />
+                                            Rows Per page
+                                        </div>
+                                    </div>
                                 </Stack>
                             </Paper>
                         </AnimatedGridItem>
