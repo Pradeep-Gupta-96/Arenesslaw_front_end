@@ -180,7 +180,7 @@ const Totalexceldata = () => {
     };
 
     const Indicator = ({ label, color, count }) => (
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginRight: '15px' }}>
             <div style={{ width: '16px', height: '16px', backgroundColor: color, marginRight: '8px' }}></div>
             <Typography variant="body2">{`${label}: ${count}`}</Typography>
         </div>
@@ -320,7 +320,6 @@ const Totalexceldata = () => {
                         <AnimatedGridItem className='data-vs' item xs={12} md={12}>
                             <AnimatedGridItem item xs={6} md={6}>
                                 Data Visualization Email
-                               
                                 <Item sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
                                         <Indicator label="Delivered" color="rgba(153, 102, 255, 0.8)" count={datacount.deliveredCount} />
@@ -332,27 +331,25 @@ const Totalexceldata = () => {
                                     <div style={{ width: '300px', height: '300px' }}>
                                         <canvas ref={chartRefp} id="myChart"></canvas>
                                     </div>
-                                    <div></div>
                                 </Item>
                             </AnimatedGridItem>
 
                             <AnimatedGridItem item xs={6} md={6}>
                                 Data Visualization SMS
-                                <Item sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div className='virtical-chart' style={{ width: '550px', height: '300px' }} >
+                                <Item className='virtical' sx={{ display: 'inline-block',width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className='virtical-chart' style={{ width: '100%', height: '280px' }} >
                                         <canvas ref={chartRef} id="myChart"></canvas>
                                     </div>
-                                    <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ marginLeft: '16px', display: 'flex' }}>
                                         <Indicator label="Delivered" color="rgba(153, 102, 255, 0.8)" count={datacount.smsDeliveredCount} />
                                         <Indicator label="Undelivered" color="rgba(255, 99, 132, 0.8)" count={datacount.smsUndeliveredCount} />
                                         <Indicator label="Expired" color='rgba(255, 205, 86, 0.8)' count={datacount.smsExpiredCount} />
                                     </div>
-                                    <div></div>
                                 </Item>
                             </AnimatedGridItem>
 
-                            Total Data ={datacount.totalDataCount}
                         </AnimatedGridItem>
+                            Total Data ={datacount.totalDataCount}
 
                         <AnimatedGridItem item xs={12}>
                             <div className='topbar'>
