@@ -220,11 +220,12 @@ const Totalexceldata = () => {
         chartInstance = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Delivered', 'Bounce', 'Drop', 'NA', 'Open'],
+                labels: ['Delivered', 'Deferred', 'Bounce', 'Drop', 'NA', 'Open'],
                 datasets: [{
-                    data: [data.deliveredCount, data.BounceCount, data.dropCount, data.naCount, data.openCount],
+                    data: [data.deliveredCount, data.DeferredCount, data.BounceCount, data.dropCount, data.naCount, data.openCount],
                     backgroundColor: [
                         'rgba(153, 102, 255, 0.8)',
+                        'rgba(54, 102, 255, 0.9)',
                         "rgba(255, 205, 86, 0.8)",
                         'rgba(54, 162, 235, 0.8)',
                         'rgba(255, 99, 132, 0.8)',
@@ -279,10 +280,10 @@ const Totalexceldata = () => {
         chartInstance = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Delivered', 'Undelivered', 'Expired'],
+                labels: ['Delivered', 'Undelivered', 'Expired', 'NA'],
                 datasets: [{
                     label: '# of Votes',
-                    data: [data.smsDeliveredCount, data.smsUndeliveredCount, data.smsExpiredCount],
+                    data: [data.smsDeliveredCount, data.smsUndeliveredCount, data.smsExpiredCount, data.smsnaCount],
                     backgroundColor: [
                         'rgba(153, 102, 255, 0.8)',
                         'rgba(255, 99, 132, 0.8)',
@@ -295,7 +296,7 @@ const Totalexceldata = () => {
                         'rgba(54, 162, 235, 0.8)', // Blue
                         'rgba(255, 205, 86, 0.8)', // Yellow
                         'rgba(255, 99, 132, 0.8)', // Red
-                        'rgba(153, 102, 255, 0.8)', // Purple
+                        'rgba(75, 192, 192, 0.8)', // Purple
                         'rgba(255, 159, 64, 0.8)', // Orange
                         'rgba(75, 192, 192, 0.8)', // Green
                     ],
@@ -329,7 +330,7 @@ const Totalexceldata = () => {
             }
         };
     }
-    console.log(pageSize)
+
     return (
         <>
             <Box className="mainpage" sx={{ display: 'flex' }}>
@@ -343,6 +344,7 @@ const Totalexceldata = () => {
                                 <Item sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ marginLeft: '16px', display: 'flex', flexDirection: 'column' }}>
                                         <Indicator label="Delivered" color="rgba(153, 102, 255, 0.8)" count={datacount.deliveredCount} />
+                                        <Indicator label="Deferred" color="rgba(54, 102, 255, 0.9)" count={datacount.DeferredCount} />
                                         <Indicator label="Bounce" color="rgba(255, 205, 86, 0.8)" count={datacount.BounceCount} />
                                         <Indicator label="Drop" color="rgba(54, 162, 235, 0.8)" count={datacount.dropCount} />
                                         <Indicator label="NA" color="rgba(255, 99, 132, 0.8)" count={datacount.naCount} />
@@ -364,13 +366,14 @@ const Totalexceldata = () => {
                                         <Indicator label="Delivered" color="rgba(153, 102, 255, 0.8)" count={datacount.smsDeliveredCount} />
                                         <Indicator label="Undelivered" color="rgba(255, 99, 132, 0.8)" count={datacount.smsUndeliveredCount} />
                                         <Indicator label="Expired" color='rgba(255, 205, 86, 0.8)' count={datacount.smsExpiredCount} />
+                                        <Indicator label="NA" color='rgba(75, 192, 192, 0.8)' count={datacount.smsnaCount} />
                                     </div>
                                 </Item>
                             </AnimatedGridItem>
 
                         </AnimatedGridItem>
-                        <AnimatedGridItem sx={{marginLeft:2}}>
-                        Total Data ={datacount.totalDataCount}
+                        <AnimatedGridItem sx={{ marginLeft: 2 }}>
+                            Total Data ={datacount.totalDataCount}
                         </AnimatedGridItem>
 
                         <AnimatedGridItem item xs={12}>
