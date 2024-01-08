@@ -66,9 +66,9 @@ const EmplyeeDashboard = () => {
     }
 
 
-    const API1 = `http://16.16.45.44:4000/excel/getAllexceldata`;
-    const API2 = `http://16.16.45.44:4000/excel/getAllexceldatabydate/${dateSearchValue}`;
-    const API3 = `http://16.16.45.44:4000/excel/getAllexceldatabyNotice/${noticetype}`;
+    const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
+    const API2 = `https://recqarz.com/api/excel/getAllexceldatabydate/${dateSearchValue}`;
+    const API3 = `https://recqarz.com/api/excel/getAllexceldatabyNotice/${noticetype}`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);

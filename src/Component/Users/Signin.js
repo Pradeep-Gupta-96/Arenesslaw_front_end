@@ -34,7 +34,7 @@ export default function Signin() {
     const data = new FormData(event.currentTarget);
 
     try {
-      const response = await fetch("http://16.16.45.44:4000/user/signin", {
+      const response = await fetch("https://recqarz.com/api/user/signin", {
         method: "post",
         headers: {
           "content-type": "application/json"

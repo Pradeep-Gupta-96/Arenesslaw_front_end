@@ -86,7 +86,7 @@ export default function Signup() {
       }
   
       // Post data for registration
-      const response = await fetch("http://16.16.45.44:4000/user/signup", {
+      const response = await fetch("https://recqarz.com/api/user/signup", {
         method: "post",
         headers: {
           "content-type": "application/json"

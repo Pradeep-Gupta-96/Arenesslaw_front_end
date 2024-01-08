@@ -133,7 +133,7 @@ const Dialogfordata = () => {
         formData.append('file', excelFile);
         try {
             if (excelFile !== null) {
-                const res = await fetch('http://16.16.45.44:4000/excel', {
+                const res = await fetch('https://recqarz.com/api/excel', {
                     method: 'POST',
                     headers: {
                         authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`

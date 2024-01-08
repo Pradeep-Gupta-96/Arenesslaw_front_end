@@ -68,7 +68,7 @@ const Totalexceldata = () => {
     };
 
 
-    const API = `http://16.16.45.44:4000/excel/exportExcelData/${id}/${JSON.parse(localStorage.getItem("username"))}`;
+    const API = `https://recqarz.com/api/excel/exportExcelData/${id}/${JSON.parse(localStorage.getItem("username"))}`;
 
     const callApi = async (page) => {
         try {
@@ -96,7 +96,7 @@ const Totalexceldata = () => {
         }
     };
 
-    const API2 = `http://16.16.45.44:4000/excel/searchingdata/${id}/${JSON.parse(localStorage.getItem("username"))}/${searchValue}`;
+    const API2 = `https://recqarz.com/api/excel/searchingdata/${id}/${JSON.parse(localStorage.getItem("username"))}/${searchValue}`;
 
     const callSearchApi = async (page) => {
         try {

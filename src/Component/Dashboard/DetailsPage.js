@@ -108,10 +108,10 @@ const DetailsPage = () => {
 
     const callAPIforfindnoticetype = async () => {
         try {
-            const account = await callapi(`http://16.16.45.44:4000/excel/detailsPage/${id}`);
+            const account = await callapi(`https://recqarz.com/api/excel/detailsPage/${id}`);
 
             if (account) {
-                const APIforfindnoticetype = `http://16.16.45.44:4000/excel/allnoticesofoneusers/${account}`;
+                const APIforfindnoticetype = `https://recqarz.com/api/excel/allnoticesofoneusers/${account}`;
 
                 const res = await fetch(APIforfindnoticetype, {
                     headers: {
