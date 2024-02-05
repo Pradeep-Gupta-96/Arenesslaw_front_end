@@ -26,6 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const Dialogfordata = () => {
     const [temp, setTemp] = useState("SBI");
     const [noticetype, setNoticetype] = useState("");
+    const [ExecutionDate, setDateSearchValue] = useState({ExecutionDate:""});
     const [excelFile, setExcelFile] = useState(null);
     const [excelFileError, setExcelFileError] = useState(null);
     const [isLoading, setisLoading] = useState(false)
@@ -40,6 +41,12 @@ const Dialogfordata = () => {
         setNoticetype(event.target.value);
     };
 
+
+    const onChangeDate = (event) => {
+        setDateSearchValue(event.target.value);
+    };
+
+    console.log(ExecutionDate);
 
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -130,6 +137,7 @@ const Dialogfordata = () => {
         formData.append('filename', filename);
         formData.append('Bank', temp);
         formData.append('NoticeType', noticetype);
+        formData.append('ExecutionDate', ExecutionDate);
         formData.append('file', excelFile);
         try {
             if (excelFile !== null) {
@@ -184,6 +192,9 @@ const Dialogfordata = () => {
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={12}>
                         <Item sx={{ width: 450 }}>
+                        <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} name='ExecutionDate' value={ExecutionDate.ExecutionDate} onChange={onChangeDate} />
+                        </Item>
+                        <Item sx={{ width: 450 }}>
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">Bank</InputLabel>
                                 <Select
@@ -221,6 +232,7 @@ const Dialogfordata = () => {
                                     <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
                                     <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
                                     <MenuItem value={"E-Conciliation"}> E-Conciliation </MenuItem>
+                                    <MenuItem value={"Police Complaint"}> Police Complaint </MenuItem>
                                 </Select>
                             </FormControl>
                         </Item>

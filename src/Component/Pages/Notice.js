@@ -341,7 +341,8 @@ const Notice = () => {
                                                 <Table stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Date</TableCell>
+                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Upload Date</TableCell>
+                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Execution Date</TableCell>
                                                             <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Notice Type</TableCell>
                                                             <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Actions</TableCell>
                                                         </TableRow>
@@ -366,6 +367,16 @@ const Notice = () => {
                                                                             minute: 'numeric',
                                                                             second: 'numeric'
                                                                         })}
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        { item.ExecutionDate ? new Date(item.ExecutionDate).toLocaleDateString('en-US', {
+                                                                            day: 'numeric',
+                                                                            month: 'short',
+                                                                            year: 'numeric',
+                                                                            hour: 'numeric',
+                                                                            minute: 'numeric',
+                                                                            second: 'numeric'
+                                                                        }) : 'N/A'} 
                                                                     </TableCell>
                                                                     <TableCell component="th" scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
