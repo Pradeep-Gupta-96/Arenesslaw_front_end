@@ -107,7 +107,6 @@ const Notice = () => {
 
     const API1 = `http://localhost:4000/api/excel/getAllexceldata`;
     const API2 = `http://localhost:4000/api/excel/getFilteredExcelData`;
-    const API3 = `http://localhost:4000/api/excel/getAllexceldatabyNotice/${noticetype}`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
@@ -311,6 +310,7 @@ const Notice = () => {
                                                 <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
                                                 <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
                                                 <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
+                                                <MenuItem value={"Police Complaint"}> Police Complaint </MenuItem>
                                             </Select>
                                         </FormControl>
 
