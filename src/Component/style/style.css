@@ -128,7 +128,7 @@ body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
   .notice-table tr:hover {background-color: rgba(0, 0, 0, 0.04);}
   .notice-table .send-email {background: #24D555;white-space: nowrap;}
   .notice-table .send-sms {background: #0BBDDD;white-space: nowrap;}
-  
+
 .login-page {background: url(images/bg-01.jpg);width: 100%;min-height: 100vh;box-sizing: border-box;
   display: -webkit-box;
   display: -webkit-flex;
@@ -213,4 +213,8 @@ body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
   .data-vs > div {width: 100%;max-width: 100%;margin-bottom: 20px;}
   .data-vs > div > div {display: inline-block;}
   .virtical-chart {width: 100% !important;height: auto !important;}
+  .upload-row {display: inline-block;width: 100%;}
+  .search-sec {width: 100%;margin-bottom: 20px;}
+  .css-itk0ss-MuiPaper-root.search-box {min-height: auto;}
+
 }
