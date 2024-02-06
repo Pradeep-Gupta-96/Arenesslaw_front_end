@@ -341,8 +341,8 @@ const Notice = () => {
                                         <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                             {/* Coming Soon!! */}
                                               
-                                            <Typography variant='subtitle2'>Notice Type: {noticetype}</Typography>
-                                            <Typography variant='subtitle2'> Total Count : {totalRecords? totalRecords: searchLoader? 'fetching data please data...': 'Select Date and Notice Type'}</Typography>
+                                            <Typography variant='subtitle2'>Notice Type: {noticetype? noticetype: searchLoader? 'fetching data please data...': 'Select Notice Type'}</Typography>
+                                            <Typography variant='subtitle2'> Total Count : {totalRecords? totalRecords: searchLoader? 'fetching data please data...': 'Select Date First'}</Typography>
 
                                         </Item>
                                     </div>
