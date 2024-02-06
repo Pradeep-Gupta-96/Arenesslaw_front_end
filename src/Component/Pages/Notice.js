@@ -367,9 +367,7 @@ const Notice = () => {
                                                                     </TableCell>
                                                                     <TableCell scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
-                                                                        <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >
-                                                                            Open!
-                                                                        </Button>
+                                                                        <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >Open!</Button>
                                                                     </TableCell>
                                                                 </TableRow>
                                                             ))}
