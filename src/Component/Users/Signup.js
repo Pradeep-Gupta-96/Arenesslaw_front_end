@@ -86,7 +86,7 @@ export default function Signup() {
       }
   
       // Post data for registration
-      const response = await fetch("https://recqarz.com/api/user/signup", {
+      const response = await fetch("http://localhost:4000/api/user/signup", {
         method: "post",
         headers: {
           "content-type": "application/json"

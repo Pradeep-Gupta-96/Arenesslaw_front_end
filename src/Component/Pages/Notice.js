@@ -59,12 +59,15 @@ const Notice = () => {
     const [greeting, setGreeting] = useState('');
     const [currentDateTime, setCurrentDateTime] = useState('');
     const [dateSearchValue, setDateSearchValue] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDtae] = useState('');
     const [pageconunt, setPageconunt] = useState(null);
     const [totalDataCount, setTotalDataCount] = useState(null);
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
+    // const revData = Array.isArray(results) ? [...results] : [];
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -81,21 +84,30 @@ const Notice = () => {
     const onChangeDate = (event) => {
         setDateSearchValue(event.target.value);
     };
+    const onChangestartDate = (event) => {
+        setStartDate(event.target.value);
+    };
+    const onChangeendDate = (event) => {
+        setEndDtae(event.target.value);
+    };
 
     const resetsearchbar = () => {
         setDateSearchValue('')
         setNoticetype('')
-    }
+        setStartDate('');
+        setEndDtae('')
+    };
+  
 
     const totalexceldata = (id) => {
         navigate(`/totalexceldata/${id}`)
     }
 
-  
 
-    const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
-    const API2 = `https://recqarz.com/api/excel/getAllexceldatabydate/${dateSearchValue}`;
-    const API3 = `https://recqarz.com/api/excel/getAllexceldatabyNotice/${noticetype}`;
+
+    const API1 = `http://localhost:4000/api/excel/getAllexceldata`;
+    const API2 = `http://localhost:4000/api/excel/getFilteredExcelData`;
+    const API3 = `http://localhost:4000/api/excel/getAllexceldatabyNotice/${noticetype}`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
@@ -125,10 +137,26 @@ const Notice = () => {
             setIsLoading(false);
         }
     }
-    const fetchData2 = async (page) => {
-        try {
-            const response = await fetch(`${API2}?page=${page}`, requestOptions)
 
+
+    //filtering data from backend 
+    const fetchDataWithFilters = async () => {
+        // Collect filter values, including createdAt
+        const filters = {
+            NoticeType: noticetype,
+            startDate: startDate,
+            endDate: endDate,
+            createdAt: dateSearchValue, // For filtering by a specific createdAt date
+        };
+
+        // Construct the query string from filters
+        const queryString = Object.entries(filters)
+            .filter(([_, value]) => value) // Exclude empty values
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .join('&');
+
+        try {
+            const response = await fetch(`${API2}?page=${page}&${queryString}`, requestOptions);
             const result = await response.json()
 
             const resultArray = Array.isArray(result.message) ? result.message : [result.message];
@@ -142,73 +170,26 @@ const Notice = () => {
             setTotalDataCount(parseInt(result.pageInfo.totalItems));
             setIsLoading(false);
         } catch (error) {
-            console.log(error)
+            console.error("Fetching data failed:", error);
             setIsLoading(false);
         }
-    }
-    const fetchData3 = async (page) => {
-        try {
-            const response = await fetch(`${API3}?page=${page}`, requestOptions)
+    };
 
-            const result = await response.json()
 
-            const resultArray = Array.isArray(result.message) ? result.message : [result.message];
-
-            const adjustedResultArray = resultArray.map((item, index) => ({
-                ...item,
-                rowIndex: (page - 1) * 20 + index + 1, // Calculate the rowIndex based on the current page and index
-            }));
-            setResults(adjustedResultArray)
-            setPageconunt(parseInt(result.pageInfo.totalPages));
-            setTotalDataCount(parseInt(result.pageInfo.totalItems));
-            setIsLoading(false);
-        } catch (error) {
-            console.log(error)
-            setIsLoading(false);
-        }
+    const clickforSearch = () => {
+        fetchDataWithFilters()
     }
 
     useEffect(() => {
         if (!localStorage.getItem('token')) {
             navigate('/');
         }
-    
-        if (dateSearchValue && noticetype.trim() === '') {
-            // Call API for date search if dateSearchValue is present and noticetype is empty
-            fetchData2(page);
-        } else if (noticetype.trim() !== '') {
-            // Call API for noticetype search if noticetype is present
-            fetchData3(page);
-        } else {
-            // Call API for regular data if no search criteria is present
-            fetchData1(page);
-        }
-    }, [page, dateSearchValue, noticetype]);
+
+        fetchData1(page);
+
+    }, [page]);
 
 
-    // const filteredData = revData.filter((item) => {
-    //     const inputSearch = dateSearchValue.toLowerCase();
-    //     const inputsearchtempp = noticetype.toLowerCase();
-
-    //     const formattedDateTime = new Date(item.createdAt).toLocaleDateString('en-US', {
-    //         day: 'numeric',
-    //         month: 'short',
-    //         year: 'numeric',
-    //         hour: 'numeric',
-    //         minute: 'numeric',
-    //         second: 'numeric'
-    //     }).toLowerCase();
-
-    //     const outputsearch = formattedDateTime;
-    //     const outputsearchtemp = item.NoticeType.toLowerCase();
-
-    //     return (
-    //         outputsearch.startsWith(inputSearch) &&
-    //         outputsearchtemp.startsWith(inputsearchtempp)
-    //     );
-    // });
-
-  
 
     //Greetins with time and date
     useEffect(() => {
@@ -239,6 +220,7 @@ const Notice = () => {
             clearInterval(intervalId);
         };
     }, []);
+
 
 
 
@@ -296,7 +278,15 @@ const Notice = () => {
                             <AnimatedGridItem item xs={12} >
                                 <div className='topbar'>
                                     <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                       
+                                        Upload Date
                                         <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
+
+                                        Execution Date
+                                        <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
+                                        <TextField type='date' placeholder='endDate' size="small" sx={{ m: 1, minWidth: 200 }} value={endDate} onChange={onChangeendDate} />
+                                      
+                                       
                                         <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                                             <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
                                             <Select
@@ -323,6 +313,8 @@ const Notice = () => {
                                                 <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
                                             </Select>
                                         </FormControl>
+
+                                        <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
                                         <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                     </Item>
                                 </div>
@@ -369,14 +361,14 @@ const Notice = () => {
                                                                         })}
                                                                     </TableCell>
                                                                     <TableCell>
-                                                                        { item.ExecutionDate ? new Date(item.ExecutionDate).toLocaleDateString('en-US', {
+                                                                        {item.ExecutionDate ? new Date(item.ExecutionDate).toLocaleDateString('en-US', {
                                                                             day: 'numeric',
                                                                             month: 'short',
                                                                             year: 'numeric',
                                                                             hour: 'numeric',
                                                                             minute: 'numeric',
                                                                             second: 'numeric'
-                                                                        }) : 'N/A'} 
+                                                                        }) : 'N/A'}
                                                                     </TableCell>
                                                                     <TableCell component="th" scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
