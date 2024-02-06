@@ -128,7 +128,7 @@ body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
   .notice-table tr:hover {background-color: rgba(0, 0, 0, 0.04);}
   .notice-table .send-email {background: #24D555;white-space: nowrap;}
   .notice-table .send-sms {background: #0BBDDD;white-space: nowrap;}
-  
+
 .login-page {background: url(images/bg-01.jpg);width: 100%;min-height: 100vh;box-sizing: border-box;
   display: -webkit-box;
   display: -webkit-flex;
@@ -163,40 +163,17 @@ body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
   .list-item li {cursor: pointer; transition: transform 0.5s ease;}
   .list-item li:hover {color: #1a237e; transform: scale(1.1);}
   .left-side h4 {font-size: 14px;padding: 10px 15px;position: absolute;bottom: 0px;border-top: 1px solid rgba(0, 0, 0, 0.12);width: 100%;}
-  .upload-row {
-    display: flex;
-    padding: 15px 0px;
-    gap: 20px;
-}
-.search-sec {
-  width: 33%;
-}.upload-row h5 {
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-.css-itk0ss-MuiPaper-root.search-box {
-  text-align: left;
-  padding: 15px;
-  min-height: 310px;
-}
-.sarch-itm {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.sarch-itm label {
-  font-weight: 500;
-  color: #000;
-  font-size: 14px;
-}
-.search-box.up-box {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+  .upload-row {display: flex;padding: 15px 0px;gap: 20px;}
+.search-sec {width: 33%;}
+.data-status {width: 66%;}
+.upload-row h5 {font-size: 18px;font-weight: 500;margin-bottom: 10px;}
+.css-itk0ss-MuiPaper-root.search-box {text-align: left;padding: 15px;min-height: 310px;}
+.sarch-itm {display: flex;justify-content: space-between;align-items: center;}
+.sarch-itm.sr-both-btn {justify-content: right;}
+.sarch-itm label {font-weight: 500;color: #000;font-size: 14px;}
+.search-box.up-box {display: flex;flex-wrap: wrap;justify-content: center;align-items: center;text-align: center;}
+
+
 @media screen and (max-width: 767px) {
   /* main.MuiBox-root.css-zxdg2z {width: 100%;} */
   .topbar .MuiPaper-root {display: inherit;}
@@ -213,4 +190,8 @@ body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
   .data-vs > div {width: 100%;max-width: 100%;margin-bottom: 20px;}
   .data-vs > div > div {display: inline-block;}
   .virtical-chart {width: 100% !important;height: auto !important;}
+  .upload-row {display: inline-block;width: 100%;}
+  .search-sec,.data-status {width: 100%;margin-bottom: 20px;}
+  .css-itk0ss-MuiPaper-root.search-box {min-height: auto;}
+
 }
