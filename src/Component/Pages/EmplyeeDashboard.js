@@ -267,13 +267,13 @@ const EmplyeeDashboard = () => {
                                                 </Select>
                                             </FormControl>
                                             </div>
-                                            <div className='sarch-itm'>
+                                            <div className='sarch-itm sr-both-btn'>
                                                 <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
                                                 <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                             </div>
                                         </Item>
                                     </div>
-                                    <div className='search-sec'>
+                                    <div className='search-sec data-status'>
                                         <Typography variant='h5'>Data Status</Typography>
                                         <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                             Coming Soon!!

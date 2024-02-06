@@ -287,7 +287,7 @@ const Notice = () => {
                                                 </Select>
                                             </FormControl>
                                             </div>
-                                            <div className='sarch-itm'>
+                                            <div className='sarch-itm sr-both-btn'>
                                                 <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
                                                 <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                             </div>
