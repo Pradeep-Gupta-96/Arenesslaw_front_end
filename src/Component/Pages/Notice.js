@@ -68,6 +68,7 @@ const Notice = () => {
     const [searchLoader, setSearchLoader] = useState(false)
     const [totalRecords, setTotalRecords] = useState(0);
     const [results, setResults] = useState([])
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('username')) || '')
     const revData = Array.isArray(results) ? [...results].reverse() : [];
     // const revData = Array.isArray(results) ? [...results] : [];
 
@@ -112,7 +113,7 @@ const Notice = () => {
     }
 
 
-
+// console.log(JSON.parse(user));
 
     const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
     const API2 = `https://recqarz.com/api/excel/getFilteredExcelData`;
@@ -228,8 +229,14 @@ const Notice = () => {
         }
 
         fetchData1(page);
-
+       
     }, [page]);
+
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem('username')))
+
+    }, [])
+    
 
 
 
@@ -261,6 +268,8 @@ const Notice = () => {
         return () => {
             clearInterval(intervalId);
         };
+
+        
     }, []);
 
 
@@ -327,6 +336,7 @@ const Notice = () => {
                                                     <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
                                                     <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
                                                     <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
+                                                    <MenuItem value={"Police Complaint"}> Police Complaint </MenuItem>
                                                 </Select>
                                             </FormControl>
                                             </div>
@@ -352,7 +362,7 @@ const Notice = () => {
                                             {/* Bulk Upload */}
                                             {JSON.parse(localStorage.getItem("username")) === "SBI Card" ? "" : <div style={{ marginTop: "0px" }}>
                                                 <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /><br />
-                                                <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
+                                                <Button disabled={user == 'SBI'} variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
                                                     Bulk Upload
                                                 </Button>
                                                 <Dialog

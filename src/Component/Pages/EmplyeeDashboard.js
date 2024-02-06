@@ -264,6 +264,7 @@ const EmplyeeDashboard = () => {
                                                     <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
                                                     <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
                                                     <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
+                                                    <MenuItem value={"Police Complaint"}> Police Complaint </MenuItem>
                                                 </Select>
                                             </FormControl>
                                             </div>
