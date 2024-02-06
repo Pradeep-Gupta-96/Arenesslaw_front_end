@@ -4,10 +4,12 @@ import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom';
 import {
     LinearProgress, Paper, Grid, Button, Table, TableRow,
-    TableHead, TableBody, TableCell, TableContainer, TextField, MenuItem, InputLabel, Select, FormControl, Stack, Pagination
+    TableHead, TableBody, TableCell, TableContainer, TextField, MenuItem, InputLabel, Select, FormControl, Stack, Pagination, Typography
 } from '@mui/material';
 import '../style/style.css'
 import AdminNavbar from '../Navbar/AdminNavbar';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -49,6 +51,8 @@ const EmplyeeDashboard = () => {
     const [noticetype, setNoticetype] = useState('')
     const [isLoading, setIsLoading] = useState(true); // Add isLoading state
     const [dateSearchValue, setDateSearchValue] = useState('');
+    const [greeting, setGreeting] = useState('');
+    const [currentDateTime, setCurrentDateTime] = useState('');
     const [pageconunt, setPageconunt] = useState(null);
     const [totalDataCount, setTotalDataCount] = useState(null);
     const [startDate, setStartDate] = useState('');
@@ -160,6 +164,8 @@ const EmplyeeDashboard = () => {
 
     }, [page]);
 
+    
+
 
     const resetsearchbar = () => {
         setDateSearchValue('')
@@ -168,6 +174,35 @@ const EmplyeeDashboard = () => {
         setEndDtae('')
     };
   
+
+    useEffect(() => {
+        const getCurrentDateTime = () => {
+            const date = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDateTime = date.toLocaleDateString(undefined, options) + ' ' + date.toLocaleTimeString();
+
+            if (date.getHours() >= 0 && date.getHours() < 12) {
+                setGreeting('Good morning!');
+            } else if (date.getHours() >= 12 && date.getHours() < 18) {
+                setGreeting('Good afternoon!');
+            } else {
+                setGreeting('Good evening!');
+            }
+
+            setCurrentDateTime(formattedDateTime);
+        };
+
+        // Initial call to getCurrentDateTime
+        getCurrentDateTime();
+
+        // Update time every second using setInterval
+        const intervalId = setInterval(getCurrentDateTime, 1000);
+
+        // Cleanup function to clear the interval when component unmounts
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
 
     return (
@@ -178,50 +213,81 @@ const EmplyeeDashboard = () => {
                     <DrawerHeader />
                     <Box sx={{ flexGrow: 1 }}>
                         <Grid container spacing={2}>
-
-
-                            {/*================ Searchbar ============== */}
-                            <AnimatedGridItem item xs={12} >
-                                <div className='topbar'>
-                                    <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                    Upload Date
-                                        <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
-
-                                        Execution Date
-                                        <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
-                                        <TextField type='date' placeholder='endDate' size="small" sx={{ m: 1, minWidth: 200 }} value={endDate} onChange={onChangeendDate} />
-                                      
-                                       
-                                        <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                            <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={noticetype}
-                                                label="Select Notice type"
-                                                onChange={handleChangefornoticetype}
-                                            >
-                                                <MenuItem value={"QLD"}> QLD</MenuItem>
-                                                <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
-                                                <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
-                                                <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
-                                                <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
-                                                <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
-                                        <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
-                                    </Item>
+                        <AnimatedGridItem item xs={12} >
+                                <div className='dashboardtop'>
+                                    <div style={{ marginTop: "0px", padding: "0px", textAlign: "left" }}>
+                                        <Typography component="h1" variant="h5" sx={{ display: "flex", alignItems: "center" }}>
+                                            <DashboardIcon fontSize="large" color="secondary" sx={{ marginRight: "10px" }} />
+                                            Dashboard
+                                        </Typography>
+                                        <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
+                                    </div>
+                                    <div>
+                                        <Typography variant="h6">{greeting}, RECQARZ!</Typography>
+                                        <Typography variant='subtitle2'>{currentDateTime}</Typography>
+                                    </div>
+                                </div>
+                                <div className='upload-row'>
+                                    <div className='search-sec'>
+                                        <Typography variant='h5'>Filter</Typography>
+                                        <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                            <div className='sarch-itm'>
+                                                <InputLabel>Upload Date</InputLabel>    
+                                                <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
+                                            </div>
+                                            <div className='sarch-itm'>
+                                                <InputLabel>Execution Date</InputLabel>
+                                                <div style={{width: "220px",}}>
+                                                <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
+                                                <TextField type='date' placeholder='endDate' size="small" sx={{ m: 1, minWidth: 200 }} value={endDate} onChange={onChangeendDate} />
+                                                </div>
+                                            </div>
+                                            <div className='sarch-itm'>
+                                                <InputLabel>Notice Type</InputLabel>
+                                                <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                                                <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={noticetype}
+                                                    label="Select Notice type"
+                                                    onChange={handleChangefornoticetype}
+                                                >
+                                                    <MenuItem value=''><em>none</em></MenuItem>
+                                                    <MenuItem value={"QLD"}> QLD</MenuItem>
+                                                    <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
+                                                    <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
+                                                    <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
+                                                    <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                            </div>
+                                            <div className='sarch-itm'>
+                                                <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
+                                                <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
+                                            </div>
+                                        </Item>
+                                    </div>
+                                    <div className='search-sec'>
+                                        <Typography variant='h5'>Data Status</Typography>
+                                        <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                            Coming Soon!!
+                                        </Item>
+                                    </div>
+                                    
                                 </div>
                             </AnimatedGridItem>
+
+                           
 
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
@@ -233,12 +299,12 @@ const EmplyeeDashboard = () => {
                                             </Box>
                                         ) : (
                                             <>
-                                                <Table stickyHeader aria-label="sticky table">
+                                                <Table className="notice-table" stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Date</TableCell>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Notice Type</TableCell>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Actions</TableCell>
+                                                            <TableCell>Date</TableCell>
+                                                            <TableCell>Notice Type</TableCell>
+                                                            <TableCell>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -261,7 +327,7 @@ const EmplyeeDashboard = () => {
                                                                             second: 'numeric'
                                                                         })}
                                                                     </TableCell>
-                                                                    <TableCell component="th" scope="row" >{item.NoticeType}</TableCell>
+                                                                    <TableCell scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
                                                                         <Button variant='contained' onClick={() => { EmpolyeeTotaldata(item._id) }} >
                                                                             Open!

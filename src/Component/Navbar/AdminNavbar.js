@@ -199,12 +199,12 @@ useEffect(() => {
 
 
 return (
-  <Box className="leftsidebar" sx={{ display: 'flex' }}>
-    <CssBaseline />
-    <AppBar position="fixed" open={open} sx={{ backgroundColor: "#1976d2", color: "#fff", boxShadow: "none" }}>
+  <Box className="leftsidebar left-bar" sx={{ display: 'flex' }}>
+    {/* <CssBaseline /> */}
+    <AppBar className="top-bar" position="fixed" open={open}>
       <Toolbar>
         <IconButton
-          color="inherit"
+          color="#1E201F"
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
@@ -254,16 +254,16 @@ return (
         </Menu>
       </Toolbar>
     </AppBar>
-    <Drawer className='drawer' variant="permanent" open={open} >
-      <DrawerHeader>
-        <Typography variant='h5' sx={{ position: "absolute", left: 25 }}>RECQARZ</Typography>
+    <Drawer className="left-side" variant="permanent" open={open} >
+      <DrawerHeader className="proj-title">
+        <Typography variant='h5'>Recqarz</Typography>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
 
       </DrawerHeader>
 
-      <List>
+      <List className="list-item">
         {DrawerList.map((item, index) => {
           const { text, icons, forNavigation } = item;
           return (
@@ -290,7 +290,7 @@ return (
           )
         })}
       </List>
-
+      <Typography variant="h4">© 2024 Recqarz.com</Typography>
     </Drawer>
 
   </Box>

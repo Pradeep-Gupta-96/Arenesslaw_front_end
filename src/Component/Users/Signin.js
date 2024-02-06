@@ -3,17 +3,21 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IconButton, InputAdornment } from '@mui/material';
+import HttpsOutlinedIcon from '@mui/icons-material/HttpsOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+
 
 const theme = createTheme();
 
@@ -28,7 +32,13 @@ export default function Signin() {
       setVisivility(false)
     }
   }
-
+  const changeIcons = () => {
+    if (visivility === false) {
+      setVisivility(true)
+    } else {
+      setVisivility(false)
+    }
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -83,72 +93,70 @@ export default function Signin() {
 
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main"   >
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            justifyContent: "center",
-            flexDirection: 'column',
-            alignItems: 'center',
-            '& > :not(style)': {
-              m: 1,
-              width: "100%",
-                  height: 550,
-                  maxWidth:600
-            },
-          }}
-        >
-          <Paper elevation={6} >
-            <Avatar sx={{ mx: 'auto', mt: 5, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5" sx={{ my: 1,textAlign:"center" }}>
-              Sign-in
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ m: "8%"}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="username"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type={visivility ? "text" : "password"}
-                InputProps={{
-                  endAdornment:
-                    <InputAdornment position='end'>
-                      <IconButton onClick={changeicons}>
-                        {visivility ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                }}
-                id="password"
-                autoComplete="current-password"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign In
-              </Button>
-            </Box>
-          </Paper>
+    <>
+    <div className='login-page'>
+    <Box className="login-box">
+          <div>
+            <h3 className="text-primary">Welcome Back !</h3>
+            <p className="text-muted">Sign in to continue to portal.</p>
+          </div>
+          <Box component="form" onSubmit={handleSubmit} sx={{}}>
+            <TextField
+              id="email"
+              label="Email Address"
+              placeholder='Type Your Email'
+              size='large'
+              margin="normal" required fullWidth name="email" autoComplete="email" autoFocus
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonOutlineIcon />
+                  </InputAdornment>
+                ),
+              }}
+              variant="standard"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              placeholder='Type your password'
+              type={visivility ? "text" : "password"} // Assuming 'visibility' is the correct variable name
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <HttpsOutlinedIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={changeIcons}>
+                      {visivility ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              id="password"
+              autoComplete="current-password"
+              variant="standard"
+            />
+            <div className='login-btn'>
+            <div className="login100-form-bgbtn"></div>
+            <Button type="submit" fullWidth variant="contained" >Sign In</Button>
+            </div>
+            <Grid container>
+              <Grid item xs>
+                <Typography variant='subtitle2'>
+                  <RouterLink to='/ResetwithOTP'>Forgot password?</RouterLink>
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-      </Container>
-    </ThemeProvider>
+    </div>
+    </>
+    
   );
 }
