@@ -107,7 +107,6 @@ const Notice = () => {
 
     const API1 = `http://localhost:4000/api/excel/getAllexceldata`;
     const API2 = `http://localhost:4000/api/excel/getFilteredExcelData`;
-    const API3 = `http://localhost:4000/api/excel/getAllexceldatabyNotice/${noticetype}`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
@@ -258,7 +257,7 @@ const Notice = () => {
                                             </div>
                                             <div className='sarch-itm'>
                                                 <InputLabel>Execution Date</InputLabel>
-                                                <div style={{width: "220px",}}>
+                                                <div style={{textAlign: "right",}}>
                                                 <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
                                                 <TextField type='date' placeholder='endDate' size="small" sx={{ m: 1, minWidth: 200 }} value={endDate} onChange={onChangeendDate} />
                                                 </div>
@@ -332,15 +331,6 @@ const Notice = () => {
                                 </div>
                             </AnimatedGridItem>
 
-
-
-                            {/*================ Searchbar ============== */}
-                            <AnimatedGridItem item xs={12} >
-                                <div className='topbar'>
-                                    
-                                </div>
-                            </AnimatedGridItem>
-
                             {/*================ Table ============== */}
                             <Grid item xs={12}>
                                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -351,13 +341,13 @@ const Notice = () => {
                                             </Box>
                                         ) : (
                                             <>
-                                                <Table stickyHeader aria-label="sticky table">
+                                                <Table className="notice-table" stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Upload Date</TableCell>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Execution Date</TableCell>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Notice Type</TableCell>
-                                                            <TableCell sx={{ background: "#1976d2", color: "#fff", padding: "8px 10px" }}>Actions</TableCell>
+                                                            <TableCell>Upload Date</TableCell>
+                                                            <TableCell>Execution Date</TableCell>
+                                                            <TableCell>Notice Type</TableCell>
+                                                            <TableCell>Actions</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -391,7 +381,7 @@ const Notice = () => {
                                                                             second: 'numeric'
                                                                         }) : 'N/A'}
                                                                     </TableCell>
-                                                                    <TableCell component="th" scope="row" >{item.NoticeType}</TableCell>
+                                                                    <TableCell scope="row" >{item.NoticeType}</TableCell>
                                                                     <TableCell align="left">
                                                                         <Button variant='contained' onClick={() => { totalexceldata(item._id) }} >
                                                                             Open!

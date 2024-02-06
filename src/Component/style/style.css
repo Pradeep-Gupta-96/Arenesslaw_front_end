@@ -120,6 +120,15 @@
 /* new css */
 * {box-sizing: border-box;font-family: 'Poppins', sans-serif !important;}
 body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
+.notice-table th {font-weight: bold;}
+  .notice-table th {padding: 8px 10px;background: rgb(241, 241, 241);}
+  .notice-table td {padding: 8px 10px;}
+  .pdf-icon svg {color: red;}
+  tr:nth-child(even) {background-color: #F7F8FA;}
+  .notice-table tr:hover {background-color: rgba(0, 0, 0, 0.04);}
+  .notice-table .send-email {background: #24D555;white-space: nowrap;}
+  .notice-table .send-sms {background: #0BBDDD;white-space: nowrap;}
+  
 .login-page {background: url(images/bg-01.jpg);width: 100%;min-height: 100vh;box-sizing: border-box;
   display: -webkit-box;
   display: -webkit-flex;
