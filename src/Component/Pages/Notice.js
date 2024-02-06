@@ -252,10 +252,6 @@ const Notice = () => {
                                         <Typography variant='h5'>Filter</Typography>
                                         <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                             <div className='sarch-itm'>
-                                                <InputLabel>Upload Date</InputLabel>    
-                                                <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
-                                            </div>
-                                            <div className='sarch-itm'>
                                                 <InputLabel>Execution Date</InputLabel>
                                                 <div style={{textAlign: "right",}}>
                                                 <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
@@ -344,7 +340,6 @@ const Notice = () => {
                                                 <Table className="notice-table" stickyHeader aria-label="sticky table">
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell>Upload Date</TableCell>
                                                             <TableCell>Execution Date</TableCell>
                                                             <TableCell>Notice Type</TableCell>
                                                             <TableCell>Actions</TableCell>
@@ -360,17 +355,6 @@ const Notice = () => {
                                                                     tabIndex={-1}
                                                                     key={item._id}
                                                                 >
-
-                                                                    <TableCell>
-                                                                        {new Date(item.createdAt).toLocaleDateString('en-US', {
-                                                                            day: 'numeric',
-                                                                            month: 'short',
-                                                                            year: 'numeric',
-                                                                            hour: 'numeric',
-                                                                            minute: 'numeric',
-                                                                            second: 'numeric'
-                                                                        })}
-                                                                    </TableCell>
                                                                     <TableCell>
                                                                         {item.ExecutionDate ? new Date(item.ExecutionDate).toLocaleDateString('en-US', {
                                                                             day: 'numeric',

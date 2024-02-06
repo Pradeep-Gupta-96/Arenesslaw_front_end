@@ -232,10 +232,6 @@ const EmplyeeDashboard = () => {
                                         <Typography variant='h5'>Filter</Typography>
                                         <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                             <div className='sarch-itm'>
-                                                <InputLabel>Upload Date</InputLabel>    
-                                                <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
-                                            </div>
-                                            <div className='sarch-itm'>
                                                 <InputLabel>Execution Date</InputLabel>
                                                 <div style={{width: "220px",}}>
                                                 <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
