@@ -65,6 +65,7 @@ const Notice = () => {
     const [totalDataCount, setTotalDataCount] = useState(null);
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
+    const [totalRecords, setTotalRecords] = useState(0);
     const [results, setResults] = useState([])
     const revData = Array.isArray(results) ? [...results].reverse() : [];
     // const revData = Array.isArray(results) ? [...results] : [];
@@ -104,6 +105,12 @@ const Notice = () => {
     }
 
 
+    const handleRecord = () => {
+        getTotalRecords()
+    }
+
+
+
 
     const API1 = `http://localhost:4000/api/excel/getAllexceldata`;
     const API2 = `http://localhost:4000/api/excel/getFilteredExcelData`;
@@ -114,6 +121,36 @@ const Notice = () => {
         method: 'get',
         headers: myHeaders,
     };
+
+
+    console.log(startDate,endDate,noticetype );
+    console.log(totalRecords);
+ 
+     
+        const URL =`http://localhost:4000/api/excel/count`;
+        const getTotalRecords = async () => {
+            try {
+                const response = await fetch(`${URL}`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'authorization': `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                    },
+                    body: JSON.stringify({startDate, endDate, noticeType:noticetype})
+                })
+     
+                const result = await response.json()
+                setTotalRecords(result.totalCount)
+             
+     
+            } catch (error) {
+                console.log(error)
+                setIsLoading(false);
+            }
+        }
+
+
+    
 
     const fetchData1 = async (page) => {
         try {
@@ -317,6 +354,7 @@ const Notice = () => {
                                         <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
                                         <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
                                     </Item>
+                                    <Button onClick={handleRecord}> get total: {totalRecords? totalRecords: 'N/A'} </Button>
                                 </div>
                             </AnimatedGridItem>
 
