@@ -112,18 +112,82 @@
 .pagination-row {display: flex;align-items: center;}
 .pagination-row > .MuiFormControl-root .MuiInputBase-root { background: transparent;color: #fff;border: none;width: auto;display: flex;align-items: center;font-size: 14px;font-weight: bold;}
 .pagination-row .MuiFormControl-root .MuiOutlinedInput-root svg {color: #fff;}
-
-.noticetype h4 {
-  margin-bottom: 0px;
-  color: #1976d2;
-  font-weight: bold;
-  font-size: 14px;
-}
+.noticetype h4 {margin-bottom: 0px;color: #1976d2;font-weight: bold;font-size: 14px;}
 .dashboardtop { border-bottom: 2px solid #1976d2; display: flex; justify-content: space-between;padding: 0px 0px 10px;}
 .notice-type .MuiGrid-root.MuiGrid-item {float: left;width: 33%;min-height: 60px;}
 .data-vs {display: flex;}
 .data-vs > div:first-child {margin-right: 20px;}
-
+/* new css */
+* {box-sizing: border-box;font-family: 'Poppins', sans-serif !important;}
+body{padding: 0px;margin: 0px;font-family: 'Poppins', sans-serif !important;}
+.login-page {background: url(images/bg-01.jpg);width: 100%;min-height: 100vh;box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;display: flex;flex-wrap: wrap;justify-content: center;align-items: center;padding: 15px;background-repeat: no-repeat;background-position: center;background-size: cover;}
+.login-box{width: 500px;background: #fff;border-radius: 10px;overflow: hidden;padding: 55px;}
+.login-box h3 {margin: 0px;}
+.login-box label {font-weight: bold;}
+.login-box label + div {padding: 10px 0px;}
+.login-btn {width: 100%;display: block;position: relative;z-index: 1;border-radius: 25px;overflow: hidden;margin: 10px auto ;}
+.login100-form-bgbtn {position: absolute;z-index: -1;width: 300%; height: 100%;background: #a64bf4;
+    background: -webkit-linear-gradient(right,#00dbde,#fc00ff,#00dbde,#fc00ff);
+    background: -o-linear-gradient(right,#00dbde,#fc00ff,#00dbde,#fc00ff);
+    background: -moz-linear-gradient(right,#00dbde,#fc00ff,#00dbde,#fc00ff);
+    background: linear-gradient(right,#00dbde,#fc00ff,#00dbde,#fc00ff);
+    background: -webkit-linear-gradient(right,#00dbde,#fc00ff,#00dbde,#fc00ff);
+    top: 0;left: -100%;-webkit-transition: all .4s;-o-transition: all .4s;-moz-transition: all .4s;transition: all .4s;}
+.login-btn:hover .login100-form-bgbtn {left: 0px;}
+.login-btn button {font-size: 16px;
+  line-height: 1.2; background: none; border: none; outline: none;
+  text-transform: uppercase;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;display: flex;justify-content: center;align-items: center;padding: 0 20px;width: 100%;height: 50px;}
+  .login-btn button:hover{background: none;}
+  header.top-bar {background: #F7F8FA;color: #1E201F;box-shadow: none;border-bottom: 1px solid #E0E4F0;}
+  .left-side > div { background: #F7F8FA;}
+  .proj-title.css-1r9jet7 {justify-content: space-between;padding-left: 15px;}
+  .proj-title h5 {font-size: 32px;font-weight: 700;line-height: 39px;letter-spacing: 0px;text-align: center;color: #0068B9;}
+  .list-item .MuiListItemIcon-root {margin-right: 20px;position: relative;top: -2px;}
+  .list-item li {cursor: pointer; transition: transform 0.5s ease;}
+  .list-item li:hover {color: #1a237e; transform: scale(1.1);}
+  .left-side h4 {font-size: 14px;padding: 10px 15px;position: absolute;bottom: 0px;border-top: 1px solid rgba(0, 0, 0, 0.12);width: 100%;}
+  .upload-row {
+    display: flex;
+    padding: 15px 0px;
+    gap: 20px;
+}
+.search-sec {
+  width: 33%;
+}.upload-row h5 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.css-itk0ss-MuiPaper-root.search-box {
+  text-align: left;
+  padding: 15px;
+  min-height: 310px;
+}
+.sarch-itm {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sarch-itm label {
+  font-weight: 500;
+  color: #000;
+  font-size: 14px;
+}
+.search-box.up-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 @media screen and (max-width: 767px) {
   /* main.MuiBox-root.css-zxdg2z {width: 100%;} */
   .topbar .MuiPaper-root {display: inherit;}

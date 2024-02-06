@@ -236,39 +236,99 @@ const Notice = () => {
 
                             <AnimatedGridItem item xs={12} >
                                 <div className='dashboardtop'>
-                                    <div>
-                                        <Typography variant="h6">{greeting}, RECQARZ!</Typography>
-                                        <Typography variant='subtitle2'>{currentDateTime}</Typography>
-                                    </div>
-                                    <div style={{ marginTop: "0px", padding: "0px 12px", textAlign: "left" }}>
+                                    <div style={{ marginTop: "0px", padding: "0px", textAlign: "left" }}>
                                         <Typography component="h1" variant="h5" sx={{ display: "flex", alignItems: "center" }}>
                                             <DashboardIcon fontSize="large" color="secondary" sx={{ marginRight: "10px" }} />
                                             Dashboard
                                         </Typography>
                                         <Typography variant='subtitle2'>Stay informed about the current happenings!!</Typography>
                                     </div>
-                                    {/* Bulk Upload */}
-
-                                    {JSON.parse(localStorage.getItem("username")) === "SBI Card" ? "" : <div style={{ marginTop: "0px" }}>
-                                        <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /><br />
-                                        <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
-                                            Bulk Upload
-                                        </Button>
-                                        <Dialog
-                                            open={open}
-                                            TransitionComponent={Transition}
-                                            keepMounted
-                                            onClose={handleClose}
-                                            aria-describedby="alert-dialog-slide-description"
-                                        >
-                                            <DialogTitle>{"Bulk Upload File!"}</DialogTitle>
-                                            <DialogContent>
-                                                <Dialogfordata /> {/* Replace with your Dialog content */}
-                                            </DialogContent>
-                                        </Dialog>
-                                    </div>}
-
-
+                                    <div>
+                                        <Typography variant="h6">{greeting}, RECQARZ!</Typography>
+                                        <Typography variant='subtitle2'>{currentDateTime}</Typography>
+                                    </div>
+                                </div>
+                                <div className='upload-row'>
+                                    <div className='search-sec'>
+                                        <Typography variant='h5'>Filter</Typography>
+                                        <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                            <div className='sarch-itm'>
+                                                <InputLabel>Upload Date</InputLabel>    
+                                                <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
+                                            </div>
+                                            <div className='sarch-itm'>
+                                                <InputLabel>Execution Date</InputLabel>
+                                                <div style={{width: "220px",}}>
+                                                <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
+                                                <TextField type='date' placeholder='endDate' size="small" sx={{ m: 1, minWidth: 200 }} value={endDate} onChange={onChangeendDate} />
+                                                </div>
+                                            </div>
+                                            <div className='sarch-itm'>
+                                                <InputLabel>Notice Type</InputLabel>
+                                                <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                                                <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={noticetype}
+                                                    label="Select Notice type"
+                                                    onChange={handleChangefornoticetype}
+                                                >
+                                                    <MenuItem value=''><em>none</em></MenuItem>
+                                                    <MenuItem value={"QLD"}> QLD</MenuItem>
+                                                    <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
+                                                    <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
+                                                    <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
+                                                    <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
+                                                    <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                            </div>
+                                            <div className='sarch-itm'>
+                                                <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
+                                                <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
+                                            </div>
+                                        </Item>
+                                    </div>
+                                    <div className='search-sec'>
+                                        <Typography variant='h5'>Data Status</Typography>
+                                        <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                            Coming Soon!!
+                                        </Item>
+                                    </div>
+                                    <div className='search-sec'>
+                                        <Typography variant='h5'>Data Upload</Typography>
+                                        <Item className='search-box up-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
+                                            {/* Bulk Upload */}
+                                            {JSON.parse(localStorage.getItem("username")) === "SBI Card" ? "" : <div style={{ marginTop: "0px" }}>
+                                                <UploadFileIcon color="secondary" sx={UploadFileIconCSS1} onClick={handleClickOpen} /><br />
+                                                <Button variant="contained" sx={UploadFileIconCSS} color="secondary" onClick={handleClickOpen}>
+                                                    Bulk Upload
+                                                </Button>
+                                                <Dialog
+                                                    open={open}
+                                                    TransitionComponent={Transition}
+                                                    keepMounted
+                                                    onClose={handleClose}
+                                                    aria-describedby="alert-dialog-slide-description"
+                                                >
+                                                    <DialogTitle>{"Bulk Upload File!"}</DialogTitle>
+                                                    <DialogContent>
+                                                        <Dialogfordata /> {/* Replace with your Dialog content */}
+                                                    </DialogContent>
+                                                </Dialog>
+                                            </div>}
+                                        </Item>
+                                    </div>
+                                    
                                 </div>
                             </AnimatedGridItem>
 
@@ -277,46 +337,7 @@ const Notice = () => {
                             {/*================ Searchbar ============== */}
                             <AnimatedGridItem item xs={12} >
                                 <div className='topbar'>
-                                    <Item sx={{ display: "flex", justifyContent: "space-between", transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
-                                       
-                                        Upload Date
-                                        <TextField type='date' placeholder='Search by Date' size="small" sx={{ m: 1, minWidth: 200 }} value={dateSearchValue} onChange={onChangeDate} />
-
-                                        Execution Date
-                                        <TextField type='date' placeholder='startDate' size="small" sx={{ m: 1, minWidth: 200 }} value={startDate} onChange={onChangestartDate} />
-                                        <TextField type='date' placeholder='endDate' size="small" sx={{ m: 1, minWidth: 200 }} value={endDate} onChange={onChangeendDate} />
-                                      
-                                       
-                                        <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                                            <InputLabel id="demo-simple-select-label">Select Notice type</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={noticetype}
-                                                label="Select Notice type"
-                                                onChange={handleChangefornoticetype}
-                                            >
-                                                <MenuItem value=''><em>none</em></MenuItem>
-                                                <MenuItem value={"QLD"}> QLD</MenuItem>
-                                                <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
-                                                <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
-                                                <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Marathi"}>Bilingual Notice Marathi</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Kannad"}>Bilingual Notice Kannad</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Telugu"}>Bilingual Notice Telugu</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Malyaalam"}>Bilingual Notice Malyaalam</MenuItem>
-                                                <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
-                                                <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
-                                                <MenuItem value={"E-Conciliation"}> E-Conciliation</MenuItem>
-                                            </Select>
-                                        </FormControl>
-
-                                        <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={clickforSearch} >Search</Button>
-                                        <Button variant='contained' color='secondary' sx={{ m: 1 }} onClick={resetsearchbar} >Reset</Button>
-                                    </Item>
+                                    
                                 </div>
                             </AnimatedGridItem>
 
