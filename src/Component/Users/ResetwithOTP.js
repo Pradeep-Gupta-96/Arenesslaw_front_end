@@ -40,7 +40,7 @@ export default function ResetwithOTP() {
             event.preventDefault()
             const data = new FormData(event.currentTarget);
             console.log(data.get('email'))
-            const api = "http://localhost:4000/api/user/sendopt"
+            const api = "https://recqarz.com/api/user/sendopt"
             const response = await fetch(api, {
                 method: "POST",
                 headers: {
@@ -76,7 +76,7 @@ export default function ResetwithOTP() {
             event.preventDefault()
             const data = new FormData(event.currentTarget);
             console.log(data.get('OTP'))
-            const api = "http://localhost:4000/user/verifyotp"
+            const api = "https://recqarz.com/user/verifyotp"
             const response = await fetch(api, {
                 method: "POST",
                 headers: {
@@ -126,7 +126,7 @@ export default function ResetwithOTP() {
                 return;
               }
             if (Npassword === Cpassword) {
-                const api = "http://localhost:4000/api/user/updatepass"
+                const api = "https://recqarz.com/api/user/updatepass"
                 const response = await fetch(api, {
                     method: "POST",
                     headers: {

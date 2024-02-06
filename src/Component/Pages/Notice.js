@@ -114,8 +114,8 @@ const Notice = () => {
 
 
 
-    const API1 = `http://localhost:4000/api/excel/getAllexceldata`;
-    const API2 = `http://localhost:4000/api/excel/getFilteredExcelData`;
+    const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
+    const API2 = `https://recqarz.com/api/excel/getFilteredExcelData`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
@@ -129,7 +129,7 @@ const Notice = () => {
     console.log(totalRecords);
  
      
-        const URL =`http://localhost:4000/api/excel/count`;
+        const URL =`https://recqarz.com/api/excel/count`;
         const getTotalRecords = async () => {
             try {
                 setSearchLoader(true)
@@ -341,8 +341,8 @@ const Notice = () => {
                                         <Item className='search-box' sx={{ transition: "transform 0.5s ease", "&:hover": { color: "#1a237e", transform: "scale(0.99)" } }}    >
                                             {/* Coming Soon!! */}
                                               
-                                            <Typography variant='subtitle2'>Notice Type: {noticetype? noticetype: searchLoader? 'fetching data please data...': 'Select Notice Type'}</Typography>
-                                            <Typography variant='subtitle2'> Total Count : {totalRecords? totalRecords: searchLoader? 'fetching data please data...': 'Select Date First'}</Typography>
+                                            <Typography variant='subtitle2'>Notice Type: {noticetype? noticetype: searchLoader? 'fetching data please wait...': 'Select Notice Type'}</Typography>
+                                            <Typography variant='subtitle2'> Total Count : {totalRecords? totalRecords: searchLoader? 'fetching data please wait...': 'Select Date First'}</Typography>
 
                                         </Item>
                                     </div>
