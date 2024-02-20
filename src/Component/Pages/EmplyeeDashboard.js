@@ -83,8 +83,8 @@ const EmplyeeDashboard = () => {
         setNoticetype(event.target.value);
     };
 
-    const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
-    const API2 = `https://recqarz.com/api/excel/getFilteredExcelData`;
+    const API1 = `https://crm.recqarz.com/api/excel/getAllexceldata`;
+    const API2 = `https://crm.recqarz.com/api/excel/getFilteredExcelData`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);

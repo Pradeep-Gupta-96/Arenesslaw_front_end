@@ -88,7 +88,7 @@ export default function Resetpass() {
           type: "error"
         });
       } else {
-        const response = await fetch(`https://recqarz.com/api/user/resetpass/${id}`, {
+        const response = await fetch(`https://crm.recqarz.com/api/user/resetpass/${id}`, {
           method: "PATCH",
           headers: {
             "content-type": "application/json",

@@ -96,7 +96,7 @@ const Totalexceldata = () => {
         setSearchValue('');
     };
 
-    const API = `https://recqarz.com/api/excel/exponedexcelldata/${id}`;
+    const API = `https://crm.recqarz.com/api/excel/exponedexcelldata/${id}`;
 
     const callApi = async (page) => {
         try {
@@ -124,7 +124,7 @@ const Totalexceldata = () => {
         }
     };
 
-    const API2 = `https://recqarz.com/api/excel/searchingAdmindata/${id}/${searchValue}`;
+    const API2 = `https://crm.recqarz.com/api/excel/searchingAdmindata/${id}/${searchValue}`;
 
     const callSearchApi = async (page) => {
         try {
@@ -153,7 +153,7 @@ const Totalexceldata = () => {
     };
 
 
-    const Chart_data_visualization_API = `https://recqarz.com/api/excel/Chart_data_visualization_admin/${id}`;
+    const Chart_data_visualization_API = `https://crm.recqarz.com/api/excel/Chart_data_visualization_admin/${id}`;
 
     const Chart_data_visualization_CallApi = async () => {
         try {

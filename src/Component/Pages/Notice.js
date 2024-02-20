@@ -114,8 +114,8 @@ const Notice = () => {
 
 
 
-    const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
-    const API2 = `https://recqarz.com/api/excel/getFilteredExcelData`;
+    const API1 = `https://crm.recqarz.com/api/excel/getAllexceldata`;
+    const API2 = `https://crm.recqarz.com/api/excel/getFilteredExcelData`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
@@ -129,7 +129,7 @@ const Notice = () => {
     console.log(totalRecords);
  
      
-        const URL =`https://recqarz.com/api/excel/count`;
+        const URL =`https://crm.recqarz.com/api/excel/count`;
         const getTotalRecords = async () => {
             try {
                 setSearchLoader(true)
