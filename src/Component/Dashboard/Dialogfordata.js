@@ -219,10 +219,10 @@ const Dialogfordata = () => {
                                     label="Select Notice type"
                                     onChange={handleChangefornoticetype}
                                 >
-                                    <MenuItem value={"QLD"}> QLD</MenuItem>
-                                    <MenuItem value={"Demand legal Notice"}> Demand legal Notice</MenuItem>
-                                    <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem>
-                                    <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
+                                    <MenuItem value={"Shop on EMI"}> Shop on EMI</MenuItem>
+                                    <MenuItem value={"BNPL"}> BNPL</MenuItem>
+                                    {/* <MenuItem value={"Execution Notice"}> Execution Notice</MenuItem> */}
+                                    {/* <MenuItem value={"Bilingual Notice Hindi"}> Bilingual Notice Hindi</MenuItem>
                                     <MenuItem value={"Bilingual Notice English"}>Bilingual Notice English</MenuItem>
                                     <MenuItem value={"Bilingual Notice Punjabi"}>Bilingual Notice Punjabi</MenuItem>
                                     <MenuItem value={"Bilingual Notice Bangali"}>Bilingual Notice Bangali</MenuItem>
@@ -233,7 +233,7 @@ const Dialogfordata = () => {
                                     <MenuItem value={"Bilingual Notice Odia"}>Bilingual Notice Odia</MenuItem>
                                     <MenuItem value={"Physical conciliation"}> Physical conciliation</MenuItem>
                                     <MenuItem value={"E-Conciliation"}> E-Conciliation </MenuItem>
-                                    <MenuItem value={"Police Complaint"}> Police Complaint </MenuItem>
+                                    <MenuItem value={"Police Complaint"}> Police Complaint </MenuItem> */}
                                 </Select>
                             </FormControl>
                         </Item>
