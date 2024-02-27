@@ -71,7 +71,7 @@ const Notice = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('username')) || '')
     const revData = Array.isArray(results) ? [...results].reverse() : [];
     // const revData = Array.isArray(results) ? [...results] : [];
-
+   
     const handleClickOpen = () => {
         setOpen(true);
     }
@@ -115,8 +115,8 @@ const Notice = () => {
 
 // console.log(JSON.parse(user));
 
-    const API1 = `https://recqarz.com/api/excel/getAllexceldata`;
-    const API2 = `https://recqarz.com/api/excel/getFilteredExcelData`;
+    const API1 = `http://localhost:4000/api/excel/getAllexceldata`;
+    const API2 = `http://localhost:4000/api/excel/getFilteredExcelData`;
 
     const myHeaders = new Headers();
     myHeaders.append("Authorization", `bearer ${JSON.parse(localStorage.getItem("token"))}`);
@@ -130,7 +130,7 @@ const Notice = () => {
     console.log(totalRecords);
  
      
-        const URL =`https://recqarz.com/api/excel/count`;
+        const URL =`http://localhost:4000/api/excel/count`;
         const getTotalRecords = async () => {
             try {
                 setSearchLoader(true)

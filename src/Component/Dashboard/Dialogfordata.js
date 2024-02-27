@@ -141,7 +141,8 @@ const Dialogfordata = () => {
         formData.append('file', excelFile);
         try {
             if (excelFile !== null) {
-                const res = await fetch('https://recqarz.com/api/excel', {
+                // const res = await fetch('http://localhost:4000/api/excel', {
+                const res = await fetch('http://localhost:4000/api/excel', {
                     method: 'POST',
                     headers: {
                         authorization: `bearer ${JSON.parse(localStorage.getItem('token'))}`
